@@ -10,9 +10,22 @@
 		863FAA7C302AAFA400A49F93 /* garong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = garong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5F7B037C302AB2EB00FF90EF /* Exceptions for "garong" folder in "garong" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Core/Untitled.swift,
+			);
+			target = 863FAA7B302AAFA400A49F93 /* garong */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		863FAA7E302AAFA400A49F93 /* garong */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5F7B037C302AB2EB00FF90EF /* Exceptions for "garong" folder in "garong" target */,
+			);
 			path = garong;
 			sourceTree = "<group>";
 		};
