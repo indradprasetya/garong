@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct garongApp: App {
+    init() {
+        #if DEBUG
+        Task { @MainActor in
+            DragDropGameTests.runAllTests()
+        }
+        #endif
+    }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainMenuView()
         }
     }
 }
