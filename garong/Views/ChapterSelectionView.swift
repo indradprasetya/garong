@@ -1,87 +1,119 @@
-//
-//  ChapterSelectionView.swift
-//  garong
-//
-
 import SwiftUI
 
 struct ChapterSelectionView: View {
-    let chapters = SampleGameData.chapters
-    
+    let title: String
+    let subtitle: String
+    let chapters: [Chapter]
+
+    init(story: GameStory) {
+        title = story.title
+        subtitle = story.subtitle
+        chapters = story.chapters
+    }
+
+    init(title: String, subtitle: String, chapters: [Chapter]) {
+        self.title = title
+        self.subtitle = subtitle
+        self.chapters = chapters
+    }
+
     var body: some View {
         ZStack {
-            Color(UIColor.systemGroupedBackground).ignoresSafeArea()
-            
-            VStack(alignment: .leading, spacing: 20) {
-                Text("Chapters")
-                    .font(.largeTitle.bold())
-                    .padding(.horizontal, 32)
-                    .padding(.top, 16)
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 24) {
-                        ForEach(chapters, id: \.id) { chapter in
-                            if chapter.isUnlocked {
-                                NavigationLink(destination: GameplayView(chapter: chapter)) {
-                                    chapterCard(for: chapter)
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                            } else {
-                                chapterCard(for: chapter)
-                                    .opacity(0.6)
-                            }
+            GarongTheme.pageBackground.ignoresSafeArea()
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text(title)
+                            .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                            .foregroundStyle(GarongTheme.ink)
+                        Text(subtitle)
+                            .font(.headline)
+                            .foregroundStyle(GarongTheme.teal)
+                    }
+
+                    LazyVGrid(
+                        columns: [GridItem(.adaptive(minimum: 250), spacing: 18)],
+                        spacing: 18
+                    ) {
+                        ForEach(chapters) { chapter in
+                            chapterDestination(for: chapter)
                         }
                     }
-                    .padding(.horizontal, 32)
-                    .padding(.bottom, 20)
                 }
+                .padding(.horizontal, 32)
+                .padding(.vertical, 24)
             }
-            .padding(.vertical, 16)
         }
         .navigationTitle("Chapters")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.hidden, for: .navigationBar)
     }
-    
+
     @ViewBuilder
-    private func chapterCard(for chapter: Chapter) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Chapter \(chapter.number)")
-                    .font(.headline)
-                    .foregroundColor(.accentColor)
-                Spacer()
-                if !chapter.isUnlocked {
-                    Image(systemName: "lock.fill")
-                        .foregroundColor(.secondary)
-                }
+    private func chapterDestination(for chapter: Chapter) -> some View {
+        if chapter.isUnlocked {
+            NavigationLink {
+                ChapterIntroView(chapter: chapter)
+            } label: {
+                ChapterCard(chapter: chapter)
             }
-            
-            Text(chapter.name)
-                .font(.title3.bold())
-                .foregroundColor(.primary)
-                .lineLimit(2)
-            
-            Spacer()
-            
-            Text("\(chapter.scenes.count) Scenes")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+            .buttonStyle(.plain)
+        } else {
+            ChapterCard(chapter: chapter)
+                .opacity(0.56)
+                .accessibilityLabel("Chapter \(chapter.number), \(chapter.name), locked")
         }
-        .padding()
-        .frame(width: 240, height: 160)
+    }
+}
+
+private struct ChapterCard: View {
+    let chapter: Chapter
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 13) {
+            HStack {
+                Text("LEVEL \(chapter.number)")
+                    .font(.caption.weight(.heavy))
+                    .tracking(1.2)
+                    .foregroundStyle(GarongTheme.coral)
+                Spacer()
+                Image(systemName: chapter.isUnlocked ? "arrow.up.right" : "lock.fill")
+                    .foregroundStyle(chapter.isUnlocked ? GarongTheme.teal : .secondary)
+            }
+
+            Text(chapter.name)
+                .font(.system(.title3, design: .rounded, weight: .bold))
+                .foregroundStyle(GarongTheme.ink)
+
+            Text(chapter.description)
+                .font(.subheadline)
+                .foregroundStyle(GarongTheme.ink.opacity(0.68))
+                .lineLimit(3)
+
+            Spacer(minLength: 4)
+
+            HStack(spacing: 14) {
+                Label("\(chapter.scenes.count) frames", systemImage: "rectangle.stack.fill")
+                Label("\(chapter.objects.count) objects", systemImage: "shippingbox.fill")
+            }
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(GarongTheme.teal)
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity, minHeight: 220, alignment: .leading)
         .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color(UIColor.secondarySystemGroupedBackground))
-                .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .fill(.white.opacity(0.9))
+                .shadow(color: GarongTheme.ink.opacity(0.09), radius: 14, y: 7)
         )
     }
 }
 
 struct ChapterSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            ChapterSelectionView()
+        NavigationStack {
+            ChapterSelectionView(story: SampleGameData.stories[0])
         }
-        .previewInterfaceOrientation(.landscapeLeft)
     }
 }
