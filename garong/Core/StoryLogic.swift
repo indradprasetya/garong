@@ -7,8 +7,10 @@ import Foundation
 
 enum StoryLoader {
     static func load(named name: String, bundle: Bundle = .main) throws -> StoryDefinition {
-        let url = bundle.url(forResource: name, withExtension: "json", subdirectory: "Resources/Stories") ??
-                  bundle.url(forResource: name, withExtension: "json")
+        let cleanName = name.replacingOccurrences(of: ".json", with: "")
+        let url = bundle.url(forResource: cleanName, withExtension: "json") ??
+                  bundle.url(forResource: cleanName, withExtension: "json", subdirectory: "Resources") ??
+                  bundle.url(forResource: cleanName, withExtension: "json", subdirectory: "Resources/Stories")
         guard let url else {
             throw StoryValidationError.missingStory(name)
         }
@@ -29,6 +31,15 @@ struct StoryRunner {
 
     func outcome(for actionIDs: [String]) -> StoryOutcome? {
         outcomesByKey[actionIDs.joined(separator: "|")]
+    }
+
+    func partialOutcome(matching prefixActionIDs: [String]) -> StoryOutcome? {
+        guard !prefixActionIDs.isEmpty else { return nil }
+        return outcomesByKey.values.first { outcome in
+            let actionIDs = outcome.actionIDs
+            guard actionIDs.count >= prefixActionIDs.count else { return false }
+            return zip(actionIDs, prefixActionIDs).allSatisfy { $0 == $1 }
+        }
     }
 }
 
@@ -57,7 +68,6 @@ private extension StoryDefinition {
         let actionIDs = try uniqueIDs(actions.map(\.id))
         let characterIDs = try uniqueIDs(characters.map(\.id))
         let gridIDs = try uniqueIDs(grids.map(\.id))
-        let charactersByID = Dictionary(uniqueKeysWithValues: characters.map { ($0.id, $0) })
 
         guard gridCount > 0, choiceCount > 0, !actions.isEmpty,
               grids.count == gridCount,
@@ -76,7 +86,7 @@ private extension StoryDefinition {
 
         let expectedOutcomeCount = (0..<choiceCount).reduce(1) { count, _ in count * actions.count }
         guard outcomes.count == expectedOutcomeCount else {
-            throw StoryValidationError.invalidOutcome("outcomeCount")
+            throw StoryValidationError.invalidOutcome("outcomeCount (expected \(expectedOutcomeCount), got \(outcomes.count))")
         }
 
         var seenSequences = Set<String>()
@@ -90,23 +100,20 @@ private extension StoryDefinition {
             }
 
             for state in outcome.states {
+                let slots = state.visualSlotsList
                 guard gridIDs.contains(state.gridID),
-                      (1...2).contains(state.characterSlots.count),
-                      Set(state.characterSlots.map(\.slot)) == Set(1...state.characterSlots.count),
-                      Set(state.characterSlots.map(\.characterID)).count == state.characterSlots.count else {
+                      !slots.isEmpty else {
                     throw StoryValidationError.invalidOutcome(key)
                 }
 
-                for slot in state.characterSlots {
-                    guard characterIDs.contains(slot.characterID),
-                          charactersByID[slot.characterID]?.expressionIDs.contains(slot.expressionID) == true else {
+                for slot in slots {
+                    guard slot.characterIDs.allSatisfy(characterIDs.contains) else {
                         throw StoryValidationError.invalidOutcome(key)
                     }
                 }
 
                 if let bubble = state.textBubble {
-                    guard state.characterSlots.contains(where: { $0.characterID == bubble.speakerID }),
-                          !bubble.text.en.isEmpty,
+                    guard !bubble.text.en.isEmpty,
                           !bubble.text.id.isEmpty else {
                         throw StoryValidationError.invalidOutcome(key)
                     }
@@ -125,3 +132,4 @@ private extension StoryDefinition {
         return set
     }
 }
+

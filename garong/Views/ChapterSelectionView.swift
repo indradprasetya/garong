@@ -6,74 +6,132 @@
 import SwiftUI
 
 struct ChapterSelectionView: View {
-    let chapters = SampleGameData.chapters
+    let stories = StoryCatalog.stories
     
     var body: some View {
         ZStack {
             Color(UIColor.systemGroupedBackground).ignoresSafeArea()
             
-            VStack(alignment: .leading, spacing: 20) {
-                Text("Chapters")
-                    .font(.largeTitle.bold())
-                    .padding(.horizontal, 32)
-                    .padding(.top, 16)
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 24) {
-                        ForEach(chapters, id: \.id) { chapter in
-                            if chapter.isUnlocked {
-                                NavigationLink(destination: GameplayView(chapter: chapter)) {
-                                    chapterCard(for: chapter)
+            ScrollView(.vertical, showsIndicators: true) {
+                VStack(alignment: .leading, spacing: 24) {
+                    
+                    ForEach(stories) { group in
+                        VStack(alignment: .leading, spacing: 10) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(group.title)
+                                    .font(.title2.bold())
+                                    .foregroundColor(.primary)
+                                
+                                Text(group.description)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.horizontal, 32)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 20) {
+                                    ForEach(group.chapters) { item in
+                                        let chapter = Chapter(storyItem: item)
+                                        if item.isUnlocked {
+                                            NavigationLink(destination: GameplayView(chapter: chapter)) {
+                                                chapterCard(for: item)
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
+                                        } else {
+                                            chapterCard(for: item)
+                                                .opacity(0.6)
+                                        }
+                                    }
                                 }
-                                .buttonStyle(PlainButtonStyle())
-                            } else {
-                                chapterCard(for: chapter)
-                                    .opacity(0.6)
+                                .padding(.horizontal, 32)
+                                .padding(.vertical, 8)
                             }
                         }
                     }
-                    .padding(.horizontal, 32)
-                    .padding(.bottom, 20)
                 }
+                .padding(.vertical, 16)
             }
-            .padding(.vertical, 16)
         }
-        .navigationTitle("Chapters")
+        .navigationTitle("Story Chapters")
         .navigationBarTitleDisplayMode(.inline)
     }
     
     @ViewBuilder
-    private func chapterCard(for chapter: Chapter) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Chapter \(chapter.number)")
-                    .font(.headline)
-                    .foregroundColor(.accentColor)
-                Spacer()
-                if !chapter.isUnlocked {
-                    Image(systemName: "lock.fill")
-                        .foregroundColor(.secondary)
-                }
+    private func chapterCard(for item: StoryChapterItem) -> some View {
+        let charId = item.storyDefinition?.characters.first?.id ?? ""
+        let imageName = AssetFallbackHelper.imageName(for: charId)
+        
+        ZStack(alignment: .bottomLeading) {
+            // Card Image Background
+            #if canImport(UIKit)
+            if !imageName.isEmpty, UIImage(named: imageName) != nil {
+                Image(imageName)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 240, height: 160)
+                    .opacity(0.5)
+                    .clipped()
+            } else {
+                Color(UIColor.secondarySystemGroupedBackground)
+                    .overlay(
+                        Image(systemName: "globe")
+                            .font(.system(size: 44))
+                            .foregroundColor(.accentColor.opacity(0.4))
+                    )
             }
+            #else
+            Color(UIColor.secondarySystemGroupedBackground)
+                .overlay(
+                    Image(systemName: "globe")
+                        .font(.system(size: 44))
+                        .foregroundColor(.accentColor.opacity(0.4))
+                )
+            #endif
             
-            Text(chapter.name)
-                .font(.title3.bold())
-                .foregroundColor(.primary)
-                .lineLimit(2)
+            // Gradient Overlay for High Contrast Legibility
+            LinearGradient(
+                colors: [Color.black.opacity(0.75), Color.black.opacity(0.0)],
+                startPoint: .bottom,
+                endPoint: .center
+            )
             
-            Spacer()
-            
-            Text("\(chapter.scenes.count) Scenes")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+            // Card Content (Chapter Title & Number - description removed)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text("Chapter \(item.chapterNumber)")
+                        .font(.caption.bold())
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Capsule().fill(Color.accentColor))
+                    
+                    Spacer()
+                    
+                    if !item.isUnlocked {
+                        Image(systemName: "lock.fill")
+                            .font(.caption)
+                            .foregroundColor(.white)
+                            .padding(6)
+                            .background(Circle().fill(Color.black.opacity(0.5)))
+                    }
+                }
+                
+                Text(item.title)
+                    .font(.headline.bold())
+                    .foregroundColor(.white)
+                    .lineLimit(2)
+                    .shadow(color: Color.black.opacity(0.6), radius: 2, x: 0, y: 1)
+                
+            }
+            .padding(14)
         }
-        .padding()
         .frame(width: 240, height: 160)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color(UIColor.secondarySystemGroupedBackground))
-                .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
+        .cornerRadius(18)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color(UIColor.separator).opacity(0.6), lineWidth: 1)
         )
+        .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 3)
     }
 }
 
@@ -85,3 +143,4 @@ struct ChapterSelectionView_Previews: PreviewProvider {
         .previewInterfaceOrientation(.landscapeLeft)
     }
 }
+

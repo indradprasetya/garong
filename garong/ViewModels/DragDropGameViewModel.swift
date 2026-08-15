@@ -13,9 +13,12 @@ final class DragDropGameViewModel: ObservableObject {
     @Published private(set) var phase: DragDropPhase
     @Published private(set) var chapterResult: ChapterResult?
     @Published private(set) var chapterName: String
+    @Published var isDraggingItem: Bool = false
     @Published var animatingSceneID: UUID?
     
-    private let engine: DragDropGameEngine
+    private var engine: DragDropGameEngine
+    private var currentChapterIndex: Int = 0
+    private var storyChapters: [StoryChapterItem] = []
     
     init(chapter: Chapter) {
         let engine = DragDropGameEngine(chapter: chapter)
@@ -25,6 +28,37 @@ final class DragDropGameViewModel: ObservableObject {
         self.phase = engine.phase
         self.chapterResult = nil
         self.chapterName = chapter.name
+        
+        if let storyDef = chapter.storyDefinition,
+           let group = StoryCatalog.stories.first(where: { g in g.chapters.contains { $0.id == storyDef.id || $0.fileName.contains(storyDef.id) } }) {
+            self.storyChapters = group.chapters
+            self.currentChapterIndex = group.chapters.firstIndex(where: { $0.id == storyDef.id || $0.fileName.contains(storyDef.id) }) ?? 0
+        }
+    }
+    
+    var hasNextChapter: Bool {
+        !storyChapters.isEmpty && currentChapterIndex + 1 < storyChapters.count
+    }
+    
+    /// Navigates to next chapter automatically or displays completed dialog if final chapter in story.
+    func goToNextChapterOrFinish() {
+        if hasNextChapter {
+            currentChapterIndex += 1
+            let nextItem = storyChapters[currentChapterIndex]
+            let nextChapter = Chapter(storyItem: nextItem)
+            self.engine = DragDropGameEngine(chapter: nextChapter)
+            self.chapterName = nextChapter.name
+            self.chapterResult = nil
+            syncWithEngine()
+        } else {
+            finishChapter()
+        }
+    }
+    
+    func setDraggingActive(_ active: Bool) {
+        withAnimation(.easeInOut(duration: 0.25)) {
+            self.isDraggingItem = active
+        }
     }
     
     /// Total number of scenes in this chapter.
@@ -38,9 +72,9 @@ final class DragDropGameViewModel: ObservableObject {
         "\(placedObjectCount) / \(totalSceneCount) Scenes Filled"
     }
     
-    /// Drop or replace an object in a target scene.
-    func dropObject(_ object: GameObject, intoScene sceneID: UUID) {
-        let success = engine.placeObject(object, inScene: sceneID)
+    /// Drop or replace an object in a target scene slot.
+    func dropObject(_ object: GameObject, intoSlot slotID: String? = nil, intoScene sceneID: UUID) {
+        let success = engine.placeObject(object, inSlot: slotID, inScene: sceneID)
         guard success else { return }
         
         // Trigger visual reaction pulse
@@ -54,9 +88,16 @@ final class DragDropGameViewModel: ObservableObject {
         }
     }
     
-    /// Remove an object from a scene.
-    func removeObject(_ object: GameObject, fromScene sceneID: UUID) {
-        let success = engine.removeObject(object, fromScene: sceneID)
+    /// Remove an object from a scene slot.
+    func removeObject(_ object: GameObject, fromSlot slotID: String? = nil, fromScene sceneID: UUID) {
+        let success = engine.removeObject(object, fromSlot: slotID, fromScene: sceneID)
+        guard success else { return }
+        syncWithEngine()
+    }
+    
+    /// Remove an object globally from whichever scene currently holds it.
+    func removeObjectGlobal(_ object: GameObject) {
+        let success = engine.removeObjectGlobal(object)
         guard success else { return }
         syncWithEngine()
     }
