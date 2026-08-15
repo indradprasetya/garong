@@ -103,6 +103,61 @@ final class DragDropGameTests {
                    engine.placedObjectCount == 0 &&
                    engine.scenes.allSatisfy { $0.currentObject == nil && $0.characterEmotion == .neutral }
         }
+
+        assertTest("Story JSON: Rhodey story loads and validates") {
+            do {
+                let story = try StoryLoader.load(named: "crying_to_learning")
+                return story.id == "rhodey_wants_to_draw" &&
+                       story.title.en == "Make Rhodey Want to Draw" &&
+                       story.gridCount == 3 &&
+                       story.choiceCount == 2 &&
+                       story.actions.count == 3 &&
+                       story.characters.count == 1 &&
+                       story.outcomes.count == 9
+            } catch {
+                print("    Story load error: \(error)")
+                return false
+            }
+        }
+
+        assertTest("Story runner: ideal path makes Rhodey draw") {
+            do {
+                let runner = try StoryRunner(story: StoryLoader.load(named: "crying_to_learning"))
+                let outcome = runner.outcome(for: ["action_get_nearby", "action_crayon"])
+                return outcome?.states.flatMap(\.characterSlots).map(\.expressionID) == [
+                           "rhodey_refusing",
+                           "rhodey_loved",
+                           "rhodey_drawing_happy"
+                       ] &&
+                       outcome?.finalState == "DRAWING" &&
+                       outcome?.isIdeal == true
+            } catch {
+                print("    Story runner error: \(error)")
+                return false
+            }
+        }
+
+        assertTest("Story JSON: localized text and outcomes match chapter") {
+            do {
+                let story = try StoryLoader.load(named: "crying_to_learning")
+                let categories = Dictionary(grouping: story.outcomes, by: \.category).mapValues(\.count)
+                return story.actions.first(where: { $0.id == "action_toy" })?.name.id == "Mainan" &&
+                       story.outcomes.first?.states.first?.textBubble?.text.en == "I don't want to draw right now." &&
+                       story.outcomes.first?.states.first?.textBubble?.text.id == "Aku belum mau menggambar sekarang." &&
+                       story.outcomes.allSatisfy { outcome in
+                           outcome.states.allSatisfy { state in
+                               (1...2).contains(state.characterSlots.count)
+                           }
+                       } &&
+                       story.outcomes.flatMap(\.states).contains { $0.textBubble == nil } &&
+                       categories["success"] == 1 &&
+                       categories["progress"] == 4 &&
+                       categories["retry"] == 4
+            } catch {
+                print("    Story content error: \(error)")
+                return false
+            }
+        }
         
         let allPassed = passedCount == totalCount
         print("🧪 [DragDropGameTests] Result: \(passedCount)/\(totalCount) tests passed (\(allPassed ? "SUCCESS" : "FAILURE"))")
