@@ -6,6 +6,13 @@
 import SwiftUI
 
 struct MainMenuView: View {
+    private enum Destination: Hashable {
+        case game
+        case chapters
+    }
+
+    @State private var destination: Destination?
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -34,12 +41,8 @@ struct MainMenuView: View {
                     }
                     
                     HStack(spacing: 20) {
-                        NavigationLink {
-                            if let firstChapter = SampleGameData.chapters.first {
-                                GameplayView(chapter: firstChapter)
-                            } else {
-                                Text("No chapters available")
-                            }
+                        Button {
+                            destination = .game
                         } label: {
                             HStack {
                                 Image(systemName: "play.fill")
@@ -53,8 +56,8 @@ struct MainMenuView: View {
                             .shadow(color: Color.accentColor.opacity(0.3), radius: 6, x: 0, y: 3)
                         }
                         
-                        NavigationLink {
-                            ChapterSelectionView()
+                        Button {
+                            destination = .chapters
                         } label: {
                             HStack {
                                 Image(systemName: "square.grid.2x2.fill")
@@ -74,8 +77,19 @@ struct MainMenuView: View {
                 .padding(.horizontal, 40)
                 .padding(.vertical, 20)
             }
+            .navigationDestination(item: $destination) { destination in
+                switch destination {
+                case .game:
+                    if let firstChapter = SampleGameData.chapters.first {
+                        GameplayView(chapter: firstChapter)
+                    } else {
+                        Text("No chapters available")
+                    }
+                case .chapters:
+                    ChapterSelectionView()
+                }
+            }
         }
-        .navigationViewStyle(.stack)
     }
 }
 
