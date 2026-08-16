@@ -1,112 +1,113 @@
-//
-//  MainMenuView.swift
-//  garong
-//
-
 import SwiftUI
 
 struct MainMenuView: View {
-    private enum Destination: Hashable {
-        case game
-        case chapters
-    }
-
-    @State private var destination: Destination?
-
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(UIColor.systemGroupedBackground).ignoresSafeArea()
-                
-                VStack(spacing: 24) {
-                    Spacer()
-                    
-                    VStack(spacing: 12) {
-                        #if canImport(UIKit)
-                        if UIImage(named: "Rhodey") != nil {
-                            Image("Rhodey")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100)
-                                .shadow(color: .accentColor.opacity(0.3), radius: 10, x: 0, y: 5)
-                        } else {
-                            Image(systemName: "hand.raised.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100)
-                                .foregroundStyle(
-                                    LinearGradient(colors: [.accentColor, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
-                                )
-                                .shadow(color: .accentColor.opacity(0.3), radius: 10, x: 0, y: 5)
-                        }
-                        #else
-                        Image(systemName: "hand.raised.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100)
-                        #endif
-                        
-                        Text("Garong")
-                            .font(.system(size: 48, weight: .heavy, design: .rounded))
-                            .foregroundStyle(
-                                LinearGradient(colors: [.primary, .secondary], startPoint: .top, endPoint: .bottom)
-                            )
-                        
-                        Text("A Drag & Drop Sandbox Adventure")
-                            .font(.title3)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    HStack(spacing: 20) {
-                        Button {
-                            destination = .game
-                        } label: {
-                            HStack {
-                                Image(systemName: "play.fill")
-                                Text("Start Game")
-                            }
-                            .font(.title3.bold())
-                            .foregroundColor(.white)
-                            .frame(width: 200, height: 50)
-                            .background(Color.accentColor)
-                            .cornerRadius(14)
-                            .shadow(color: Color.accentColor.opacity(0.3), radius: 6, x: 0, y: 3)
-                        }
-                        
-                        Button {
-                            destination = .chapters
-                        } label: {
-                            HStack {
-                                Image(systemName: "square.grid.2x2.fill")
-                                Text("Chapters")
-                            }
-                            .font(.title3.bold())
-                            .foregroundColor(.accentColor)
-                            .frame(width: 200, height: 50)
-                            .background(Color(UIColor.secondarySystemGroupedBackground))
-                            .cornerRadius(14)
-                            .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 2)
-                        }
-                    }
-                    
-                    Spacer()
+                GarongTheme.pageBackground.ignoresSafeArea()
+                decorativeBackground
+
+                HStack(spacing: 34) {
+                    hero
+                    actionPanel
                 }
-                .padding(.horizontal, 40)
-                .padding(.vertical, 20)
+                .padding(.horizontal, 54)
+                .padding(.vertical, 34)
             }
-            .navigationDestination(item: $destination) { destination in
-                switch destination {
-                case .game:
-                    if let firstItem = StoryCatalog.stories.first?.chapters.first {
-                        GameplayView(chapter: Chapter(storyItem: firstItem))
-                    } else {
-                        Text("No chapters available")
-                    }
-                case .chapters:
-                    ChapterSelectionView()
-                }
-            }
+            .toolbar(.hidden, for: .navigationBar)
         }
+        .tint(GarongTheme.teal)
+    }
+
+    private var hero: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            Text("A SMALL STEP CAN\nCHANGE THE MOMENT")
+                .font(.caption.weight(.heavy))
+                .tracking(1.8)
+                .foregroundStyle(GarongTheme.coral)
+
+            Text("GARONG")
+                .font(.system(size: 68, weight: .black, design: .rounded))
+                .foregroundStyle(GarongTheme.ink)
+                .minimumScaleFactor(0.7)
+
+            Text("Observe. Try an approach.\nWatch what changes.")
+                .font(.system(.title2, design: .rounded, weight: .semibold))
+                .foregroundStyle(GarongTheme.teal)
+
+            Text("A story-driven interaction game about responding to children with curiosity, care, and flexible support.")
+                .font(.body)
+                .foregroundStyle(GarongTheme.ink.opacity(0.7))
+                .frame(maxWidth: 480, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var actionPanel: some View {
+        VStack(spacing: 18) {
+            ZStack {
+                Circle()
+                    .fill(GarongTheme.sun.opacity(0.36))
+                    .frame(width: 150, height: 150)
+
+                Image(systemName: "cat.fill")
+                    .font(.system(size: 74, weight: .semibold))
+                    .foregroundStyle(GarongTheme.ink)
+
+                Image(systemName: "heart.fill")
+                    .font(.title)
+                    .foregroundStyle(GarongTheme.coral)
+                    .offset(x: 58, y: -55)
+            }
+            .accessibilityHidden(true)
+
+            NavigationLink {
+                StorySelectionView(stories: SampleGameData.stories)
+            } label: {
+                Label("Start a Story", systemImage: "play.fill")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(GarongPrimaryButtonStyle())
+
+            NavigationLink {
+                ChapterSelectionView(
+                    title: "All Chapters",
+                    subtitle: "Development access to every GARONG chapter.",
+                    chapters: SampleGameData.chapters
+                )
+            } label: {
+                Label("Browse Chapters", systemImage: "square.grid.2x2.fill")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(GarongSecondaryButtonStyle())
+
+            Text("No scores. No wrong answers. Your choices shape the response.")
+                .font(.caption)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(GarongTheme.ink.opacity(0.58))
+        }
+        .padding(26)
+        .frame(maxWidth: 390)
+        .background(
+            RoundedRectangle(cornerRadius: 30, style: .continuous)
+                .fill(.white.opacity(0.86))
+                .shadow(color: GarongTheme.ink.opacity(0.12), radius: 20, y: 10)
+        )
+    }
+
+    private var decorativeBackground: some View {
+        ZStack {
+            Circle()
+                .fill(GarongTheme.sun.opacity(0.13))
+                .frame(width: 360, height: 360)
+                .offset(x: -330, y: -220)
+            Circle()
+                .fill(GarongTheme.teal.opacity(0.1))
+                .frame(width: 420, height: 420)
+                .offset(x: 420, y: 250)
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 
