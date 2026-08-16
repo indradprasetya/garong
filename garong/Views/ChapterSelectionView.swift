@@ -113,7 +113,7 @@ private struct ChapterCard: View {
 struct ChapterSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            ChapterSelectionView(story: SampleGameData.stories[0])
+            ChapterSelectionView(story: StoryCatalog.gameStories[0])
         }
     }
 }

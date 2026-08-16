@@ -62,7 +62,7 @@ struct MainMenuView: View {
             .accessibilityHidden(true)
 
             NavigationLink {
-                StorySelectionView(stories: SampleGameData.stories)
+                StorySelectionView(stories: StoryCatalog.gameStories)
             } label: {
                 Label("Start a Story", systemImage: "play.fill")
                     .frame(maxWidth: .infinity)
@@ -73,7 +73,7 @@ struct MainMenuView: View {
                 ChapterSelectionView(
                     title: "All Chapters",
                     subtitle: "Development access to every GARONG chapter.",
-                    chapters: SampleGameData.chapters
+                    chapters: StoryCatalog.allChapters
                 )
             } label: {
                 Label("Browse Chapters", systemImage: "square.grid.2x2.fill")

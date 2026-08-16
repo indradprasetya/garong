@@ -122,7 +122,7 @@ private struct StoryCard: View {
 struct StorySelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            StorySelectionView(stories: SampleGameData.stories)
+            StorySelectionView(stories: StoryCatalog.gameStories)
         }
     }
 }
