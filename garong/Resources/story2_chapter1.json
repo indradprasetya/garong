@@ -1,0 +1,1100 @@
+{
+  "schemaVersion": 4,
+  "id": "validate_jojo_feelings",
+  "title": {
+    "en": "Validate Jojo's Feelings",
+    "id": "Validasi Perasaan Jojo"
+  },
+  "description": {
+    "en": "Jojo feels hurt in the playground after Rhodey says something unkind. The conflict is still small, but Jojo needs his feelings to be taken seriously before he can move on.",
+    "id": "Jojo merasa sakit hati di taman setelah Rhodey mengatakan sesuatu yang tidak baik. Konfliknya masih kecil, tetapi Jojo perlu merasa perasaannya dianggap serius sebelum bisa lanjut bermain."
+  },
+  "hints": [
+    {
+      "en": "Validation starts by making the child feel safe enough to speak.",
+      "id": "Validasi dimulai dari membuat anak merasa cukup aman untuk bicara."
+    }
+  ],
+  "initialState": "HURT",
+  "gridCount": 3,
+  "choiceCount": 2,
+  "actions": [
+    {
+      "id": "action_asking",
+      "name": {
+        "en": "Ask",
+        "id": "Tanya"
+      }
+    },
+    {
+      "id": "action_blaming",
+      "name": {
+        "en": "Blame",
+        "id": "Menyalahkan"
+      }
+    },
+    {
+      "id": "action_approach",
+      "name": {
+        "en": "Approach",
+        "id": "Dekati"
+      }
+    }
+  ],
+  "characters": [
+    {
+      "id": "jojo",
+      "displayName": "Jojo",
+      "expressionIDs": [
+        "jojo_calm",
+        "jojo_defensive",
+        "jojo_relieved",
+        "jojo_sad"
+      ]
+    },
+    {
+      "id": "rhodey",
+      "displayName": "Rhodey",
+      "expressionIDs": [
+        "rhodey_defensive",
+        "rhodey_neutral",
+        "rhodey_questioning",
+        "rhodey_sad"
+      ]
+    }
+  ],
+  "grids": [
+    {
+      "id": "grid_1",
+      "order": 1,
+      "locked": false,
+      "backgroundID": "background_playground",
+      "dropSlots": [
+        {
+          "id": "slot_scene",
+          "targetCharacterID": null
+        }
+      ]
+    },
+    {
+      "id": "grid_2",
+      "order": 2,
+      "locked": false,
+      "backgroundID": "background_playground",
+      "dropSlots": [
+        {
+          "id": "slot_scene",
+          "targetCharacterID": null
+        }
+      ]
+    },
+    {
+      "id": "grid_3",
+      "order": 3,
+      "locked": true,
+      "backgroundID": "background_playground",
+      "dropSlots": []
+    }
+  ],
+  "outcomes": [
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_sad",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Rhodey called me a mean name.",
+              "id": "Rhodey mengejekku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_relieved",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_neutral",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "That made me feel small.",
+              "id": "Itu membuatku merasa direndahkan."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_relieved",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_neutral",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "That made me feel small.",
+              "id": "Itu membuatku merasa direndahkan."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_blaming"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_sad",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Rhodey called me a mean name.",
+              "id": "Rhodey mengejekku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_relieved",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_neutral",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "That made me feel small.",
+              "id": "Itu membuatku merasa direndahkan."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_defensive",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_defensive",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Why are you blaming me?",
+              "id": "Kenapa kamu menyalahkanku?"
+            }
+          }
+        }
+      ],
+      "finalState": "DEFENSIVE",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_sad",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Rhodey called me a mean name.",
+              "id": "Rhodey mengejekku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_relieved",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_neutral",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "That made me feel small.",
+              "id": "Itu membuatku merasa direndahkan."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_relieved",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_sad",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Thank you for listening to me.",
+              "id": "Terima kasih sudah mendengarkanku."
+            }
+          }
+        }
+      ],
+      "finalState": "VALIDATED",
+      "isIdeal": false,
+      "category": "success"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_blaming"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_sad",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Rhodey called me a mean name.",
+              "id": "Rhodey mengejekku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_defensive",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_defensive",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Why are you blaming me?",
+              "id": "Kenapa kamu menyalahkanku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_relieved",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_neutral",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "That made me feel small.",
+              "id": "Itu membuatku merasa direndahkan."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_blaming"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_blaming"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_sad",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Rhodey called me a mean name.",
+              "id": "Rhodey mengejekku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_defensive",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_defensive",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Why are you blaming me?",
+              "id": "Kenapa kamu menyalahkanku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_defensive",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_defensive",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Why are you blaming me?",
+              "id": "Kenapa kamu menyalahkanku?"
+            }
+          }
+        }
+      ],
+      "finalState": "DEFENSIVE",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_blaming"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_sad",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Rhodey called me a mean name.",
+              "id": "Rhodey mengejekku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_defensive",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_defensive",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Why are you blaming me?",
+              "id": "Kenapa kamu menyalahkanku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_calm",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_neutral",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Can I tell you what happened?",
+              "id": "Boleh aku ceritakan yang terjadi?"
+            }
+          }
+        }
+      ],
+      "finalState": "SAFE",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_sad",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Rhodey called me a mean name.",
+              "id": "Rhodey mengejekku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_calm",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_neutral",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Can I tell you what happened?",
+              "id": "Boleh aku ceritakan yang terjadi?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_relieved",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_sad",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Thank you for listening to me.",
+              "id": "Terima kasih sudah mendengarkanku."
+            }
+          }
+        }
+      ],
+      "finalState": "VALIDATED",
+      "isIdeal": true,
+      "category": "success"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_blaming"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_sad",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Rhodey called me a mean name.",
+              "id": "Rhodey mengejekku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_calm",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_neutral",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Can I tell you what happened?",
+              "id": "Boleh aku ceritakan yang terjadi?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_defensive",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_defensive",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Why are you blaming me?",
+              "id": "Kenapa kamu menyalahkanku?"
+            }
+          }
+        }
+      ],
+      "finalState": "DEFENSIVE",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_sad",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Rhodey called me a mean name.",
+              "id": "Rhodey mengejekku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_calm",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_neutral",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Can I tell you what happened?",
+              "id": "Boleh aku ceritakan yang terjadi?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "jojo"
+              ],
+              "assetID": "jojo_calm",
+              "assetType": "expression"
+            },
+            {
+              "slot": 2,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_neutral",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "jojo",
+            "text": {
+              "en": "Can I tell you what happened?",
+              "id": "Boleh aku ceritakan yang terjadi?"
+            }
+          }
+        }
+      ],
+      "finalState": "SAFE",
+      "isIdeal": false,
+      "category": "progress"
+    }
+  ]
+}

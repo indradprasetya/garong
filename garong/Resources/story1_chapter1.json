@@ -1,0 +1,868 @@
+{
+  "schemaVersion": 4,
+  "id": "rhodey_wants_to_draw",
+  "title": {
+    "en": "Make Rhodey Want to Draw",
+    "id": "Membuat Rhodey Mau Menggambar"
+  },
+  "description": {
+    "en": "Rhodey is sitting in the classroom but does not feel ready to draw. He is close to the activity, yet his body language shows that he needs emotional safety before he can enjoy the drawing materials.",
+    "id": "Rhodey duduk di kelas tetapi belum merasa siap untuk menggambar. Ia dekat dengan aktivitasnya, tetapi bahasa tubuhnya menunjukkan bahwa ia butuh rasa aman sebelum bisa menikmati alat gambar."
+  },
+  "hints": [
+    {
+      "en": "A child may join an activity more easily after feeling noticed and accompanied.",
+      "id": "Anak sering lebih mudah ikut aktivitas setelah merasa diperhatikan dan ditemani."
+    }
+  ],
+  "initialState": "REFUSING",
+  "gridCount": 3,
+  "choiceCount": 2,
+  "actions": [
+    {
+      "id": "action_approach",
+      "name": {
+        "en": "Approach",
+        "id": "Dekati"
+      }
+    },
+    {
+      "id": "action_crayon",
+      "name": {
+        "en": "Crayon",
+        "id": "Krayon"
+      }
+    },
+    {
+      "id": "action_toy",
+      "name": {
+        "en": "Toy",
+        "id": "Mainan"
+      }
+    }
+  ],
+  "characters": [
+    {
+      "id": "rhodey",
+      "displayName": "Rhodey",
+      "expressionIDs": [
+        "rhodey_calm",
+        "rhodey_frustrated",
+        "rhodey_happy",
+        "rhodey_questioning"
+      ]
+    }
+  ],
+  "grids": [
+    {
+      "id": "grid_1",
+      "order": 1,
+      "locked": false,
+      "backgroundID": "background_classroom",
+      "dropSlots": [
+        {
+          "id": "slot_scene",
+          "targetCharacterID": null
+        }
+      ]
+    },
+    {
+      "id": "grid_2",
+      "order": 2,
+      "locked": false,
+      "backgroundID": "background_classroom",
+      "dropSlots": [
+        {
+          "id": "slot_scene",
+          "targetCharacterID": null
+        }
+      ]
+    },
+    {
+      "id": "grid_3",
+      "order": 3,
+      "locked": true,
+      "backgroundID": "background_classroom",
+      "dropSlots": []
+    }
+  ],
+  "outcomes": [
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want to draw right now.",
+              "id": "Aku belum mau menggambar sekarang."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_happy",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "You're staying with me?",
+              "id": "Kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": null
+        }
+      ],
+      "finalState": "COMFORTABLE",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_crayon"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want to draw right now.",
+              "id": "Aku belum mau menggambar sekarang."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_happy",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "You're staying with me?",
+              "id": "Kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_drawing",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I want to draw now!",
+              "id": "Sekarang aku mau menggambar!"
+            }
+          }
+        }
+      ],
+      "finalState": "DRAWING",
+      "isIdeal": true,
+      "category": "success"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_toy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want to draw right now.",
+              "id": "Aku belum mau menggambar sekarang."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_happy",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "You're staying with me?",
+              "id": "Kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I want to play instead.",
+              "id": "Aku mau bermain saja."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_crayon"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want to draw right now.",
+              "id": "Aku belum mau menggambar sekarang."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want the crayon yet.",
+              "id": "Aku belum mau menerima krayonnya."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Thank you for staying with me.",
+              "id": "Terima kasih sudah menemaniku."
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_crayon"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_crayon"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want to draw right now.",
+              "id": "Aku belum mau menggambar sekarang."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want the crayon yet.",
+              "id": "Aku belum mau menerima krayonnya."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I said I don't want to draw!",
+              "id": "Aku bilang aku belum mau menggambar!"
+            }
+          }
+        }
+      ],
+      "finalState": "FRUSTRATED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_crayon"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_toy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want to draw right now.",
+              "id": "Aku belum mau menggambar sekarang."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want the crayon yet.",
+              "id": "Aku belum mau menerima krayonnya."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I want to play instead.",
+              "id": "Aku mau bermain saja."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_toy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want to draw right now.",
+              "id": "Aku belum mau menggambar sekarang."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I want to play instead.",
+              "id": "Aku mau bermain saja."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_happy",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "You're staying with me?",
+              "id": "Kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "LOVED",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_toy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_crayon"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want to draw right now.",
+              "id": "Aku belum mau menggambar sekarang."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I want to play instead.",
+              "id": "Aku mau bermain saja."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Can I try the crayon?",
+              "id": "Boleh aku mencoba krayonnya?"
+            }
+          }
+        }
+      ],
+      "finalState": "CURIOUS",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_toy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_toy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I don't want to draw right now.",
+              "id": "Aku belum mau menggambar sekarang."
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I want to play instead.",
+              "id": "Aku mau bermain saja."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I want to play instead.",
+              "id": "Aku mau bermain saja."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    }
+  ]
+}

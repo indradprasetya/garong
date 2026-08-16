@@ -22,12 +22,29 @@ struct MainMenuView: View {
                     Spacer()
                     
                     VStack(spacing: 12) {
-                        Image(systemName: "gamecontroller.fill")
-                            .font(.system(size: 64))
-                            .foregroundStyle(
-                                LinearGradient(colors: [.accentColor, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
-                            )
-                            .shadow(color: .accentColor.opacity(0.3), radius: 10, x: 0, y: 5)
+                        #if canImport(UIKit)
+                        if UIImage(named: "Rhodey") != nil {
+                            Image("Rhodey")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100)
+                                .shadow(color: .accentColor.opacity(0.3), radius: 10, x: 0, y: 5)
+                        } else {
+                            Image(systemName: "hand.raised.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100)
+                                .foregroundStyle(
+                                    LinearGradient(colors: [.accentColor, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
+                                )
+                                .shadow(color: .accentColor.opacity(0.3), radius: 10, x: 0, y: 5)
+                        }
+                        #else
+                        Image(systemName: "hand.raised.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100)
+                        #endif
                         
                         Text("Garong")
                             .font(.system(size: 48, weight: .heavy, design: .rounded))
@@ -80,8 +97,8 @@ struct MainMenuView: View {
             .navigationDestination(item: $destination) { destination in
                 switch destination {
                 case .game:
-                    if let firstChapter = SampleGameData.chapters.first {
-                        GameplayView(chapter: firstChapter)
+                    if let firstItem = StoryCatalog.stories.first?.chapters.first {
+                        GameplayView(chapter: Chapter(storyItem: firstItem))
                     } else {
                         Text("No chapters available")
                     }

@@ -103,6 +103,73 @@ final class DragDropGameTests {
                    engine.placedObjectCount == 0 &&
                    engine.scenes.allSatisfy { $0.currentObject == nil && $0.characterEmotion == .neutral }
         }
+
+        assertTest("Story JSON: Rhodey story loads and validates") {
+            do {
+                let story = try StoryLoader.load(named: "story1_chapter1")
+                return story.id == "rhodey_wants_to_draw" &&
+                       story.title.en == "Make Rhodey Want to Draw" &&
+                       story.gridCount == 3 &&
+                       story.choiceCount == 2 &&
+                       story.actions.count == 3 &&
+                       story.characters.count == 1 &&
+                       story.outcomes.count == 9
+            } catch {
+                print("    Story load error: \(error)")
+                return false
+            }
+        }
+
+        assertTest("Story runner: ideal path for story1_chapter1") {
+            do {
+                let story = try StoryLoader.load(named: "story1_chapter1")
+                let runner = try StoryRunner(story: story)
+                let outcome = runner.outcome(for: ["action_approach", "action_crayon"])
+                return outcome != nil &&
+                       outcome?.isIdeal == true
+            } catch {
+                print("    Story runner error: \(error)")
+                return false
+            }
+        }
+
+        assertTest("Story runner: multi-slot drop zones for story2_chapter3") {
+            do {
+                let story = try StoryLoader.load(named: "story2_chapter3")
+                let item = StoryChapterItem(id: "s2c3", storyNumber: 2, chapterNumber: 3, fileName: "story2_chapter3", storyDefinition: story, isUnlocked: true)
+                let chapter = Chapter(storyItem: item)
+                let engine = DragDropGameEngine(chapter: chapter)
+                
+                return engine.totalSceneCount == 5 &&
+                       engine.scenes[0].dropSlots.count == 2 &&
+                       engine.scenes[1].dropSlots.count == 2 &&
+                       engine.scenes[2].dropSlots.count == 1 &&
+                       engine.scenes[3].dropSlots.count == 0
+            } catch {
+                print("    Multi-slot story load error: \(error)")
+                return false
+            }
+        }
+
+        assertTest("Story JSON: all 6 chapter JSON files load and validate") {
+            let files = [
+                "story1_chapter1", "story1_chapter2", "story1_chapter3",
+                "story2_chapter1", "story2_chapter2", "story2_chapter3"
+            ]
+            do {
+                for file in files {
+                    let story = try StoryLoader.load(named: file)
+                    let runner = try StoryRunner(story: story)
+                    guard !story.actions.isEmpty, !story.outcomes.isEmpty, runner.outcome(for: Array(repeating: story.actions.first!.id, count: story.choiceCount)) != nil else {
+                        return false
+                    }
+                }
+                return true
+            } catch {
+                print("    All stories load error: \(error)")
+                return false
+            }
+        }
         
         let allPassed = passedCount == totalCount
         print("🧪 [DragDropGameTests] Result: \(passedCount)/\(totalCount) tests passed (\(allPassed ? "SUCCESS" : "FAILURE"))")

@@ -1,0 +1,7535 @@
+{
+  "schemaVersion": 4,
+  "id": "rhodey_torn_paper",
+  "title": {
+    "en": "Help Rhodey After His Paper Tears",
+    "id": "Bantu Rhodey Setelah Kertasnya Robek"
+  },
+  "description": {
+    "en": "Rhodey's drawing paper tears during class and the broken drawing feels important to him. He is upset not only because the paper is damaged, but because the work he cared about suddenly feels lost.",
+    "id": "Kertas gambar Rhodey robek saat di kelas dan gambar itu terasa penting baginya. Ia kesal bukan hanya karena kertasnya rusak, tetapi karena karya yang ia pedulikan terasa hilang tiba-tiba."
+  },
+  "hints": [
+    {
+      "en": "A distressed child may need calm presence before they can explain what happened.",
+      "id": "Anak yang sangat sedih mungkin butuh kehadiran tenang sebelum bisa menjelaskan yang terjadi."
+    }
+  ],
+  "initialState": "CRYING",
+  "gridCount": 4,
+  "choiceCount": 3,
+  "actions": [
+    {
+      "id": "action_approach",
+      "name": {
+        "en": "Approach",
+        "id": "Dekati"
+      }
+    },
+    {
+      "id": "action_asking",
+      "name": {
+        "en": "Ask",
+        "id": "Tanya"
+      }
+    },
+    {
+      "id": "action_candy",
+      "name": {
+        "en": "Candy",
+        "id": "Permen"
+      }
+    },
+    {
+      "id": "action_paper",
+      "name": {
+        "en": "Paper",
+        "id": "Kertas"
+      }
+    }
+  ],
+  "characters": [
+    {
+      "id": "rhodey",
+      "displayName": "Rhodey",
+      "expressionIDs": [
+        "rhodey_calm",
+        "rhodey_crying",
+        "rhodey_frustrated",
+        "rhodey_questioning",
+        "rhodey_relieved"
+      ]
+    }
+  ],
+  "grids": [
+    {
+      "id": "grid_1",
+      "order": 1,
+      "locked": false,
+      "backgroundID": "background_classroom",
+      "dropSlots": [
+        {
+          "id": "slot_scene",
+          "targetCharacterID": null
+        }
+      ]
+    },
+    {
+      "id": "grid_2",
+      "order": 2,
+      "locked": false,
+      "backgroundID": "background_classroom",
+      "dropSlots": [
+        {
+          "id": "slot_scene",
+          "targetCharacterID": null
+        }
+      ]
+    },
+    {
+      "id": "grid_3",
+      "order": 3,
+      "locked": false,
+      "backgroundID": "background_classroom",
+      "dropSlots": [
+        {
+          "id": "slot_scene",
+          "targetCharacterID": null
+        }
+      ]
+    },
+    {
+      "id": "grid_4",
+      "order": 4,
+      "locked": true,
+      "backgroundID": "background_classroom",
+      "dropSlots": []
+    }
+  ],
+  "outcomes": [
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CURIOUS",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_holding_new_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Thank you. I can try again!",
+              "id": "Terima kasih. Aku bisa mencoba lagi!"
+            }
+          }
+        }
+      ],
+      "finalState": "RELIEVED",
+      "isIdeal": true,
+      "category": "success"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        }
+      ],
+      "finalState": "OVERWHELMED",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CURIOUS",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_holding_new_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Thank you. I can try again!",
+              "id": "Terima kasih. Aku bisa mencoba lagi!"
+            }
+          }
+        }
+      ],
+      "finalState": "RELIEVED",
+      "isIdeal": false,
+      "category": "success"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CURIOUS",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        }
+      ],
+      "finalState": "OVERWHELMED",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "UNCOMFORTABLE",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        }
+      ],
+      "finalState": "OVERWHELMED",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CURIOUS",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Please listen to me!",
+              "id": "Tolong dengarkan aku!"
+            }
+          }
+        }
+      ],
+      "finalState": "FRUSTRATED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CURIOUS",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        }
+      ],
+      "finalState": "OVERWHELMED",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "UNCOMFORTABLE",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        }
+      ],
+      "finalState": "OVERWHELMED",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CURIOUS",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_holding_new_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Thank you. I can try again!",
+              "id": "Terima kasih. Aku bisa mencoba lagi!"
+            }
+          }
+        }
+      ],
+      "finalState": "RELIEVED",
+      "isIdeal": false,
+      "category": "success"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CURIOUS",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_holding_new_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Thank you. I can try again!",
+              "id": "Terima kasih. Aku bisa mencoba lagi!"
+            }
+          }
+        }
+      ],
+      "finalState": "RELIEVED",
+      "isIdeal": false,
+      "category": "success"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "I can't talk yet.",
+              "id": "Aku belum bisa bicara."
+            }
+          }
+        }
+      ],
+      "finalState": "OVERWHELMED",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Is that for me?",
+              "id": "Itu untukku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CURIOUS",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_approach"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Please listen to me!",
+              "id": "Tolong dengarkan aku!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_calm",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Will you stay with me?",
+              "id": "Maukah kamu menemaniku?"
+            }
+          }
+        }
+      ],
+      "finalState": "CALMING",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_asking"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Please listen to me!",
+              "id": "Tolong dengarkan aku!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_relieved",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "It tore while I was drawing.",
+              "id": "Kertasnya robek saat aku menggambar."
+            }
+          }
+        }
+      ],
+      "finalState": "HEARD",
+      "isIdeal": false,
+      "category": "progress"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_candy"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Please listen to me!",
+              "id": "Tolong dengarkan aku!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "The candy doesn't fix my drawing.",
+              "id": "Permennya tidak memperbaiki gambarku."
+            }
+          }
+        }
+      ],
+      "finalState": "DISTRACTED",
+      "isIdeal": false,
+      "category": "retry"
+    },
+    {
+      "steps": [
+        {
+          "sourceGridID": "grid_1",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_2",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        },
+        {
+          "sourceGridID": "grid_3",
+          "placements": [
+            {
+              "slotID": "slot_scene",
+              "actionID": "action_paper"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "gridID": "grid_1",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_crying_torn_paper",
+              "assetType": "pose"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "My drawing is torn!",
+              "id": "Gambarku robek!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_2",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_questioning",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "That's not my drawing.",
+              "id": "Itu bukan gambarku."
+            }
+          }
+        },
+        {
+          "gridID": "grid_3",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Please listen to me!",
+              "id": "Tolong dengarkan aku!"
+            }
+          }
+        },
+        {
+          "gridID": "grid_4",
+          "visualSlots": [
+            {
+              "slot": 1,
+              "characterIDs": [
+                "rhodey"
+              ],
+              "assetID": "rhodey_frustrated",
+              "assetType": "expression"
+            }
+          ],
+          "textBubble": {
+            "speakerID": "rhodey",
+            "text": {
+              "en": "Please listen to me!",
+              "id": "Tolong dengarkan aku!"
+            }
+          }
+        }
+      ],
+      "finalState": "FRUSTRATED",
+      "isIdeal": false,
+      "category": "retry"
+    }
+  ]
+}
