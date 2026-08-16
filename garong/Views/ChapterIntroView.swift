@@ -5,7 +5,7 @@ struct ChapterIntroView: View {
 
     var body: some View {
         ZStack {
-            GarongTheme.pageBackground.ignoresSafeArea()
+            GarongDecorativeBackground()
 
             HStack(spacing: 36) {
                 scenePreview
@@ -58,19 +58,19 @@ struct ChapterIntroView: View {
                 .frame(width: 160, height: 160)
                 .offset(x: -80, y: -60)
 
-            Image(systemName: "cat.fill")
-                .font(.system(size: 120, weight: .semibold))
-                .foregroundStyle(GarongTheme.ink)
-                .offset(y: 28)
-
-            Text("Background artwork\nfor this chapter")
-                .font(.caption.weight(.semibold))
-                .multilineTextAlignment(.center)
-                .foregroundStyle(GarongTheme.ink.opacity(0.54))
-                .offset(y: -110)
+            HStack(spacing: 4) {
+                ForEach(characterAssets, id: \.self) { asset in
+                    StoryArtworkView(assetName: asset, size: 150)
+                }
+            }
         }
         .frame(maxWidth: 430, maxHeight: 400)
         .accessibilityLabel("Chapter illustration placeholder")
+    }
+
+    private var characterAssets: [String] {
+        let assets = chapter.storyDefinition?.characters.map { AssetFallbackHelper.imageName(for: $0.id) } ?? []
+        return assets.isEmpty ? ["Rhodey", "Jojo"] : Array(assets.prefix(2))
     }
 
     private func stat(_ value: String, _ label: String, _ symbol: String) -> some View {
@@ -91,7 +91,7 @@ struct ChapterIntroView: View {
 struct ChapterIntroView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            ChapterIntroView(chapter: SampleGameData.firstInvitation)
+            ChapterIntroView(chapter: StoryCatalog.allChapters[0])
         }
     }
 }

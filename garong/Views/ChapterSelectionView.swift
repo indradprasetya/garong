@@ -19,7 +19,7 @@ struct ChapterSelectionView: View {
 
     var body: some View {
         ZStack {
-            GarongTheme.pageBackground.ignoresSafeArea()
+            GarongDecorativeBackground()
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
@@ -82,6 +82,12 @@ private struct ChapterCard: View {
                     .foregroundStyle(chapter.isUnlocked ? GarongTheme.teal : .secondary)
             }
 
+            HStack {
+                Spacer()
+                StoryArtworkView(assetName: heroAsset, size: 76)
+                Spacer()
+            }
+
             Text(chapter.name)
                 .font(.system(.title3, design: .rounded, weight: .bold))
                 .foregroundStyle(GarongTheme.ink)
@@ -107,6 +113,12 @@ private struct ChapterCard: View {
                 .fill(.white.opacity(0.9))
                 .shadow(color: GarongTheme.ink.opacity(0.09), radius: 14, y: 7)
         )
+    }
+
+    private var heroAsset: String {
+        let characterID = chapter.storyDefinition?.characters.first?.id ?? ""
+        let resolved = AssetFallbackHelper.imageName(for: characterID)
+        return resolved.isEmpty ? "Rhodey" : resolved
     }
 }
 

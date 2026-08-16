@@ -7,16 +7,15 @@ struct ChapterCompleteView: View {
     
     var body: some View {
         VStack(spacing: 24) {
-            Image(systemName: "trophy.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(
-                    LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom)
-                )
-                .shadow(color: .orange.opacity(0.5), radius: 10, x: 0, y: 5)
+            HStack(spacing: 12) {
+                StoryArtworkView(assetName: "GiveBandage", size: 84)
+                StoryArtworkView(assetName: "Apologize", size: 84)
+            }
             
             VStack(spacing: 8) {
                 Text("Chapter Complete!")
-                    .font(.largeTitle.bold())
+                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                    .foregroundStyle(GarongTheme.ink)
                 
                 // Fallback text since result properties aren't fully defined in prompt
                 // Assuming it has some summary or we can just show generic completion
@@ -29,13 +28,13 @@ struct ChapterCompleteView: View {
                 Button(action: onRestart) {
                     Text("Play Again")
                         .font(.headline)
-                        .foregroundColor(.accentColor)
+                        .foregroundColor(GarongTheme.teal)
                         .frame(width: 160, height: 50)
                         .background(Color(UIColor.secondarySystemBackground))
                         .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.accentColor, lineWidth: 2)
+                                .stroke(GarongTheme.teal, lineWidth: 2)
                         )
                 }
                 
@@ -44,7 +43,7 @@ struct ChapterCompleteView: View {
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(width: 160, height: 50)
-                        .background(Color.accentColor)
+                        .background(GarongTheme.teal)
                         .cornerRadius(12)
                         .shadow(radius: 3)
                 }
@@ -54,7 +53,7 @@ struct ChapterCompleteView: View {
         .padding(40)
         .background(
             RoundedRectangle(cornerRadius: 24)
-                .fill(Color(UIColor.systemBackground))
+                .fill(GarongTheme.cream)
                 .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 10)
         )
         .frame(maxWidth: 500)

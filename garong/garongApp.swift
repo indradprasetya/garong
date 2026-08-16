@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct garongApp: App {
+    @AppStorage("hasSeenGarongOnboarding") private var hasSeenOnboarding = false
+
     var body: some Scene {
         WindowGroup {
-            MainMenuView()
+            if hasSeenOnboarding {
+                MainMenuView()
+            } else {
+                OnboardingView { hasSeenOnboarding = true }
+            }
         }
     }
 }

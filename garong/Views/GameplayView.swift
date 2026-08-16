@@ -17,7 +17,7 @@ struct GameplayView: View {
     var body: some View {
         ZStack {
             // Background fill extending into edges - Acts as unattach drop target when dragging placed items outside
-            Color(UIColor.systemGroupedBackground)
+            GarongTheme.pageBackground
                 .ignoresSafeArea()
                 .dropDestination(for: GameObject.self) { items, _ in
                     for item in items {
@@ -38,11 +38,12 @@ struct GameplayView: View {
                     } label: {
                         Image(systemName: "arrowshape.backward.fill")
                             .font(.title2)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(GarongTheme.ink)
                     }
                     
                     Text(viewModel.chapterName)
-                        .font(.title3.bold())
+                        .font(.system(.title3, design: .rounded, weight: .bold))
+                        .foregroundStyle(GarongTheme.ink)
                     
                     Spacer()
                     
@@ -68,8 +69,8 @@ struct GameplayView: View {
                             .padding(.vertical, 4)
                             .background(
                                 RoundedRectangle(cornerRadius: 16)
-                                    .fill(isReady ? Color.accentColor : Color(UIColor.tertiaryLabel))
-                                    .shadow(color: isReady ? Color.accentColor.opacity(0.4) : Color.clear, radius: 6, x: 0, y: 3)
+                                    .fill(isReady ? GarongTheme.teal : GarongTheme.ink.opacity(0.25))
+                                    .shadow(color: isReady ? GarongTheme.teal.opacity(0.4) : Color.clear, radius: 6, x: 0, y: 3)
                             )
                         }
                         .disabled(!isReady)
@@ -105,6 +106,9 @@ struct GameplayView: View {
                 
                 // Bottom Tray (CENTERED Draggable Objects - also unattached when dropped here)
                 VStack(alignment: .center, spacing: 4) {
+                    Text("CHOOSE AN APPROACH")
+                        .font(.caption2.weight(.heavy)).tracking(1.2)
+                        .foregroundStyle(GarongTheme.coral)
                     HStack(spacing: 16) {
                         ForEach(viewModel.availableObjects, id: \.id) { object in
                             DraggableObjectView(object: object)
@@ -112,7 +116,9 @@ struct GameplayView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
-                .frame(height: 88)
+                .padding(.vertical, 8)
+                .frame(height: 104)
+                .background(.white.opacity(0.78), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .dropDestination(for: GameObject.self) { items, _ in
                     for item in items {
                         withAnimation(.spring()) {
@@ -152,7 +158,7 @@ struct GameplayView: View {
 
 struct GameplayView_Previews: PreviewProvider {
     static var previews: some View {
-        GameplayView(chapter: SampleGameData.chapters[0])
+        GameplayView(chapter: StoryCatalog.allChapters[0])
             .previewInterfaceOrientation(.landscapeLeft)
     }
 }

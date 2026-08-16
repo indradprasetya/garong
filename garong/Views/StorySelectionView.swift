@@ -5,7 +5,7 @@ struct StorySelectionView: View {
 
     var body: some View {
         ZStack {
-            GarongTheme.pageBackground.ignoresSafeArea()
+            GarongDecorativeBackground()
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
@@ -68,9 +68,7 @@ private struct StoryCard: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 18, style: .continuous)
                         .fill(GarongTheme.sun.opacity(0.3))
-                    Image(systemName: story.symbol)
-                        .font(.system(size: 32, weight: .semibold))
-                        .foregroundStyle(GarongTheme.coral)
+                    StoryArtworkView(assetName: heroAsset, size: 64)
                 }
                 .frame(width: 72, height: 72)
 
@@ -116,6 +114,12 @@ private struct StoryCard: View {
                 .shadow(color: GarongTheme.ink.opacity(0.1), radius: 16, y: 8)
         )
         .contentShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
+    }
+
+    private var heroAsset: String {
+        let characterID = story.chapters.first?.storyDefinition?.characters.first?.id ?? ""
+        let resolved = AssetFallbackHelper.imageName(for: characterID)
+        return resolved.isEmpty ? (story.number == 1 ? "Rhodey" : "Jojo") : resolved
     }
 }
 

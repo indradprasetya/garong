@@ -4,8 +4,7 @@ struct MainMenuView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                GarongTheme.pageBackground.ignoresSafeArea()
-                decorativeBackground
+                GarongDecorativeBackground()
 
                 HStack(spacing: 34) {
                     hero
@@ -50,9 +49,7 @@ struct MainMenuView: View {
                     .fill(GarongTheme.sun.opacity(0.36))
                     .frame(width: 150, height: 150)
 
-                Image(systemName: "cat.fill")
-                    .font(.system(size: 74, weight: .semibold))
-                    .foregroundStyle(GarongTheme.ink)
+                StoryArtworkView(assetName: "Rhodey", size: 112)
 
                 Image(systemName: "heart.fill")
                     .font(.title)
@@ -95,20 +92,6 @@ struct MainMenuView: View {
         )
     }
 
-    private var decorativeBackground: some View {
-        ZStack {
-            Circle()
-                .fill(GarongTheme.sun.opacity(0.13))
-                .frame(width: 360, height: 360)
-                .offset(x: -330, y: -220)
-            Circle()
-                .fill(GarongTheme.teal.opacity(0.1))
-                .frame(width: 420, height: 420)
-                .offset(x: 420, y: 250)
-        }
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
-    }
 }
 
 struct MainMenuView_Previews: PreviewProvider {
