@@ -7,48 +7,23 @@ import SwiftUI
 
 enum AssetFallbackHelper {
     /// Returns the asset image name for character expressions.
-    /// Uses available catalog assets (`"Rhodey"`, `"Jojo"`, `"Globe"`).
+    /// Uses the available generic character assets when an expression-specific asset is absent.
     static func imageName(for assetID: String) -> String {
         let lower = assetID.lowercased()
         if lower.contains("rhodey") {
-            return "Rhodey"
+            return "rhodey"
         } else if lower.contains("jojo") {
-            return "Jojo"
+            return "jojo"
         } else {
-            return "Globe"
+            return "fallback_globe"
         }
     }
 
     /// Returns the asset image name for game actions or items.
     static func actionImageName(for actionID: String) -> String {
-        let lower = actionID.lowercased()
-        if lower.contains("approach") {
-            return "Approach"
-        } else if lower.contains("apologize") {
-            return "Apologize"
-        } else if lower.contains("ask_quiet") {
-            return "AskQuiet"
-        } else if lower.contains("asking") || lower.contains("ask") {
-            return "Asking"
-        } else if lower.contains("attention") || lower.contains("reset") {
-            return "AttentionReset"
-        } else if lower.contains("blam") {
-            return "Blaming"
-        } else if lower.contains("candy") || lower.contains("lollipop") {
-            return "Candy"
-        } else if lower.contains("crayon") || lower.contains("draw") {
-            return "Crayon"
-        } else if lower.contains("bandage") {
-            return "GiveBandage"
-        } else if lower.contains("lecture") {
-            return "Lecture"
-        } else if lower.contains("paper") {
-            return "Paper"
-        } else if lower.contains("toy") {
-            return "Toy"
-        } else {
-            return "Globe"
-        }
+        let name = actionID.lowercased()
+        guard name.hasPrefix("action_") else { return "fallback_globe" }
+        return name == "action_lollipop" ? "action_candy" : name
     }
 
     /// Returns an appropriate SF Symbol fallback for game actions or items.
@@ -71,4 +46,3 @@ enum AssetFallbackHelper {
         }
     }
 }
-

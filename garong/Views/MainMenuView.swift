@@ -16,8 +16,8 @@ struct MainMenuView: View {
                     
                     VStack(spacing: 12) {
                         #if canImport(UIKit)
-                        if UIImage(named: "Rhodey") != nil {
-                            Image("Rhodey")
+                        if UIImage(named: "rhodey") != nil {
+                            Image("rhodey")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 100)
