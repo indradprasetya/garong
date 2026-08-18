@@ -13,10 +13,15 @@ struct garongApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if hasSeenOnboarding {
-                MainMenuView()
-            } else {
-                OnboardingView { hasSeenOnboarding = true }
+            Group {
+                if hasSeenOnboarding {
+                    MainMenuView()
+                } else {
+                    OnboardingView { hasSeenOnboarding = true }
+                }
+            }
+            .task {
+                BackgroundMusicManager.shared.play()
             }
         }
     }
