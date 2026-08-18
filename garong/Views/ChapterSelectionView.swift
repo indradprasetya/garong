@@ -42,10 +42,6 @@ struct ChapterSelectionView: View {
             .padding(.horizontal, 34)
             .padding(.vertical, 20)
         }
-        .navigationTitle("Choose a Chapter")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(.hidden, for: .navigationBar)
-        .tint(GarongTheme.ink)
     }
 
     private var storyHero: some View {
