@@ -86,7 +86,7 @@ struct Chapter: Identifiable, Equatable {
                     name: isOutcomeGrid ? "Outcome" : "Grid \(grid.order)",
                     description: isOutcomeGrid ? "Final Result" : "Scene \(grid.order)",
                     dropSlots: dropSlots,
-                    characterImageNames: charNames.isEmpty ? ["Globe"] : charNames,
+                    characterImageNames: charNames.isEmpty ? ["fallback_globe"] : charNames,
                     isUnlocked: index == 0
                 )
             }
@@ -107,4 +107,3 @@ struct Chapter: Identifiable, Equatable {
         lhs.id == rhs.id && lhs.number == rhs.number && lhs.name == rhs.name && lhs.isUnlocked == rhs.isUnlocked
     }
 }
-

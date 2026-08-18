@@ -42,7 +42,6 @@ struct CharacterView: View {
 
 struct CharacterView_Previews: PreviewProvider {
     static var previews: some View {
-        CharacterView(imageName: "Rhodey", emotion: .happy)
+        CharacterView(imageName: "rhodey", emotion: .happy)
     }
 }
-

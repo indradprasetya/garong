@@ -45,7 +45,7 @@ struct SceneDropZoneView: View {
                     } else if let singleSlot = scene.dropSlots.first {
                         SceneColumnDropZone(
                             slot: singleSlot,
-                            characterImageName: scene.characterImageNames.first ?? "Globe",
+                            characterImageName: scene.characterImageNames.first ?? "fallback_globe",
                             characterEmotion: scene.characterEmotion,
                             isAnimating: isAnimating,
                             onDrop: { obj in onDrop(obj, singleSlot.id) },
@@ -56,7 +56,7 @@ struct SceneDropZoneView: View {
                         VStack(spacing: 4) {
                             Spacer(minLength: 0)
                             CharacterView(
-                                imageName: scene.characterImageNames.first ?? "Globe",
+                                imageName: scene.characterImageNames.first ?? "fallback_globe",
                                 emotion: scene.characterEmotion,
                                 isReacting: isAnimating
                             )
