@@ -1,6 +1,10 @@
 {
   "schemaVersion": 4,
   "id": "share_the_slide",
+  "shortTitle": {
+    "en": "The Slide Is Mine",
+    "id": "Perosotan Ini Milikku"
+  },
   "title": {
     "en": "Help Rhodey Share the Slide",
     "id": "Bantu Rhodey Berbagi Perosotan"

@@ -1,6 +1,10 @@
 {
   "schemaVersion": 4,
   "id": "rhodey_torn_paper",
+  "shortTitle": {
+    "en": "My Drawing Tore",
+    "id": "Gambarku Robek"
+  },
   "title": {
     "en": "Help Rhodey After His Paper Tears",
     "id": "Bantu Rhodey Setelah Kertasnya Robek"

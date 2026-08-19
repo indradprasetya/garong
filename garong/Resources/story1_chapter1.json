@@ -1,6 +1,10 @@
 {
   "schemaVersion": 4,
   "id": "rhodey_wants_to_draw",
+  "shortTitle": {
+    "en": "Let's Draw!",
+    "id": "Ayo Menggambar!"
+  },
   "title": {
     "en": "Make Rhodey Want to Draw",
     "id": "Membuat Rhodey Mau Menggambar"

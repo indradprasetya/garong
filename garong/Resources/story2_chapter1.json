@@ -1,6 +1,10 @@
 {
   "schemaVersion": 4,
   "id": "validate_jojo_feelings",
+  "shortTitle": {
+    "en": "That Hurt My Feelings",
+    "id": "Itu Menyakiti Perasaanku"
+  },
   "title": {
     "en": "Validate Jojo's Feelings",
     "id": "Validasi Perasaan Jojo"
