@@ -14,7 +14,7 @@ final class BackgroundMusicManager {
             forResource: "Steps_in_the_Grass",
             withExtension: "mp3"
         ) else {
-            assertionFailure("Background music file is missing from the app bundle.")
+            print("Background music file is missing from the app bundle.")
             return
         }
 
@@ -27,10 +27,13 @@ final class BackgroundMusicManager {
             audioPlayer.numberOfLoops = -1
             audioPlayer.volume = 0.28
             audioPlayer.prepareToPlay()
-            audioPlayer.play()
+            guard audioPlayer.play() else {
+                print("Background music player could not start.")
+                return
+            }
             player = audioPlayer
         } catch {
-            assertionFailure("Unable to play background music: \(error.localizedDescription)")
+            print("Unable to play background music: \(error.localizedDescription)")
         }
     }
 }

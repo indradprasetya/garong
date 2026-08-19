@@ -1,28 +1,35 @@
-//
-//  garongApp.swift
-//  garong
-//
-//  Created by Indrayana Dian Prasetya on 11/08/26.
-//
-
 import SwiftUI
 
 @main
 struct garongApp: App {
-    // Version the key whenever onboarding content changes so an installed build
-    // does not silently skip a newly introduced onboarding screen.
-    @AppStorage("hasSeenGarongOnboardingV2") private var hasSeenOnboarding = false
+    @State private var isShowingOnboarding = true
 
     var body: some Scene {
         WindowGroup {
             Group {
-                if hasSeenOnboarding {
-                    MainMenuView()
+                if isShowingOnboarding {
+                    OnboardingView {
+                        withAnimation(.easeInOut(duration: 0.65)) {
+                            isShowingOnboarding = false
+                        }
+                    }
+                    .transition(
+                        .opacity.combined(
+                            with: .scale(scale: 1.015)
+                        )
+                    )
+
                 } else {
-                    OnboardingView { hasSeenOnboarding = true }
+                    MainMenuView()
+                        .transition(
+                            .opacity.combined(
+                                with: .scale(scale: 0.985)
+                            )
+                        )
                 }
             }
-            .task {
+            .ignoresSafeArea()
+            .onAppear {
                 BackgroundMusicManager.shared.play()
             }
         }
