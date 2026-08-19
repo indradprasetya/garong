@@ -9,7 +9,9 @@ import SwiftUI
 
 @main
 struct garongApp: App {
-    @AppStorage("hasSeenGarongOnboarding") private var hasSeenOnboarding = false
+    // Version the key whenever onboarding content changes so an installed build
+    // does not silently skip a newly introduced onboarding screen.
+    @AppStorage("hasSeenGarongOnboardingV2") private var hasSeenOnboarding = false
 
     var body: some Scene {
         WindowGroup {
