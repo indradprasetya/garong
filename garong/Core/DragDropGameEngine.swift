@@ -9,6 +9,7 @@ import Foundation
 final class DragDropGameEngine {
     private let reactionEvaluator: ReactionEvaluating
     private let completionEvaluator: CompletionEvaluator
+    private let progressStore: StoryProgressStore
     private var storyRunner: StoryRunner?
     
     private(set) var chapter: Chapter
@@ -19,16 +20,19 @@ final class DragDropGameEngine {
     init(
         chapter: Chapter,
         reactionEvaluator: ReactionEvaluating = DefaultReactionEvaluator(),
-        completionEvaluator: CompletionEvaluator = CompletionEvaluator()
+        completionEvaluator: CompletionEvaluator = CompletionEvaluator(),
+        progressStore: StoryProgressStore = StoryProgressStore()
     ) {
         self.chapter = chapter
         self.scenes = chapter.scenes
         self.availableObjects = chapter.objects
         self.reactionEvaluator = reactionEvaluator
         self.completionEvaluator = completionEvaluator
+        self.progressStore = progressStore
         
         if let story = chapter.storyDefinition {
             self.storyRunner = try? StoryRunner(story: story)
+            restoreProgress(for: story)
         }
         
         reevaluateAllReactions()
@@ -67,6 +71,7 @@ final class DragDropGameEngine {
         }
         
         reevaluateAllReactions()
+        saveProgress()
         return true
     }
     
@@ -85,6 +90,7 @@ final class DragDropGameEngine {
         }
         if removedAny {
             reevaluateAllReactions()
+            saveProgress()
             if phase == .completed {
                 phase = .playing
             }
@@ -110,6 +116,7 @@ final class DragDropGameEngine {
         }
         
         reevaluateAllReactions()
+        saveProgress()
         
         if phase == .completed {
             phase = .playing
@@ -230,8 +237,38 @@ final class DragDropGameEngine {
         }
         availableObjects = chapter.objects
         phase = .playing
+        if let storyID = chapter.storyDefinition?.id {
+            try? progressStore.reset(storyID: storyID)
+        }
         reevaluateAllReactions()
     }
-}
 
+    private func restoreProgress(for story: StoryDefinition) {
+        guard let progress = try? progressStore.progress(for: story.id) else { return }
+        let objectsByActionID = Dictionary(uniqueKeysWithValues: zip(story.actions.map(\.id), availableObjects))
+        let gridIndexes = Dictionary(uniqueKeysWithValues: story.grids.enumerated().map { ($0.element.id, $0.offset) })
+
+        for step in progress {
+            guard let sceneIndex = gridIndexes[step.sourceGridID], scenes.indices.contains(sceneIndex) else { continue }
+            for placement in step.placements {
+                guard let slotIndex = scenes[sceneIndex].dropSlots.firstIndex(where: { $0.id == placement.slotID }),
+                      let object = objectsByActionID[placement.actionID] else { continue }
+                scenes[sceneIndex].dropSlots[slotIndex].currentObject = object
+            }
+        }
+    }
+
+    private func saveProgress() {
+        guard let story = chapter.storyDefinition else { return }
+        let actionIDsByName = Dictionary(uniqueKeysWithValues: story.actions.map { ($0.name.en, $0.id) })
+        let progress = zip(story.grids, scenes).compactMap { grid, scene -> StoryProgressStep? in
+            let placements = scene.dropSlots.compactMap { slot -> StoryProgressPlacement? in
+                guard let name = slot.currentObject?.name, let actionID = actionIDsByName[name] else { return nil }
+                return StoryProgressPlacement(slotID: slot.id, actionID: actionID)
+            }
+            return placements.isEmpty ? nil : StoryProgressStep(sourceGridID: grid.id, placements: placements)
+        }
+        try? progressStore.save(progress, for: story.id)
+    }
+}
 

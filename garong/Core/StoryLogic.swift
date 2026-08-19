@@ -72,6 +72,7 @@ private extension StoryDefinition {
         guard gridCount > 0, choiceCount > 0, !actions.isEmpty,
               grids.count == gridCount,
               Set(grids.map(\.order)) == Set(1...gridCount),
+              !shortTitle.en.isEmpty, !shortTitle.id.isEmpty,
               !title.en.isEmpty, !title.id.isEmpty,
               !description.en.isEmpty, !description.id.isEmpty else {
             throw StoryValidationError.invalidGrid("story")
@@ -132,4 +133,3 @@ private extension StoryDefinition {
         return set
     }
 }
-

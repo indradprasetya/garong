@@ -8,6 +8,7 @@ import Foundation
 struct StoryDefinition: Codable {
     let schemaVersion: Int
     let id: String
+    let shortTitle: LocalizedStoryText
     let title: LocalizedStoryText
     let description: LocalizedStoryText
     let hints: [LocalizedStoryText]?
@@ -136,4 +137,3 @@ struct LocalizedStoryText: Codable {
         return language == "id" ? id : en
     }
 }
-
