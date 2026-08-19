@@ -1,6 +1,10 @@
 {
   "schemaVersion": 4,
   "id": "listen_before_helping_rhodey",
+  "shortTitle": {
+    "en": "Jojo Pushed Me!",
+    "id": "Jojo Mendorongku!"
+  },
   "title": {
     "en": "Listen Before Helping Rhodey",
     "id": "Dengarkan Sebelum Membantu Rhodey"

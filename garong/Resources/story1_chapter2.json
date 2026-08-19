@@ -1,6 +1,10 @@
 {
   "schemaVersion": 4,
   "id": "jojo_settles_down_to_draw",
+  "shortTitle": {
+    "en": "Too Loud to Draw",
+    "id": "Terlalu Berisik untuk Menggambar"
+  },
   "title": {
     "en": "Help Jojo Settle Down and Draw",
     "id": "Bantu Jojo Tenang dan Menggambar"
