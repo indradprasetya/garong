@@ -19,147 +19,213 @@ struct SceneDropZoneView: View {
     var onDragEnded: (() -> Void)? = nil
 
     @State private var isHoveringDrag = false
+    @State private var targetedCharIndex: Int? = nil
 
     var body: some View {
-        ZStack {
-            // 1. Container Frame Base
-            if AssetFallbackHelper.hasAsset(named: containerImageName) {
-                Image(containerImageName)
-                    .resizable()
-                    .scaledToFit()
-            } else {
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(Color(UIColor.secondarySystemGroupedBackground).opacity(scene.isUnlocked ? 1.0 : 0.6))
-            }
+        GeometryReader { geo in
+            let cardW = geo.size.width
+            let cardH = geo.size.height
+            let cornerRadius = max(6, cardH * 0.095)
 
-            if scene.isUnlocked {
-                // 2. Inner Scene Content Inset & Clipped Inside Container Frame
-                ZStack(alignment: .bottom) {
-                    // Inner Classroom / Scene Background
-                    if AssetFallbackHelper.hasAsset(named: scene.backgroundImageName) {
-                        Image(scene.backgroundImageName)
-                            .resizable()
-                            .scaledToFill()
-                    }
+            ZStack {
+                // 1. Container Frame Base
+                if AssetFallbackHelper.hasAsset(named: containerImageName) {
+                    Image(containerImageName)
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(Color(UIColor.secondarySystemGroupedBackground).opacity(scene.isUnlocked ? 1.0 : 0.6))
+                }
 
-                    // Character(s) Anchored to Bottom
-                    if scene.dropSlots.count > 1 {
-                        HStack(spacing: 6) {
-                            ForEach(Array(scene.dropSlots.enumerated()), id: \.element.id) { index, slot in
-                                let charImage = scene.characterImageNames.indices.contains(index)
-                                    ? scene.characterImageNames[index]
-                                    : AssetFallbackHelper.imageName(for: slot.targetCharacterID ?? "")
-                                
+                if scene.isUnlocked {
+                    // 2. Inner Scene Content Inset & Clipped Inside Container Frame
+                    ZStack(alignment: .bottom) {
+                        // Inner Classroom / Scene Background
+                        if AssetFallbackHelper.hasAsset(named: scene.backgroundImageName) {
+                            Image(scene.backgroundImageName)
+                                .resizable()
+                                .scaledToFill()
+                                .clipped()
+                        }
+
+                        // Determine characters to render (supports multiple character image names or target slots)
+                        let displayImages: [String] = {
+                            if !scene.characterImageNames.isEmpty {
+                                return scene.characterImageNames
+                            }
+                            let slotChars = scene.dropSlots.compactMap { slot -> String? in
+                                guard let charID = slot.targetCharacterID, !charID.isEmpty else { return nil }
+                                return AssetFallbackHelper.imageName(for: charID)
+                            }
+                            return slotChars.isEmpty ? ["fallback_globe"] : slotChars
+                        }()
+
+                        let isMultiChar = displayImages.count > 1
+                        let charMaxH = isMultiChar ? cardH * 0.55 : cardH * 0.62
+
+                        // Character(s) Anchored to Bottom
+                        HStack(spacing: isMultiChar ? -cardW * 0.02 : 0) {
+                            ForEach(Array(displayImages.enumerated()), id: \.offset) { index, charImage in
+                                let isWiggling = (targetedCharIndex == index)
                                 CharacterView(
                                     imageName: charImage,
                                     emotion: scene.characterEmotion,
-                                    isReacting: isAnimating
+                                    isReacting: isAnimating,
+                                    isWiggling: isWiggling
                                 )
-                                .frame(maxHeight: 110)
-                                .offset(y: 8)
+                                .frame(maxHeight: charMaxH)
+                                .offset(y: cardH * 0.02)
                             }
                         }
-                    } else {
-                        let charImage = scene.characterImageNames.first ?? "fallback_globe"
-                        CharacterView(
-                            imageName: charImage,
-                            emotion: scene.characterEmotion,
-                            isReacting: isAnimating
-                        )
-                        .frame(maxHeight: 115)
-                        .offset(y: 8)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    }
 
-                    // Top Speech Bubble Banner
-                    if let bubble = scene.speechBubbleText, !bubble.isEmpty {
-                        VStack(spacing: 0) {
-                            ZStack {
-                                if AssetFallbackHelper.hasAsset(named: "bubble_respond") {
-                                    Image("bubble_respond")
-                                        .resizable()
-                                        .scaledToFill()
-                                } else {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(Color(red: 0.18, green: 0.53, blue: 0.44))
+                        // Top Speech Bubble Banner
+                        if let bubble = scene.speechBubbleText, !bubble.isEmpty {
+                            let bubbleH = cardH * 0.38
+                            let fontSize = max(9, min(cardH * 0.09, cardW * 0.08))
+                            let bottomPadding = cardH * 0.12
+                            let horizPadding = cardW * 0.05
+
+                            VStack(spacing: 0) {
+                                ZStack {
+                                    if AssetFallbackHelper.hasAsset(named: "bubble_respond") {
+                                        Image("bubble_respond")
+                                            .resizable()
+                                            .scaledToFit()
+                                    } else {
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color(red: 0.18, green: 0.53, blue: 0.44))
+                                    }
+                                    
+                                    Text(bubble)
+                                        .font(.appFont(size: fontSize, relativeTo: .body))
+                                        .foregroundColor(.white)
+                                        .multilineTextAlignment(.center)
+                                        .lineLimit(2)
+                                        .minimumScaleFactor(0.5)
+                                        .padding(.horizontal, horizPadding)
+                                        .padding(.bottom, bottomPadding)
+                                }
+                                .frame(maxWidth: cardW * 0.90)
+                                .frame(height: bubbleH)
+                                .clipped()
+                                
+                                Spacer(minLength: 0)
+                            }
+                        }
+
+                        // Drop Target Overlays (Split left/right when multiple slots exist)
+                        if scene.dropSlots.count > 1 {
+                            HStack(spacing: 0) {
+                                Color.clear
+                                    .contentShape(Rectangle())
+                                    .dropDestination(for: GameObject.self) { items, _ in
+                                        guard let firstItem = items.first else { return false }
+                                        withAnimation(.spring()) {
+                                            targetedCharIndex = nil
+                                            onDrop(firstItem, scene.dropSlots[0].id)
+                                        }
+                                        return true
+                                    } isTargeted: { targeted in
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            targetedCharIndex = targeted ? 0 : nil
+                                            if targeted { isHoveringDrag = true }
+                                        }
+                                    }
+                                
+                                Color.clear
+                                    .contentShape(Rectangle())
+                                    .dropDestination(for: GameObject.self) { items, _ in
+                                        guard let firstItem = items.first else { return false }
+                                        withAnimation(.spring()) {
+                                            targetedCharIndex = nil
+                                            onDrop(firstItem, scene.dropSlots[1].id)
+                                        }
+                                        return true
+                                    } isTargeted: { targeted in
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            targetedCharIndex = targeted ? 1 : nil
+                                            if targeted { isHoveringDrag = true }
+                                        }
+                                    }
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        } else {
+                            Color.clear
+                                .contentShape(Rectangle())
+                                .dropDestination(for: GameObject.self) { items, _ in
+                                    guard let firstItem = items.first, let slot = scene.dropSlots.first else { return false }
+                                    withAnimation(.spring()) {
+                                        targetedCharIndex = nil
+                                        onDrop(firstItem, slot.id)
+                                    }
+                                    return true
+                                } isTargeted: { targeted in
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        targetedCharIndex = targeted ? 0 : nil
+                                        isHoveringDrag = targeted
+                                    }
+                                }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
+
+                        // Corner Drop Item Slot Badge(s) - Only visible when an item is placed in the scene
+                        if !scene.dropSlots.isEmpty {
+                            let badgeSize = max(22, cardH * 0.22)
+                            HStack {
+                                if let firstSlot = scene.dropSlots.first, let placedObj = firstSlot.currentObject {
+                                    CornerDropSlotBadge(
+                                        slot: firstSlot,
+                                        placedObject: placedObj,
+                                        badgeSize: badgeSize,
+                                        onTargetChanged: { targeted in isHoveringDrag = targeted },
+                                        onDrop: { obj in onDrop(obj, firstSlot.id) },
+                                        onRemove: { obj in onRemoveObject(obj, firstSlot.id) }
+                                    )
                                 }
                                 
-                                Text(bubble)
-                                    .font(.appFont(size: 20, relativeTo: .body))
-                                    .foregroundColor(.white)
-                                    .multilineTextAlignment(.center)
-                                    .lineLimit(2)
-                                    .minimumScaleFactor(0.7)
-                                    .padding(.horizontal, 10)
-                                    .padding(.bottom, 24)
+                                Spacer()
+                                
+                                if scene.dropSlots.count > 1, let secondPlacedObj = scene.dropSlots[1].currentObject {
+                                    CornerDropSlotBadge(
+                                        slot: scene.dropSlots[1],
+                                        placedObject: secondPlacedObj,
+                                        badgeSize: badgeSize,
+                                        onTargetChanged: { targeted in isHoveringDrag = targeted },
+                                        onDrop: { obj in onDrop(obj, scene.dropSlots[1].id) },
+                                        onRemove: { obj in onRemoveObject(obj, scene.dropSlots[1].id) }
+                                    )
+                                }
                             }
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 69)
-                            
-                            Spacer(minLength: 0)
+                            .padding(cardH * 0.03)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                         }
                     }
-
-                    // Corner Drop Item Slot Badge(s) - Only visible when an item is placed in the scene
-                    if !scene.dropSlots.isEmpty {
-                        HStack {
-                            if let firstSlot = scene.dropSlots.first, let placedObj = firstSlot.currentObject {
-                                CornerDropSlotBadge(
-                                    slot: firstSlot,
-                                    placedObject: placedObj,
-                                    onTargetChanged: { targeted in isHoveringDrag = targeted },
-                                    onDrop: { obj in onDrop(obj, firstSlot.id) },
-                                    onRemove: { obj in onRemoveObject(obj, firstSlot.id) }
-                                )
-                            }
-                            
-                            Spacer()
-                            
-                            if scene.dropSlots.count > 1, let secondPlacedObj = scene.dropSlots[1].currentObject {
-                                CornerDropSlotBadge(
-                                    slot: scene.dropSlots[1],
-                                    placedObject: secondPlacedObj,
-                                    onTargetChanged: { targeted in isHoveringDrag = targeted },
-                                    onDrop: { obj in onDrop(obj, scene.dropSlots[1].id) },
-                                    onRemove: { obj in onRemoveObject(obj, scene.dropSlots[1].id) }
-                                )
-                            }
-                        }
-                        .padding(5)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                    .padding(cardH * 0.035)
+                    .clipped()
+                } else {
+                    // Locked Scene Grid Frame
+                    let lockIconSize = max(14, cardH * 0.15)
+                    let lockTextSize = max(9, cardH * 0.09)
+                    VStack(spacing: cardH * 0.04) {
+                        Spacer()
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: lockIconSize))
+                            .foregroundColor(.secondary.opacity(0.4))
+                        Text(scene.name)
+                            .font(.appFont(size: lockTextSize, relativeTo: .caption))
+                            .foregroundColor(.secondary.opacity(0.6))
+                        Spacer()
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding(5)
-            } else {
-                // Locked Scene Grid Frame
-                VStack(spacing: 8) {
-                    Spacer()
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: 22))
-                        .foregroundColor(.secondary.opacity(0.4))
-                    Text(scene.name)
-                        .font(.appFont(size: 13, relativeTo: .caption))
-                        .foregroundColor(.secondary.opacity(0.6))
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .aspectRatio(212.0 / 147.0, contentMode: .fit)
         .scaleEffect(isAnimating ? 1.02 : 1.0)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .dropDestination(for: GameObject.self) { items, location in
-            guard let firstItem = items.first, let targetSlot = scene.dropSlots.first(where: { $0.currentObject == nil }) ?? scene.dropSlots.first else { return false }
-            withAnimation(.spring()) {
-                onDrop(firstItem, targetSlot.id)
-            }
-            return true
-        } isTargeted: { targeted in
-            withAnimation(.easeInOut(duration: 0.2)) {
-                isHoveringDrag = targeted
-            }
-        }
     }
 
     private var containerImageName: String {
@@ -177,6 +243,7 @@ struct SceneDropZoneView: View {
 struct CornerDropSlotBadge: View {
     let slot: GameDropSlot
     let placedObject: GameObject
+    var badgeSize: CGFloat = 42
     var onTargetChanged: ((Bool) -> Void)? = nil
     let onDrop: (GameObject) -> Void
     let onRemove: (GameObject) -> Void
@@ -185,13 +252,16 @@ struct CornerDropSlotBadge: View {
 
     var body: some View {
         let hasAsset = !placedObject.symbol.isEmpty && AssetFallbackHelper.hasAsset(named: placedObject.symbol)
+        let cornerRadius = max(4, badgeSize * 0.19)
+        let iconFontSize = max(12, badgeSize * 0.48)
+        let imagePadding = max(2, badgeSize * 0.095)
 
         ZStack {
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(Color.white)
                 .shadow(color: Color.black.opacity(0.15), radius: 3, x: 0, y: 1)
 
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(isTargeted ? Color.accentColor : Color.black.opacity(0.7), lineWidth: isTargeted ? 2 : 1.5)
 
             Group {
@@ -199,26 +269,26 @@ struct CornerDropSlotBadge: View {
                     Image(placedObject.symbol)
                         .resizable()
                         .scaledToFit()
-                        .padding(4)
+                        .padding(imagePadding)
                 } else {
                     Image(systemName: placedObject.sfSymbol)
-                        .font(.system(size: 20))
+                        .font(.system(size: iconFontSize))
                         .foregroundColor(.accentColor)
                 }
             }
         }
-        .frame(width: 42, height: 42)
+        .frame(width: badgeSize, height: badgeSize)
         .scaleEffect(isTargeted ? 1.1 : 1.0)
         .instantDraggable(placedObject) {
             if hasAsset {
                 Image(placedObject.symbol)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 48, height: 48)
+                    .frame(width: badgeSize * 1.14, height: badgeSize * 1.14)
                     .shadow(radius: 6)
             } else {
                 Image(systemName: placedObject.sfSymbol)
-                    .font(.system(size: 38))
+                    .font(.system(size: iconFontSize * 1.9))
                     .shadow(radius: 6)
             }
         }
@@ -259,7 +329,7 @@ struct SceneDropZoneView_Previews: PreviewProvider {
                 )
             ],
             characterEmotion: .angry,
-            speechBubbleText: "I don't want to go!",
+            speechBubbleText: "I don't want to draw right now!",
             characterImageNames: ["rhodey_crying"],
             isUnlocked: true,
             backgroundID: "background_classroom"
@@ -303,16 +373,29 @@ struct SceneDropZoneView_Previews: PreviewProvider {
         )
 
         return Group {
-            SceneDropZoneView(
-                scene: fullAttributeScene,
-                isAnimating: false,
-                isDraggingAnyItem: false,
-                onDrop: { _, _ in },
-                onRemoveObject: { _, _ in }
-            )
-            .frame(width: 212, height: 147)
-            .padding()
-            .previewDisplayName("Full Attributes (Mockup Style)")
+            HStack {
+                SceneDropZoneView(
+                    scene: fullAttributeScene,
+                    isAnimating: false,
+                    isDraggingAnyItem: false,
+                    onDrop: { _, _ in },
+                    onRemoveObject: { _, _ in }
+                )
+                .frame(width: 212, height: 147)
+                .padding()
+                .previewDisplayName("Full Attributes (Mockup Style)")
+                
+                SceneDropZoneView(
+                    scene: lockedScene,
+                    isAnimating: false,
+                    isDraggingAnyItem: false,
+                    onDrop: { _, _ in },
+                    onRemoveObject: { _, _ in }
+                )
+                .frame(width: 212, height: 147)
+                .padding()
+                .previewDisplayName("Locked Scene")
+            }
 
             SceneDropZoneView(
                 scene: twoCharScene,

@@ -23,6 +23,7 @@ enum AssetFallbackHelper {
         "bubble_respond",
         "classroom_background",
         "gameplay_background",
+        "park_background",
         "container",
         "container_drag",
         "container_lock",
@@ -95,8 +96,15 @@ enum AssetFallbackHelper {
 
     /// Returns the background asset image name.
     static func backgroundImageName(for backgroundID: String) -> String {
-        if backgroundID.lowercased().contains("classroom") && hasAsset(named: "classroom_background") {
+        let lower = backgroundID.lowercased()
+        if (lower.contains("park") || lower.contains("playground")) && hasAsset(named: "park_background") {
+            return "park_background"
+        }
+        if lower.contains("classroom") && hasAsset(named: "classroom_background") {
             return "classroom_background"
+        }
+        if hasAsset(named: lower) {
+            return lower
         }
         return "gameplay_background"
     }

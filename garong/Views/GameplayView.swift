@@ -57,6 +57,11 @@ struct GameplayView: View {
                         }
                     }
                     
+                    Spacer()
+                    
+                    Text(viewModel.chapterName)
+                        .font(.appFont(size: 38))
+                        .padding(.top, 12)
                     
                     Spacer()
                     
@@ -93,26 +98,37 @@ struct GameplayView: View {
                 .padding(.horizontal, 8)
                 .ignoresSafeArea(edges: .top)
                 
+                
+                
                 Spacer()
                 
                 
-                // Main Scenes Area - 2x2 grid for 4 scenes, or 1-row layout for other scene counts
+                // Main Scenes Area - 2x2 LazyVGrid for 4 scenes (fitted to container), horizontal layout for others
                 Group {
                     if viewModel.scenes.count == 4 {
-                        VStack(spacing: 8) {
-                            HStack(spacing: 8) {
-                                ForEach(Array(viewModel.scenes.prefix(2)), id: \.id) { scene in
-                                    sceneView(for: scene)
-                                }
-                            }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        GeometryReader { geo in
+                            let spacing: CGFloat = 8
+                            let cardAspectRatio: CGFloat = 212.0 / 147.0
+                            let hFromHeight = max(0, (geo.size.height - spacing) / 1.8)
+                            let hFromWidth = max(0, (geo.size.width - spacing) / (2 * cardAspectRatio))
+                            let cardH = min(hFromHeight, hFromWidth)
+                            let cardW = cardH * cardAspectRatio
+                            let gridColumns = [
+                                GridItem(.fixed(cardW), spacing: spacing),
+                                GridItem(.fixed(cardW), spacing: spacing)
+                            ]
                             
-                            HStack(spacing: 8) {
-                                ForEach(Array(viewModel.scenes.suffix(2)), id: \.id) { scene in
-                                    sceneView(for: scene)
+                            VStack {
+                                Spacer(minLength: 0)
+                                LazyVGrid(columns: gridColumns, spacing: spacing) {
+                                    ForEach(0..<viewModel.scenes.count, id: \.self) { index in
+                                        sceneView(for: viewModel.scenes[index])
+                                            .frame(width: cardW, height: cardH)
+                                    }
                                 }
+                                Spacer(minLength: 0)
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
                         }
                     } else {
                         HStack(spacing: 8) {
@@ -120,6 +136,7 @@ struct GameplayView: View {
                                 sceneView(for: scene)
                             }
                         }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     }
                 }
                 .padding(.horizontal, 2)
@@ -136,7 +153,7 @@ struct GameplayView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
-                .frame(height: 88)
+                .frame(height: 80)
                 .dropDestination(for: GameObject.self) { items, _ in
                     for item in items {
                         withAnimation(.spring()) {
@@ -193,13 +210,91 @@ struct GameplayView: View {
                 viewModel.setDraggingActive(false)
             }
         )
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 struct GameplayView_Previews: PreviewProvider {
     static var previews: some View {
-        GameplayView(chapter: SampleGameData.chapters[0])
-            .previewInterfaceOrientation(.landscapeLeft)
+        Group {
+            // 4-Scene Chapter Preview
+            GameplayView(chapter: preview4SceneChapter)
+                .previewDisplayName("4 Scenes Chapter")
+            
+            // 3-Scene Chapter Preview
+            GameplayView(chapter: preview3SceneChapter)
+                .previewDisplayName("3 Scenes Chapter")
+        }
+        .previewInterfaceOrientation(.landscapeLeft)
+    }
+    
+    private static var preview4SceneChapter: Chapter {
+        if let storyItem = StoryCatalog.stories.first?.chapters.first(where: { $0.storyDefinition?.gridCount == 4 }) {
+            return Chapter(storyItem: storyItem)
+        }
+        
+        let placedObj = GameObject(name: "Apologize", symbol: "action_apologize", sfSymbol: "hands.sparkles.fill")
+        let scenes = [
+            GameScene(
+                name: "Grid 1",
+                description: "Rhodey is upset",
+                dropSlots: [GameDropSlot(id: "s1", label: "Rhodey", targetCharacterID: "rhodey", currentObject: placedObj)],
+                characterEmotion: .angry,
+                speechBubbleText: "I don't want to go!",
+                characterImageNames: ["rhodey_crying"],
+                isUnlocked: true,
+                backgroundID: "background_classroom"
+            ),
+            GameScene(
+                name: "Grid 2",
+                description: "Jojo asking",
+                dropSlots: [GameDropSlot(id: "s2", label: "Jojo", targetCharacterID: "jojo", currentObject: nil)],
+                characterEmotion: .angry,
+                speechBubbleText: "What happened?",
+                characterImageNames: ["jojo_questioning"],
+                isUnlocked: true,
+                backgroundID: "background_classroom"
+            ),
+            GameScene(
+                name: "Grid 3",
+                description: "Rhodey calming down",
+                dropSlots: [GameDropSlot(id: "s3", label: "Rhodey", targetCharacterID: "rhodey", currentObject: nil)],
+                characterEmotion: .calm,
+                speechBubbleText: nil,
+                characterImageNames: ["rhodey_calm"],
+                isUnlocked: false,
+                backgroundID: "background_classroom"
+            ),
+            GameScene(
+                name: "Grid 4",
+                description: "Outcome",
+                dropSlots: [],
+                characterEmotion: .happy,
+                speechBubbleText: nil,
+                characterImageNames: ["jojo_rhodey_handshake"],
+                isUnlocked: false,
+                backgroundID: "background_classroom"
+            )
+        ]
+        return Chapter(
+            number: 2,
+            name: "A Broken Crayon",
+            description: "Work through resolving the situation.",
+            scenes: scenes,
+            objects: [
+                GameObject(name: "Apologize", symbol: "action_apologize", sfSymbol: "hands.sparkles.fill"),
+                GameObject(name: "Candy", symbol: "action_candy", sfSymbol: "circle.fill"),
+                GameObject(name: "Toy", symbol: "action_toy", sfSymbol: "play.fill"),
+                GameObject(name: "Paper", symbol: "action_paper", sfSymbol: "doc.fill")
+            ],
+            completionRule: .allObjectsPlaced,
+            isUnlocked: true
+        )
+    }
+    
+    private static var preview3SceneChapter: Chapter {
+        if let storyItem = StoryCatalog.stories.first?.chapters.first {
+            return Chapter(storyItem: storyItem)
+        }
+        return SampleGameData.chapters[0]
     }
 }

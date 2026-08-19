@@ -72,7 +72,7 @@
       "id": "grid_1",
       "order": 1,
       "locked": false,
-      "backgroundID": "background_playground",
+      "backgroundID": "park_background",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -84,7 +84,7 @@
       "id": "grid_2",
       "order": 2,
       "locked": false,
-      "backgroundID": "background_playground",
+      "backgroundID": "park_background",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -96,7 +96,7 @@
       "id": "grid_3",
       "order": 3,
       "locked": true,
-      "backgroundID": "background_playground",
+      "backgroundID": "park_background",
       "dropSlots": []
     }
   ],
