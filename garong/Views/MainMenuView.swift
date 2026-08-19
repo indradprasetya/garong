@@ -63,6 +63,9 @@ struct MainMenuView: View {
                             .cornerRadius(14)
                             .shadow(color: Color.accentColor.opacity(0.3), radius: 6, x: 0, y: 3)
                         }
+                        .simultaneousGesture(TapGesture().onEnded {
+                            SoundManager.shared.play(.buttonTap)
+                        })
                         
                         NavigationLink {
                             ChapterSelectionView()
@@ -78,6 +81,9 @@ struct MainMenuView: View {
                             .cornerRadius(14)
                             .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 2)
                         }
+                        .simultaneousGesture(TapGesture().onEnded {
+                            SoundManager.shared.play(.buttonTap)
+                        })
                     }
                     
                     Spacer()

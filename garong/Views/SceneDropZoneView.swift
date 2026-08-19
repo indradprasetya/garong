@@ -92,7 +92,7 @@ struct SceneDropZoneView: View {
                                     if AssetFallbackHelper.hasAsset(named: "bubble_respond") {
                                         Image("bubble_respond")
                                             .resizable()
-                                            .scaledToFit()
+                                            .scaledToFill()
                                     } else {
                                         RoundedRectangle(cornerRadius: 8)
                                             .fill(Color(red: 0.18, green: 0.53, blue: 0.44))
@@ -107,7 +107,7 @@ struct SceneDropZoneView: View {
                                         .padding(.horizontal, horizPadding)
                                         .padding(.bottom, bottomPadding)
                                 }
-                                .frame(maxWidth: cardW * 0.90)
+                                .frame(maxWidth: .infinity)
                                 .frame(height: bubbleH)
                                 .clipped()
                                 
@@ -129,6 +129,9 @@ struct SceneDropZoneView: View {
                                         return true
                                     } isTargeted: { targeted in
                                         withAnimation(.easeInOut(duration: 0.2)) {
+                                            if targeted && targetedCharIndex != 0 {
+                                                HapticManager.shared.selection()
+                                            }
                                             targetedCharIndex = targeted ? 0 : nil
                                             if targeted { isHoveringDrag = true }
                                         }
@@ -145,6 +148,9 @@ struct SceneDropZoneView: View {
                                         return true
                                     } isTargeted: { targeted in
                                         withAnimation(.easeInOut(duration: 0.2)) {
+                                            if targeted && targetedCharIndex != 1 {
+                                                HapticManager.shared.selection()
+                                            }
                                             targetedCharIndex = targeted ? 1 : nil
                                             if targeted { isHoveringDrag = true }
                                         }
@@ -163,6 +169,9 @@ struct SceneDropZoneView: View {
                                     return true
                                 } isTargeted: { targeted in
                                     withAnimation(.easeInOut(duration: 0.2)) {
+                                        if targeted && targetedCharIndex != 0 {
+                                            HapticManager.shared.selection()
+                                        }
                                         targetedCharIndex = targeted ? 0 : nil
                                         isHoveringDrag = targeted
                                     }

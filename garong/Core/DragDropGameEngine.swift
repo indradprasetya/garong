@@ -16,6 +16,7 @@ final class DragDropGameEngine {
     private(set) var scenes: [GameScene]
     private(set) var availableObjects: [GameObject]
     private(set) var phase: DragDropPhase = .playing
+    private(set) var currentOutcome: StoryOutcome?
     
     init(
         chapter: Chapter,
@@ -49,6 +50,22 @@ final class DragDropGameEngine {
     /// Total items currently placed across all slots.
     var placedObjectCount: Int {
         scenes.reduce(0) { $0 + $1.objectCount }
+    }
+    
+    /// Whether all choice slots in the chapter are filled.
+    var isAllScenesFilled: Bool {
+        if let story = chapter.storyDefinition {
+            let placedCount = scenes.flatMap(\.dropSlots).compactMap(\.currentObject).count
+            return placedCount >= story.choiceCount
+        }
+        let choiceScenes = scenes.filter { !$0.dropSlots.isEmpty }
+        return choiceScenes.allSatisfy { $0.dropSlots.allSatisfy { $0.currentObject != nil } }
+    }
+
+    /// Whether the current evaluated outcome is ideal/correct.
+    var isCurrentOutcomeIdeal: Bool {
+        guard let outcome = currentOutcome else { return true }
+        return outcome.isIdeal
     }
     
     /// Total objects available in tray.
@@ -145,10 +162,13 @@ final class DragDropGameEngine {
             let activeOutcome: StoryOutcome?
             if placedActionIDs.count == choiceCount {
                 activeOutcome = runner.outcome(for: placedActionIDs)
+                self.currentOutcome = activeOutcome
             } else if !placedActionIDs.isEmpty {
                 activeOutcome = runner.partialOutcome(matching: placedActionIDs)
+                self.currentOutcome = nil
             } else {
                 activeOutcome = runner.initialOutcome
+                self.currentOutcome = nil
             }
             
             if let outcome = activeOutcome {

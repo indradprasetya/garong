@@ -37,6 +37,9 @@ struct ChapterSelectionView: View {
                                                 chapterCard(for: item)
                                             }
                                             .buttonStyle(PlainButtonStyle())
+                                            .simultaneousGesture(TapGesture().onEnded {
+                                                SoundManager.shared.play(.buttonTap)
+                                            })
                                         } else {
                                             chapterCard(for: item)
                                                 .opacity(0.6)

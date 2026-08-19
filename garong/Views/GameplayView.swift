@@ -43,6 +43,7 @@ struct GameplayView: View {
                 // Top Bar
                 HStack(spacing: 16) {
                     Button {
+                        SoundManager.shared.play(.backTap)
                         dismiss()
                     } label: {
                         if AssetFallbackHelper.hasAsset(named: "back_button") {
@@ -69,6 +70,7 @@ struct GameplayView: View {
                     if let outcomeScene = viewModel.scenes.last {
                         let isReady = outcomeScene.isUnlocked
                         Button {
+                            SoundManager.shared.play(.buttonTap)
                             withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
                                 viewModel.goToNextChapterOrFinish()
                             }
@@ -79,8 +81,6 @@ struct GameplayView: View {
                                 
                                 Image(systemName: "chevron.right")
                                     .font(.system(size: 16, weight: .bold))
-                                
-                               
                             }
                             .foregroundColor(.white)
                             .padding(.horizontal, 12)
