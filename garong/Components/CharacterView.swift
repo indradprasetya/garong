@@ -14,9 +14,17 @@ struct CharacterView: View {
         self.isReacting = isReacting
     }
     
+    private var resolvedImageName: String? {
+        guard let name = imageName, !name.isEmpty else { return nil }
+        let resolved = AssetFallbackHelper.imageName(for: name)
+        if resolved != "fallback_globe" && AssetFallbackHelper.hasAsset(named: resolved) {
+            return resolved
+        }
+        return AssetFallbackHelper.hasAsset(named: name) ? name : nil
+    }
+    
     var body: some View {
-        #if canImport(UIKit)
-        if let name = imageName, !name.isEmpty, UIImage(named: name) != nil {
+        if let name = resolvedImageName {
             Image(name)
                 .resizable()
                 .scaledToFit()
@@ -26,17 +34,6 @@ struct CharacterView: View {
         } else {
             PlaceholderCharacterView(emotion: emotion, isReacting: isReacting)
         }
-        #else
-        if let name = imageName, !name.isEmpty {
-            Image(name)
-                .resizable()
-                .scaledToFit()
-                .scaleEffect(isReacting ? 1.08 : 1.0)
-                .shadow(color: emotion.themeColor.opacity(0.4), radius: 8, x: 0, y: 4)
-        } else {
-            PlaceholderCharacterView(emotion: emotion, isReacting: isReacting)
-        }
-        #endif
     }
 }
 

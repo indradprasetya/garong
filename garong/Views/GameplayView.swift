@@ -17,17 +17,26 @@ struct GameplayView: View {
     var body: some View {
         ZStack {
             // Background fill extending into edges - Acts as unattach drop target when dragging placed items outside
-            Color(UIColor.systemGroupedBackground)
-                .ignoresSafeArea()
-                .dropDestination(for: GameObject.self) { items, _ in
-                    for item in items {
-                        withAnimation(.spring()) {
-                            viewModel.removeObjectGlobal(item)
-                        }
-                    }
-                    viewModel.setDraggingActive(false)
-                    return true
+            Group {
+                if AssetFallbackHelper.hasAsset(named: "gameplay_background") {
+                    Image("gameplay_background")
+                        .resizable()
+                        .scaledToFill()
+                        .ignoresSafeArea()
+                } else {
+                    Color(UIColor.systemGroupedBackground)
+                        .ignoresSafeArea()
                 }
+            }
+            .dropDestination(for: GameObject.self) { items, _ in
+                for item in items {
+                    withAnimation(.spring()) {
+                        viewModel.removeObjectGlobal(item)
+                    }
+                }
+                viewModel.setDraggingActive(false)
+                return true
+            }
             
             // Content container padded away from device hardware edges and notch
             VStack(spacing: 6) {
@@ -36,13 +45,18 @@ struct GameplayView: View {
                     Button {
                         dismiss()
                     } label: {
-                        Image(systemName: "arrowshape.backward.fill")
-                            .font(.title2)
-                            .foregroundColor(.secondary)
+                        if AssetFallbackHelper.hasAsset(named: "back_button") {
+                            Image("back_button")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 64, height: 64)
+                        } else {
+                            Image(systemName: "arrowshape.backward.fill")
+                                .font(.title2)
+                                .foregroundColor(.secondary)
+                        }
                     }
                     
-                    Text(viewModel.chapterName)
-                        .font(.title3.bold())
                     
                     Spacer()
                     
@@ -56,7 +70,7 @@ struct GameplayView: View {
                         } label: {
                             HStack(spacing: 4) {
                                 Text("Next")
-                                    .font(.system(size: 11, weight: .bold))
+                                    .font(.appFont(size: 13, relativeTo: .caption))
                                 
                                 Image(systemName: "chevron.right")
                                     .font(.system(size: 16, weight: .bold))
@@ -77,31 +91,41 @@ struct GameplayView: View {
                     }
                 }
                 .padding(.horizontal, 8)
-                .padding(.top, 4)
+                .ignoresSafeArea(edges: .top)
                 
-                // Main Scenes Area - All grid scenes present in layout
-                HStack(spacing: 8) {
-                    ForEach(viewModel.scenes, id: \.id) { scene in
-                        SceneDropZoneView(
-                            scene: scene,
-                            isAnimating: viewModel.animatingSceneID == scene.id,
-                            isDraggingAnyItem: viewModel.isDraggingItem,
-                            onDrop: { object, slotID in
-                                viewModel.dropObject(object, intoSlot: slotID, intoScene: scene.id)
-                            },
-                            onRemoveObject: { object, slotID in
-                                viewModel.removeObject(object, fromSlot: slotID, fromScene: scene.id)
-                            },
-                            onDragStarted: {
-                                viewModel.setDraggingActive(true)
-                            },
-                            onDragEnded: {
-                                viewModel.setDraggingActive(false)
+                Spacer()
+                
+                
+                // Main Scenes Area - 2x2 grid for 4 scenes, or 1-row layout for other scene counts
+                Group {
+                    if viewModel.scenes.count == 4 {
+                        VStack(spacing: 8) {
+                            HStack(spacing: 8) {
+                                ForEach(Array(viewModel.scenes.prefix(2)), id: \.id) { scene in
+                                    sceneView(for: scene)
+                                }
                             }
-                        )
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            
+                            HStack(spacing: 8) {
+                                ForEach(Array(viewModel.scenes.suffix(2)), id: \.id) { scene in
+                                    sceneView(for: scene)
+                                }
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
+                    } else {
+                        HStack(spacing: 8) {
+                            ForEach(viewModel.scenes, id: \.id) { scene in
+                                sceneView(for: scene)
+                            }
+                        }
                     }
                 }
                 .padding(.horizontal, 2)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+                Spacer()
                 
                 // Bottom Tray (CENTERED Draggable Objects - also unattached when dropped here)
                 VStack(alignment: .center, spacing: 4) {
@@ -123,8 +147,8 @@ struct GameplayView: View {
                     return true
                 }
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 10)
+            .padding(.horizontal, 46)
+            .padding(.bottom, 6)
             .ignoresSafeArea(edges: .bottom)
             
             // Completion Overlay
@@ -147,6 +171,29 @@ struct GameplayView: View {
         }
         .navigationBarHidden(true)
         .animation(.default, value: viewModel.phase)
+        .environment(\.font, .custom("Virels-Regular", size: 14))
+    }
+
+    @ViewBuilder
+    private func sceneView(for scene: GameScene) -> some View {
+        SceneDropZoneView(
+            scene: scene,
+            isAnimating: viewModel.animatingSceneID == scene.id,
+            isDraggingAnyItem: viewModel.isDraggingItem,
+            onDrop: { object, slotID in
+                viewModel.dropObject(object, intoSlot: slotID, intoScene: scene.id)
+            },
+            onRemoveObject: { object, slotID in
+                viewModel.removeObject(object, fromSlot: slotID, fromScene: scene.id)
+            },
+            onDragStarted: {
+                viewModel.setDraggingActive(true)
+            },
+            onDragEnded: {
+                viewModel.setDraggingActive(false)
+            }
+        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

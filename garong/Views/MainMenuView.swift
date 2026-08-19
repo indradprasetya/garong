@@ -15,9 +15,9 @@ struct MainMenuView: View {
                     Spacer()
                     
                     VStack(spacing: 12) {
-                        #if canImport(UIKit)
-                        if UIImage(named: "rhodey") != nil {
-                            Image("rhodey")
+                        let heroImage = AssetFallbackHelper.imageName(for: "rhodey")
+                        if AssetFallbackHelper.hasAsset(named: heroImage) {
+                            Image(heroImage)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 100)
@@ -32,21 +32,15 @@ struct MainMenuView: View {
                                 )
                                 .shadow(color: .accentColor.opacity(0.3), radius: 10, x: 0, y: 5)
                         }
-                        #else
-                        Image(systemName: "hand.raised.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100)
-                        #endif
                         
                         Text("Garong")
-                            .font(.system(size: 48, weight: .heavy, design: .rounded))
+                            .font(.appFont(size: 48, relativeTo: .largeTitle))
                             .foregroundStyle(
                                 LinearGradient(colors: [.primary, .secondary], startPoint: .top, endPoint: .bottom)
                             )
                         
                         Text("A Drag & Drop Sandbox Adventure")
-                            .font(.title3)
+                            .font(.appFont(size: 18, relativeTo: .title3))
                             .foregroundColor(.secondary)
                     }
                     
@@ -62,7 +56,7 @@ struct MainMenuView: View {
                                 Image(systemName: "play.fill")
                                 Text("Start Game")
                             }
-                            .font(.title3.bold())
+                            .font(.appFont(size: 18, relativeTo: .headline))
                             .foregroundColor(.white)
                             .frame(width: 200, height: 50)
                             .background(Color.accentColor)
@@ -77,7 +71,7 @@ struct MainMenuView: View {
                                 Image(systemName: "square.grid.2x2.fill")
                                 Text("Chapters")
                             }
-                            .font(.title3.bold())
+                            .font(.appFont(size: 18, relativeTo: .headline))
                             .foregroundColor(.accentColor)
                             .frame(width: 200, height: 50)
                             .background(Color(UIColor.secondarySystemGroupedBackground))
