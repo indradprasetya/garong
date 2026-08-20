@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "share_the_slide",
   "shortTitle": {
     "en": "The Slide Is Mine",
@@ -13,6 +13,14 @@
     "en": "Rhodey blocks the slide and does not want Jojo to join. From the outside it looks like selfish behavior, but the reason may be fear, discomfort, or a misunderstanding about safety.",
     "id": "Rhodey menghalangi perosotan dan tidak mau Jojo ikut bermain. Dari luar terlihat seperti egois, tetapi alasannya bisa berupa takut, tidak nyaman, atau salah paham tentang rasa aman."
   },
+  "completionSummary": {
+    "en": "Rhodey had a reason for holding onto the slide. Understanding that reason came before the apology could mean anything.",
+    "id": "Rhodey memiliki alasan untuk mempertahankan perosotan. Memahami alasan tersebut perlu dilakukan sebelum permintaan maaf bisa benar-benar berarti."
+  },
+  "completionTip": {
+    "en": "Before asking two children to make up, find out what's really going on. An apology means more once it's understood.",
+    "id": "Sebelum meminta dua anak berdamai, cari tahu apa yang sebenarnya terjadi. Permintaan maaf lebih bermakna setelah situasinya dipahami."
+  },
   "hints": [
     {
       "en": "Children can repair a conflict more naturally after the situation feels understood.",
@@ -22,6 +30,15 @@
   "initialState": "CONFLICT",
   "gridCount": 4,
   "choiceCount": 3,
+  "maximumPlacements": 15,
+  "starThresholds": {
+    "threeStars": 5,
+    "twoStars": 9
+  },
+  "placementLimitMessage": {
+    "en": "Jojo and Rhodey are tired. You took too long.",
+    "id": "Jojo dan Rhodey kelelahan. Kamu terlalu lama."
+  },
   "actions": [
     {
       "id": "action_asking",
@@ -79,7 +96,7 @@
       "id": "grid_1",
       "order": 1,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -91,7 +108,7 @@
       "id": "grid_2",
       "order": 2,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -103,7 +120,7 @@
       "id": "grid_3",
       "order": 3,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -115,7 +132,7 @@
       "id": "grid_4",
       "order": 4,
       "locked": true,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": []
     }
   ],

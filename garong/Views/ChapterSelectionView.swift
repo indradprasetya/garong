@@ -7,6 +7,7 @@ import SwiftUI
 
 struct ChapterSelectionView: View {
     let stories = StoryCatalog.stories
+    @State private var bestStars: [String: Int] = [:]
     
     var body: some View {
         ZStack {
@@ -57,6 +58,13 @@ struct ChapterSelectionView: View {
         }
         .navigationTitle("Story Chapters")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            let store = StoryProgressStore()
+            bestStars = Dictionary(uniqueKeysWithValues: stories.flatMap(\.chapters).compactMap { chapter in
+                guard let stars = try? store.state(for: chapter.id).completion?.bestStars else { return nil }
+                return (chapter.id, stars)
+            })
+        }
     }
     
     @ViewBuilder
@@ -107,6 +115,14 @@ struct ChapterSelectionView: View {
                             .foregroundColor(.white)
                             .padding(6)
                             .background(Circle().fill(Color.black.opacity(0.5)))
+                    } else if let stars = bestStars[item.id] {
+                        HStack(spacing: 2) {
+                            ForEach(1...3, id: \.self) { star in
+                                Image(systemName: star <= stars ? "star.fill" : "star")
+                            }
+                        }
+                        .font(.caption)
+                        .foregroundColor(.yellow)
                     }
                 }
                 
@@ -137,4 +153,3 @@ struct ChapterSelectionView_Previews: PreviewProvider {
         .previewInterfaceOrientation(.landscapeLeft)
     }
 }
-

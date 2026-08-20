@@ -6,35 +6,77 @@
 import Foundation
 
 struct StoryProgressStore {
-    private static let storageKey = "storyProgressByStoryID"
+    private static let storageKey = "storyStateByStoryID"
+    private static let legacyStorageKey = "storyProgressByStoryID"
     private let defaults: UserDefaults
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
     }
 
-    func progress(for storyID: String) throws -> [StoryProgressStep] {
-        try allProgress()[storyID] ?? []
+    func state(for storyID: String) throws -> StoryProgressState {
+        try allStates()[storyID] ?? StoryProgressState()
     }
 
-    func save(_ progress: [StoryProgressStep], for storyID: String) throws {
-        var stored = try allProgress()
-        stored[storyID] = progress
+    func saveActiveRun(_ activeRun: StoryActiveRun, for storyID: String) throws {
+        var stored = try allStates()
+        var state = stored[storyID] ?? StoryProgressState()
+        state.activeRun = activeRun
+        stored[storyID] = state
+        defaults.set(try JSONEncoder().encode(stored), forKey: Self.storageKey)
+    }
+
+    func complete(storyID: String, stars: Int, placementCount: Int) throws {
+        var stored = try allStates()
+        var state = stored[storyID] ?? StoryProgressState()
+        let result = StoryCompletion(bestStars: stars, bestPlacementCount: placementCount)
+        if let best = state.completion {
+            if stars > best.bestStars || (stars == best.bestStars && placementCount < best.bestPlacementCount) {
+                state.completion = result
+            }
+        } else {
+            state.completion = result
+        }
+        state.activeRun = nil
+        stored[storyID] = state
+        defaults.set(try JSONEncoder().encode(stored), forKey: Self.storageKey)
+    }
+
+    func clearActiveRun(storyID: String) throws {
+        var stored = try allStates()
+        guard var state = stored[storyID] else { return }
+        state.activeRun = nil
+        if state.completion == nil {
+            stored.removeValue(forKey: storyID)
+        } else {
+            stored[storyID] = state
+        }
         defaults.set(try JSONEncoder().encode(stored), forKey: Self.storageKey)
     }
 
     func reset(storyID: String) throws {
-        var stored = try allProgress()
+        var stored = try allStates()
         stored.removeValue(forKey: storyID)
         defaults.set(try JSONEncoder().encode(stored), forKey: Self.storageKey)
     }
 
     func resetAll() {
         defaults.removeObject(forKey: Self.storageKey)
+        defaults.removeObject(forKey: Self.legacyStorageKey)
     }
 
-    private func allProgress() throws -> [String: [StoryProgressStep]] {
-        guard let data = defaults.data(forKey: Self.storageKey) else { return [:] }
-        return try JSONDecoder().decode([String: [StoryProgressStep]].self, from: data)
+    private func allStates() throws -> [String: StoryProgressState] {
+        if let data = defaults.data(forKey: Self.storageKey) {
+            return try JSONDecoder().decode([String: StoryProgressState].self, from: data)
+        }
+        guard let legacyData = defaults.data(forKey: Self.legacyStorageKey) else { return [:] }
+        let legacy = try JSONDecoder().decode([String: [StoryProgressStep]].self, from: legacyData)
+        return legacy.mapValues { steps in
+            StoryProgressState(activeRun: StoryActiveRun(
+                steps: steps,
+                placementCount: steps.reduce(0) { $0 + $1.placements.count },
+                status: .playing
+            ))
+        }
     }
 }

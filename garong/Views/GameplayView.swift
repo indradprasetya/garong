@@ -63,6 +63,13 @@ struct GameplayView: View {
                     Text(viewModel.chapterName)
                         .font(.appFont(size: 38))
                         .padding(.top, 12)
+
+                    Text(viewModel.placementFace)
+                        .font(.system(size: 26))
+                        .padding(6)
+                        .background(Circle().fill(viewModel.placementColor.opacity(0.22)))
+                        .overlay(Circle().stroke(viewModel.placementColor, lineWidth: 3))
+                        .accessibilityLabel(viewModel.placementStateLabel)
                     
                     Spacer()
                     
@@ -183,6 +190,40 @@ struct GameplayView: View {
                 )
                 .padding(24)
                 .transition(.scale.combined(with: .opacity))
+                .zIndex(1)
+            }
+
+            if viewModel.phase == .needsBreak {
+                Color.black.opacity(0.4).ignoresSafeArea()
+
+                VStack(spacing: 18) {
+                    Text("😣")
+                        .font(.system(size: 58))
+                        .padding(10)
+                        .background(Circle().fill(Color.red.opacity(0.2)))
+                        .overlay(Circle().stroke(Color.red, lineWidth: 4))
+                    Text("Time for a Break")
+                        .font(.appFont(size: 30, relativeTo: .largeTitle))
+                    Text(viewModel.placementLimitMessage)
+                        .font(.appFont(size: 18, relativeTo: .body))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+
+                    HStack(spacing: 16) {
+                        Button("Try Again") {
+                            viewModel.restart()
+                        }
+                        .buttonStyle(.bordered)
+
+                        Button("Back to Chapters") {
+                            dismiss()
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                }
+                .padding(36)
+                .frame(maxWidth: 480)
+                .background(RoundedRectangle(cornerRadius: 24).fill(Color(UIColor.systemBackground)))
                 .zIndex(1)
             }
         }

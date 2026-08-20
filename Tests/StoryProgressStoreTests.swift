@@ -17,21 +17,32 @@ struct StoryProgressStoreTests {
             )
         ]
 
-        try StoryProgressStore(defaults: defaults).save(progress, for: "listen_before_helping_rhodey")
-        let restored = try StoryProgressStore(defaults: defaults).progress(for: "listen_before_helping_rhodey")
-        precondition(restored == progress, "Progress must survive store recreation")
+        let activeRun = StoryActiveRun(steps: progress, placementCount: 4, status: .playing)
+        try StoryProgressStore(defaults: defaults).saveActiveRun(activeRun, for: "listen_before_helping_rhodey")
+        let restored = try StoryProgressStore(defaults: defaults).state(for: "listen_before_helping_rhodey")
+        precondition(restored.activeRun == activeRun, "Active run must survive store recreation")
+        precondition(restored.completion == nil, "An unfinished run must not create a completion")
 
-        try StoryProgressStore(defaults: defaults).save(progress, for: "rhodey_wants_to_draw")
         let store = StoryProgressStore(defaults: defaults)
-        try store.reset(storyID: "listen_before_helping_rhodey")
-        let resetProgress = try store.progress(for: "listen_before_helping_rhodey")
-        let preservedProgress = try store.progress(for: "rhodey_wants_to_draw")
-        precondition(resetProgress.isEmpty, "Story reset must clear that story")
-        precondition(preservedProgress == progress, "Story reset must preserve other stories")
+        try store.complete(storyID: "listen_before_helping_rhodey", stars: 2, placementCount: 7)
+        var completed = try store.state(for: "listen_before_helping_rhodey")
+        precondition(completed.activeRun == nil, "Completion must clear the active run")
+        precondition(completed.completion == StoryCompletion(bestStars: 2, bestPlacementCount: 7), "Completion must save stars and placements")
+
+        try store.saveActiveRun(activeRun, for: "listen_before_helping_rhodey")
+        try store.complete(storyID: "listen_before_helping_rhodey", stars: 1, placementCount: 9)
+        completed = try store.state(for: "listen_before_helping_rhodey")
+        precondition(completed.completion == StoryCompletion(bestStars: 2, bestPlacementCount: 7), "A worse replay must preserve the best result")
+
+        try store.saveActiveRun(activeRun, for: "listen_before_helping_rhodey")
+        try store.clearActiveRun(storyID: "listen_before_helping_rhodey")
+        completed = try store.state(for: "listen_before_helping_rhodey")
+        precondition(completed.activeRun == nil, "Try Again must clear only the active run")
+        precondition(completed.completion?.bestStars == 2, "Try Again must preserve the best result")
 
         store.resetAll()
-        let emptyProgress = try store.progress(for: "rhodey_wants_to_draw")
-        precondition(emptyProgress.isEmpty, "Full reset must clear every story")
+        let emptyState = try store.state(for: "listen_before_helping_rhodey")
+        precondition(emptyState == StoryProgressState(), "Full reset must clear every story")
 
         print("StoryProgressStoreTests passed")
     }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "listen_before_helping_rhodey",
   "shortTitle": {
     "en": "Jojo Pushed Me!",
@@ -13,6 +13,14 @@
     "en": "Rhodey falls in the playground and says Jojo pushed him. Rhodey is hurt and crying, while Jojo looks shocked by the accusation. The scene asks the player to handle injury, emotion, and fairness at the same time.",
     "id": "Rhodey jatuh di taman dan mengatakan Jojo mendorongnya. Rhodey terluka dan menangis, sementara Jojo terlihat terkejut karena dituduh. Adegan ini meminta pemain menangani luka, emosi, dan keadilan sekaligus."
   },
+  "completionSummary": {
+    "en": "Rhodey was hurt and Jojo was accused, and both needed attention at the same time. Comfort and fairness had to happen together.",
+    "id": "Rhodey terluka dan Jojo dituduh, sehingga keduanya membutuhkan perhatian pada saat yang sama. Rasa nyaman dan keadilan perlu berjalan bersama."
+  },
+  "completionTip": {
+    "en": "When two children are upset at once, calm the hurt one and listen to both sides without blame. Fix what's broken after that.",
+    "id": "Saat dua anak sama-sama sedang kesal, tenangkan anak yang terluka dan dengarkan kedua sisi tanpa menyalahkan. Perbaiki masalahnya setelah itu."
+  },
   "hints": [
     {
       "en": "When two children are involved, emotional safety and fairness need to move together.",
@@ -22,6 +30,15 @@
   "initialState": "ACCUSATION",
   "gridCount": 4,
   "choiceCount": 5,
+  "maximumPlacements": 30,
+  "starThresholds": {
+    "threeStars": 8,
+    "twoStars": 18
+  },
+  "placementLimitMessage": {
+    "en": "Jojo and Rhodey are tired. You took too long.",
+    "id": "Jojo dan Rhodey kelelahan. Kamu terlalu lama."
+  },
   "actions": [
     {
       "id": "action_asking",
@@ -87,7 +104,7 @@
       "id": "grid_1",
       "order": 1,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_jojo",
@@ -103,7 +120,7 @@
       "id": "grid_2",
       "order": 2,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_jojo",
@@ -119,7 +136,7 @@
       "id": "grid_3",
       "order": 3,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -131,7 +148,7 @@
       "id": "grid_4",
       "order": 4,
       "locked": true,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": []
     }
   ],

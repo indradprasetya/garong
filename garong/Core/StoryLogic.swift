@@ -76,11 +76,19 @@ private extension StoryDefinition {
         let gridIDs = try uniqueIDs(grids.map(\.id))
 
         guard gridCount > 0, choiceCount > 0, !actions.isEmpty,
+              maximumPlacements > choiceCount,
+              starThresholds.threeStars >= choiceCount,
+              starThresholds.threeStars < starThresholds.twoStars,
+              starThresholds.twoStars < maximumPlacements,
               grids.count == gridCount,
               Set(grids.map(\.order)) == Set(1...gridCount),
               !shortTitle.en.isEmpty, !shortTitle.id.isEmpty,
               !title.en.isEmpty, !title.id.isEmpty,
-              !description.en.isEmpty, !description.id.isEmpty else {
+              !description.en.isEmpty, !description.id.isEmpty,
+              !completionSummary.en.isEmpty, !completionSummary.id.isEmpty,
+              !completionTip.en.isEmpty, !completionTip.id.isEmpty,
+              !placementLimitMessage.en.isEmpty, !placementLimitMessage.id.isEmpty,
+              characters.allSatisfy({ placementLimitMessage.en.contains($0.displayName) }) else {
             throw StoryValidationError.invalidGrid("story")
         }
 
