@@ -22,11 +22,17 @@ enum StoryLoader {
 }
 
 struct StoryRunner {
+    let story: StoryDefinition
     private let outcomesByKey: [String: StoryOutcome]
 
     init(story: StoryDefinition) throws {
         try story.validate()
+        self.story = story
         outcomesByKey = Dictionary(uniqueKeysWithValues: story.outcomes.map { ($0.actionIDs.joined(separator: "|"), $0) })
+    }
+
+    var initialOutcome: StoryOutcome? {
+        story.outcomes.first
     }
 
     func outcome(for actionIDs: [String]) -> StoryOutcome? {
@@ -34,7 +40,7 @@ struct StoryRunner {
     }
 
     func partialOutcome(matching prefixActionIDs: [String]) -> StoryOutcome? {
-        guard !prefixActionIDs.isEmpty else { return nil }
+        guard !prefixActionIDs.isEmpty else { return initialOutcome }
         return outcomesByKey.values.first { outcome in
             let actionIDs = outcome.actionIDs
             guard actionIDs.count >= prefixActionIDs.count else { return false }

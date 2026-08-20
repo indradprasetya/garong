@@ -9,13 +9,20 @@ enum SampleGameData {
     
     // MARK: - Default Objects
     
-    static let teddy = GameObject(name: "Teddy", symbol: "🧸", sfSymbol: "teddybear.fill")
-    static let apple = GameObject(name: "Apple", symbol: "🍎", sfSymbol: "apple.logo")
-    static let book = GameObject(name: "Book", symbol: "📖", sfSymbol: "book.fill")
-    static let toyCar = GameObject(name: "Toy Car", symbol: "🪀", sfSymbol: "car.fill")
-    static let ball = GameObject(name: "Ball", symbol: "🎈", sfSymbol: "circle.fill")
+    static let toy = GameObject(name: "Toy", symbol: "action_toy", sfSymbol: "play.fill")
+    static let crayon = GameObject(name: "Crayon", symbol: "action_crayon", sfSymbol: "pencil.tip.crop.circle")
+    static let candy = GameObject(name: "Candy", symbol: "action_candy", sfSymbol: "circle.fill")
+    static let paper = GameObject(name: "Paper", symbol: "action_paper", sfSymbol: "doc.fill")
+    static let bandage = GameObject(name: "Bandage", symbol: "action_give_bandage", sfSymbol: "cross.case.fill")
     
-    static let defaultObjects: [GameObject] = [teddy, apple, book, toyCar, ball]
+    // Legacy aliases for backward compatibility
+    static let teddy = toy
+    static let apple = candy
+    static let book = paper
+    static let toyCar = toy
+    static let ball = candy
+    
+    static let defaultObjects: [GameObject] = [toy, crayon, candy, paper, bandage]
     
     // MARK: - Chapters
     

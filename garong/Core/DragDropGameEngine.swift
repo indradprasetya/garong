@@ -16,6 +16,7 @@ final class DragDropGameEngine {
     private(set) var scenes: [GameScene]
     private(set) var availableObjects: [GameObject]
     private(set) var phase: DragDropPhase = .playing
+    private(set) var currentOutcome: StoryOutcome?
     
     init(
         chapter: Chapter,
@@ -49,6 +50,22 @@ final class DragDropGameEngine {
     /// Total items currently placed across all slots.
     var placedObjectCount: Int {
         scenes.reduce(0) { $0 + $1.objectCount }
+    }
+    
+    /// Whether all choice slots in the chapter are filled.
+    var isAllScenesFilled: Bool {
+        if let story = chapter.storyDefinition {
+            let placedCount = scenes.flatMap(\.dropSlots).compactMap(\.currentObject).count
+            return placedCount >= story.choiceCount
+        }
+        let choiceScenes = scenes.filter { !$0.dropSlots.isEmpty }
+        return choiceScenes.allSatisfy { $0.dropSlots.allSatisfy { $0.currentObject != nil } }
+    }
+
+    /// Whether the current evaluated outcome is ideal/correct.
+    var isCurrentOutcomeIdeal: Bool {
+        guard let outcome = currentOutcome else { return true }
+        return outcome.isIdeal
     }
     
     /// Total objects available in tray.
@@ -142,16 +159,28 @@ final class DragDropGameEngine {
             }
             
             // Resolve full or partial outcome match to update speech bubbles immediately upon item placement!
-            let activeOutcome = (placedActionIDs.count == choiceCount)
-                ? runner.outcome(for: placedActionIDs)
-                : runner.partialOutcome(matching: placedActionIDs)
+            let activeOutcome: StoryOutcome?
+            if placedActionIDs.count == choiceCount {
+                activeOutcome = runner.outcome(for: placedActionIDs)
+                self.currentOutcome = activeOutcome
+            } else if !placedActionIDs.isEmpty {
+                activeOutcome = runner.partialOutcome(matching: placedActionIDs)
+                self.currentOutcome = nil
+            } else {
+                activeOutcome = runner.initialOutcome
+                self.currentOutcome = nil
+            }
             
             if let outcome = activeOutcome {
                 for (index, state) in outcome.states.enumerated() {
                     if scenes.indices.contains(index) {
                         let isOutcomeGrid = scenes[index].dropSlots.isEmpty
-                        if !isOutcomeGrid || placedActionIDs.count == choiceCount {
-                            scenes[index].speechBubbleText = state.textBubble?.text.en
+                        let isFirstGrid = (index == 0)
+                        let isCurrentActiveGrid = (index <= placedActionIDs.count)
+                        let isComplete = (placedActionIDs.count == choiceCount)
+                        let shouldShow = isFirstGrid || isCurrentActiveGrid || (isOutcomeGrid && isComplete)
+                        
+                        if shouldShow {
                             let imageNames = state.visualSlotsList.map { visualSlot in
                                 let asset = visualSlot.assetID.isEmpty ? (visualSlot.characterIDs.first ?? "") : visualSlot.assetID
                                 return AssetFallbackHelper.imageName(for: asset)
@@ -159,13 +188,26 @@ final class DragDropGameEngine {
                             if !imageNames.isEmpty {
                                 scenes[index].characterImageNames = imageNames
                             }
-                            if outcome.isIdeal {
-                                scenes[index].characterEmotion = .happy
-                            } else if outcome.category == "retry" {
-                                scenes[index].characterEmotion = .sad
+                            
+                            if isFirstGrid || (index < placedActionIDs.count) || (isOutcomeGrid && isComplete) {
+                                scenes[index].speechBubbleText = state.textBubble?.text.en
                             } else {
-                                scenes[index].characterEmotion = .calm
+                                scenes[index].speechBubbleText = nil
                             }
+                            
+                            if isComplete {
+                                if outcome.isIdeal {
+                                    scenes[index].characterEmotion = .happy
+                                } else if outcome.category == "retry" {
+                                    scenes[index].characterEmotion = .sad
+                                } else {
+                                    scenes[index].characterEmotion = .calm
+                                }
+                            } else {
+                                scenes[index].characterEmotion = .neutral
+                            }
+                        } else {
+                            scenes[index].speechBubbleText = nil
                         }
                     }
                 }

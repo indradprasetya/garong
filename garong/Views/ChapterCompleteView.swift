@@ -16,19 +16,20 @@ struct ChapterCompleteView: View {
             
             VStack(spacing: 8) {
                 Text("Chapter Complete!")
-                    .font(.largeTitle.bold())
+                    .font(.appFont(size: 32, relativeTo: .largeTitle))
                 
-                // Fallback text since result properties aren't fully defined in prompt
-                // Assuming it has some summary or we can just show generic completion
                 Text("Great job placing all objects!")
-                    .font(.title3)
+                    .font(.appFont(size: 18, relativeTo: .title3))
                     .foregroundColor(.secondary)
             }
             
             HStack(spacing: 20) {
-                Button(action: onRestart) {
+                Button {
+                    SoundManager.shared.play(.buttonTap)
+                    onRestart()
+                } label: {
                     Text("Play Again")
-                        .font(.headline)
+                        .font(.appFont(size: 16, relativeTo: .headline))
                         .foregroundColor(.accentColor)
                         .frame(width: 160, height: 50)
                         .background(Color(UIColor.secondarySystemBackground))
@@ -39,9 +40,12 @@ struct ChapterCompleteView: View {
                         )
                 }
                 
-                Button(action: onDismiss) {
+                Button {
+                    SoundManager.shared.play(.backTap)
+                    onDismiss()
+                } label: {
                     Text("Back to Chapters")
-                        .font(.headline)
+                        .font(.appFont(size: 16, relativeTo: .headline))
                         .foregroundColor(.white)
                         .frame(width: 160, height: 50)
                         .background(Color.accentColor)

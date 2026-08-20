@@ -10,6 +10,7 @@ import SwiftUI
 @main
 struct garongApp: App {
     init() {
+        AppFont.registerFonts()
         #if DEBUG
         Task { @MainActor in
             DragDropGameTests.runAllTests()

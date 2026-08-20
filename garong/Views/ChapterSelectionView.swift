@@ -19,11 +19,11 @@ struct ChapterSelectionView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(group.title)
-                                    .font(.title2.bold())
+                                    .font(.appFont(size: 22, relativeTo: .title2))
                                     .foregroundColor(.primary)
                                 
                                 Text(group.description)
-                                    .font(.subheadline)
+                                    .font(.appFont(size: 15, relativeTo: .subheadline))
                                     .foregroundColor(.secondary)
                             }
                             .padding(.horizontal, 32)
@@ -37,6 +37,9 @@ struct ChapterSelectionView: View {
                                                 chapterCard(for: item)
                                             }
                                             .buttonStyle(PlainButtonStyle())
+                                            .simultaneousGesture(TapGesture().onEnded {
+                                                SoundManager.shared.play(.buttonTap)
+                                            })
                                         } else {
                                             chapterCard(for: item)
                                                 .opacity(0.6)
@@ -63,8 +66,7 @@ struct ChapterSelectionView: View {
         
         ZStack(alignment: .bottomLeading) {
             // Card Image Background
-            #if canImport(UIKit)
-            if !imageName.isEmpty, UIImage(named: imageName) != nil {
+            if !imageName.isEmpty && AssetFallbackHelper.hasAsset(named: imageName) {
                 Image(imageName)
                     .resizable()
                     .scaledToFill()
@@ -79,14 +81,6 @@ struct ChapterSelectionView: View {
                             .foregroundColor(.accentColor.opacity(0.4))
                     )
             }
-            #else
-            Color(UIColor.secondarySystemGroupedBackground)
-                .overlay(
-                    Image(systemName: "globe")
-                        .font(.system(size: 44))
-                        .foregroundColor(.accentColor.opacity(0.4))
-                )
-            #endif
             
             // Gradient Overlay for High Contrast Legibility
             LinearGradient(
@@ -99,7 +93,7 @@ struct ChapterSelectionView: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text("Chapter \(item.chapterNumber)")
-                        .font(.caption.bold())
+                        .font(.appFont(size: 12, relativeTo: .caption))
                         .foregroundColor(.white)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
@@ -117,7 +111,7 @@ struct ChapterSelectionView: View {
                 }
                 
                 Text(item.title)
-                    .font(.headline.bold())
+                    .font(.appFont(size: 16, relativeTo: .headline))
                     .foregroundColor(.white)
                     .lineLimit(2)
                     .shadow(color: Color.black.opacity(0.6), radius: 2, x: 0, y: 1)

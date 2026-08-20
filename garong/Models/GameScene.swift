@@ -24,6 +24,7 @@ struct GameScene: Identifiable, Equatable {
     var speechBubbleText: String?
     var characterImageNames: [String]
     var isUnlocked: Bool
+    var backgroundID: String?
     
     init(
         id: UUID = UUID(),
@@ -33,7 +34,8 @@ struct GameScene: Identifiable, Equatable {
         characterEmotion: CharacterEmotion = .neutral,
         speechBubbleText: String? = nil,
         characterImageNames: [String] = [],
-        isUnlocked: Bool = true
+        isUnlocked: Bool = true,
+        backgroundID: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -43,6 +45,7 @@ struct GameScene: Identifiable, Equatable {
         self.speechBubbleText = speechBubbleText
         self.characterImageNames = characterImageNames
         self.isUnlocked = isUnlocked
+        self.backgroundID = backgroundID
     }
     
     /// Convenience initializer for single object / single image backward compatibility.
@@ -54,7 +57,8 @@ struct GameScene: Identifiable, Equatable {
         characterEmotion: CharacterEmotion = .neutral,
         speechBubbleText: String? = nil,
         characterImageName: String? = nil,
-        isUnlocked: Bool = true
+        isUnlocked: Bool = true,
+        backgroundID: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -64,6 +68,12 @@ struct GameScene: Identifiable, Equatable {
         self.speechBubbleText = speechBubbleText
         self.characterImageNames = characterImageName != nil ? [characterImageName!] : []
         self.isUnlocked = isUnlocked
+        self.backgroundID = backgroundID
+    }
+
+    /// Helper resolving the image name for the scene background.
+    var backgroundImageName: String {
+        AssetFallbackHelper.backgroundImageName(for: backgroundID ?? "background_classroom")
     }
 
     /// Single image name backward compatibility helper.
