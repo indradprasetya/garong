@@ -7,12 +7,16 @@ struct ChapterSelectionView: View {
     let subtitle: String
     let chapters: [Chapter]
 
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss)
+    private var dismiss
 
-    // Untuk testing:
-    // 1 = chapter 1 completed
-    //     chapter 2 current
-    //     chapter 3 locked
+    /*
+     TEST STATE:
+     0 = Cry Baby current
+     1 = Cry Baby completed, Be Quiet current
+     2 = Cry Baby + Be Quiet completed, Go Study current
+     3 = all completed
+    */
     @State private var completedChapterCount: Int = 1
 
 
@@ -24,7 +28,6 @@ struct ChapterSelectionView: View {
         self.subtitle = story.subtitle
         self.chapters = story.chapters
     }
-
 
     init(
         storyNumber: Int = 1,
@@ -50,9 +53,9 @@ struct ChapterSelectionView: View {
 
             ZStack {
 
-                // ==========================================
+                // =====================================================
                 // BACKGROUND
-                // ==========================================
+                // =====================================================
 
                 Image("StoriesGreenGrid")
                     .resizable()
@@ -65,9 +68,9 @@ struct ChapterSelectionView: View {
                     .ignoresSafeArea()
 
 
-                // ==========================================
-                // SCHOOL PAPER + SCHOOL DRAWING
-                // ==========================================
+                // =====================================================
+                // SCHOOL ARTWORK
+                // =====================================================
 
                 Image("SchoolArtwork")
                     .resizable()
@@ -78,13 +81,13 @@ struct ChapterSelectionView: View {
                     )
                     .position(
                         x: width * 0.50,
-                        y: height * 0.47
+                        y: height * 0.49
                     )
 
 
-                // ==========================================
+                // =====================================================
                 // SCHOOL TITLE
-                // ==========================================
+                // =====================================================
 
                 Image("School")
                     .resizable()
@@ -94,16 +97,16 @@ struct ChapterSelectionView: View {
                     )
                     .position(
                         x: width * 0.675,
-                        y: height * 0.245
+                        y: height * 0.285
                     )
 
 
-                // ==========================================
+                // =====================================================
                 // CHAPTER 1
-                // ==========================================
+                // =====================================================
 
                 chapterButton(
-                    chapterIndex: 0,
+                    index: 0,
                     width: width,
                     height: height
                 )
@@ -113,12 +116,12 @@ struct ChapterSelectionView: View {
                 )
 
 
-                // ==========================================
+                // =====================================================
                 // CHAPTER 2
-                // ==========================================
+                // =====================================================
 
                 chapterButton(
-                    chapterIndex: 1,
+                    index: 1,
                     width: width,
                     height: height
                 )
@@ -128,12 +131,12 @@ struct ChapterSelectionView: View {
                 )
 
 
-                // ==========================================
+                // =====================================================
                 // CHAPTER 3
-                // ==========================================
+                // =====================================================
 
                 chapterButton(
-                    chapterIndex: 2,
+                    index: 2,
                     width: width,
                     height: height
                 )
@@ -143,9 +146,9 @@ struct ChapterSelectionView: View {
                 )
 
 
-                // ==========================================
-                // BACK
-                // ==========================================
+                // =====================================================
+                // BACK BUTTON
+                // =====================================================
 
                 Button {
                     dismiss()
@@ -155,31 +158,29 @@ struct ChapterSelectionView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(
-                            width: width * 0.065
+                            width: width * 0.060
                         )
                 }
                 .buttonStyle(.plain)
                 .position(
                     x: width * 0.075,
-                    y: height * 0.055
+                    y: height * 0.070
                 )
 
 
-                // ==========================================
-                // NEXT STORY
-                // ==========================================
+                // =====================================================
+                // NEXT STORY ARROW
+                // =====================================================
 
                 Button {
-
-                    // nanti next story di sini
-
+                    // next story nanti
                 } label: {
 
                     Image("NextArrow")
                         .resizable()
                         .scaledToFit()
                         .frame(
-                            width: width * 0.075
+                            width: width * 0.070
                         )
                 }
                 .buttonStyle(.plain)
@@ -199,30 +200,27 @@ struct ChapterSelectionView: View {
     }
 
 
-    // =====================================================
+    // =========================================================
     // MARK: - CHAPTER BUTTON
-    // =====================================================
+    // =========================================================
 
     @ViewBuilder
     private func chapterButton(
-        chapterIndex: Int,
+        index: Int,
         width: CGFloat,
         height: CGFloat
     ) -> some View {
 
-        if chapterIndex < chapters.count {
+        if index < chapters.count {
 
-            let status = chapterStatus(
-                chapterIndex: chapterIndex
-            )
+            let status = chapterStatus(index: index)
 
             switch status {
 
-
-            // ==============================================
+            // =================================================
             // COMPLETED
-            // WHITE + STAR
-            // ==============================================
+            // WHITE BORDER + STAR + TEXT
+            // =================================================
 
             case .completed:
 
@@ -231,7 +229,13 @@ struct ChapterSelectionView: View {
                     Image("ChapterButtonWhite")
                         .resizable()
                         .scaledToFit()
-
+                        .frame(
+                            width: width * 0.27
+                        )
+                        .offset(
+                            x: -10,
+                            y: 0
+                        )
 
                     HStack(spacing: width * 0.012) {
 
@@ -239,103 +243,95 @@ struct ChapterSelectionView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(
-                                width: width * 0.025,
-                                height: width * 0.025
+                                width: width * 0.021,
+                                height: width * 0.021
+                            )
+                            .offset(
+                                x: 15,
+                                y: 0
                             )
 
-
-                        chapterTextAsset(
-                            chapterIndex: chapterIndex
-                        )
-                        .frame(
-                            width: width * 0.145,
-                            height: height * 0.055
-                        )
-
+                        chapterTextAsset(index: index)
+                            .frame(
+                                width: width * 0.115,
+                                height: height * 0.040
+                            )
+                            .offset(
+                                x: 8,
+                                y: 0
+                            )
 
                         Spacer()
                     }
-                    .padding(
-                        .leading,
-                        width * 0.025
+                    .frame(
+                        width: width * 0.215
                     )
                 }
                 .frame(
-                    width: width * 0.31,
-                    height: height * 0.105
+                    width: width * 0.33,
+                    height: height * 0.20
                 )
 
 
-            // ==============================================
-            // CURRENT
-            // YELLOW + ARROW
-            // ==============================================
+            // =================================================
+            // CURRENT / CONTINUE
+            // PAKAI ASSET DoChapter
+            // =================================================
 
             case .current:
 
                 NavigationLink {
 
                     ChapterIntroView(
-                        chapter: chapters[chapterIndex]
+                        chapter: chapters[index]
                     )
 
                 } label: {
 
                     ZStack {
 
-                        Image("ChapterButtonYellow")
+                        // asset current/continue yang sudah jadi
+                        Image("DoChapter")
                             .resizable()
                             .scaledToFit()
-
-
-                        HStack {
-
-                            Spacer()
-
-
-                            chapterTextAsset(
-                                chapterIndex: chapterIndex
-                            )
                             .frame(
-                                width: width * 0.16,
-                                height: height * 0.058
+                                width: width * 0.27
                             )
 
+                        chapterTextAsset(index: index)
+                            .frame(
+                                width: width * 0.120,
+                                height: height * 0.040
+                            )
 
-                            Spacer()
-
-
-                            Image(systemName: "chevron.right")
-                                .font(
-                                    .system(
-                                        size: max(
-                                            16,
-                                            width * 0.021
-                                        ),
-                                        weight: .black
-                                    )
+                        Image(systemName: "chevron.right")
+                            .font(
+                                .system(
+                                    size: max(
+                                        14,
+                                        width * 0.017
+                                    ),
+                                    weight: .black
                                 )
-                                .foregroundStyle(.black)
-
-
-                            Spacer()
-                                .frame(
-                                    width: width * 0.020
-                                )
-                        }
+                            )
+                            .foregroundStyle(.black)
+                            .offset(
+                                x: width * 0.090,
+                                y: 0
+                            )
                     }
                     .frame(
-                        width: width * 0.31,
-                        height: height * 0.105
+                        width: width * 0.30,
+                        height: height * 0.18
                     )
                 }
                 .buttonStyle(.plain)
 
 
-            // ==============================================
+            // =================================================
             // LOCKED
-            // WHITE + FADED
-            // ==============================================
+            // WHITE BORDER FADED
+            // =================================================
 
             case .locked:
 
@@ -344,80 +340,77 @@ struct ChapterSelectionView: View {
                     Image("ChapterButtonWhite")
                         .resizable()
                         .scaledToFit()
-                        .opacity(0.55)
+                        .frame(
+                            width: width * 0.27
+                        )
+                        .offset(
+                            x: -10,
+                            y: 0
+                        )
+                        .opacity(0.45)
 
-
-                    chapterTextAsset(
-                        chapterIndex: chapterIndex
-                    )
-                    .frame(
-                        width: width * 0.15,
-                        height: height * 0.055
-                    )
-                    .opacity(0.35)
+                    chapterTextAsset(index: index)
+                        .frame(
+                            width: width * 0.115,
+                            height: height * 0.040
+                        )
+                        .opacity(0.32)
                 }
                 .frame(
-                    width: width * 0.31,
-                    height: height * 0.105
+                    width: width * 0.33,
+                    height: height * 0.20
                 )
                 .allowsHitTesting(false)
+            }
         }
     }
-}
 
 
-    // =====================================================
+    // =========================================================
     // MARK: - CHAPTER TEXT ASSETS
-    // =====================================================
+    // =========================================================
 
     @ViewBuilder
     private func chapterTextAsset(
-        chapterIndex: Int
+        index: Int
     ) -> some View {
 
-        switch chapterIndex {
+        switch index {
 
         case 0:
-
             Image("CRY BABY...")
                 .resizable()
                 .scaledToFit()
 
-
         case 1:
-
             Image("BE QUIET!")
                 .resizable()
                 .scaledToFit()
 
-
         case 2:
-
             Image("GO STUDY")
                 .resizable()
                 .scaledToFit()
 
-
         default:
-
             EmptyView()
         }
     }
 
 
-    // =====================================================
-    // MARK: - CHAPTER LOGIC
-    // =====================================================
+    // =========================================================
+    // MARK: - STATUS LOGIC
+    // =========================================================
 
     private func chapterStatus(
-        chapterIndex: Int
+        index: Int
     ) -> ChapterPickStatus {
 
-        if chapterIndex < completedChapterCount {
+        if index < completedChapterCount {
             return .completed
         }
 
-        if chapterIndex == completedChapterCount {
+        if index == completedChapterCount {
             return .current
         }
 
@@ -426,21 +419,20 @@ struct ChapterSelectionView: View {
 }
 
 
-// =========================================================
-// MARK: - STATUS
-// =========================================================
+// =============================================================
+// MARK: - STATUS ENUM
+// =============================================================
 
 private enum ChapterPickStatus {
-
     case completed
     case current
     case locked
 }
 
 
-// =========================================================
+// =============================================================
 // MARK: - PREVIEW
-// =========================================================
+// =============================================================
 
 #Preview {
 

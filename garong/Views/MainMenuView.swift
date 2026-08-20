@@ -1,306 +1,105 @@
 import SwiftUI
-import UIKit
 
 struct MainMenuView: View {
 
+    @State private var showStorySelection = false
+    @State private var showSettings = false
+
     var body: some View {
-        AppBackground {
-            GeometryReader { geometry in
-                let width = geometry.size.width
-                let height = geometry.size.height
 
-                HStack(spacing: width * 0.065) {
+        NavigationStack {
 
-                    // MARK: - LEFT CONTENT
-                    VStack(alignment: .leading, spacing: 0) {
+            GeometryReader { geo in
 
-                        Spacer()
+                let width = geo.size.width
+                let height = geo.size.height
 
-                        Text("A SMALL STEP CAN\nCHANGE THE MOMENT")
-                            .font(
-                                .system(
-                                    size: 14,
-                                    weight: .bold,
-                                    design: .rounded
-                                )
-                            )
-                            .tracking(4)
-                            .foregroundStyle(
-                                Color(
-                                    red: 0.88,
-                                    green: 0.38,
-                                    blue: 0.33
-                                )
-                            )
+                ZStack {
 
-                        Spacer()
-                            .frame(height: 28)
+                    // ==========================================
+                    // BACKGROUND
+                    // ==========================================
 
-                        Text("GARONG")
-                            .font(
-                                .system(
-                                    size: 55,
-                                    weight: .black,
-                                    design: .rounded
-                                )
-                            )
-                            .foregroundStyle(
-                                Color(
-                                    red: 0.03,
-                                    green: 0.19,
-                                    blue: 0.22
-                                )
-                            )
-
-                        Spacer()
-                            .frame(height: 30)
-
-                        Text(
-                            "Observe. Try an approach.\nWatch what changes."
+                    Image("StoriesGreenGrid")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(
+                            width: width,
+                            height: height
                         )
-                        .font(
-                            .system(
-                                size: 24,
-                                weight: .bold,
-                                design: .rounded
-                            )
+                        .clipped()
+
+
+                    // ==========================================
+                    // START HOMEPAGE ASSET
+                    // ==========================================
+
+                    Image("Starthomepage")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: width * 0.999
                         )
-                        .foregroundStyle(
-                            Color(
-                                red: 0.08,
-                                green: 0.55,
-                                blue: 0.51
-                            )
-                        )
-                        .lineSpacing(7)
-
-                        Spacer()
-                            .frame(height: 25)
-
-                        Text(
-                            """
-                            A story-driven interaction game about
-                            responding to children with curiosity,
-                            care, and flexible support.
-                            """
-                        )
-                        .font(
-                            .system(
-                                size: 18,
-                                weight: .regular,
-                                design: .rounded
-                            )
-                        )
-                        .foregroundStyle(
-                            Color(
-                                red: 0.30,
-                                green: 0.42,
-                                blue: 0.44
-                            )
-                        )
-                        .lineSpacing(5)
-
-                        Spacer()
-                    }
-                    .frame(
-                        width: width * 0.40,
-                        alignment: .leading
-                    )
+                        .zIndex(1)
 
 
-                    // MARK: - RIGHT CARD
-                    VStack(spacing: 14) {
+                    // ==========================================
+                    // INVISIBLE START BUTTON
+                    // ==========================================
 
-                        Spacer()
-                            .frame(height: 14)
+                    Button {
 
-                        // Rhodey illustration
-                        ZStack {
-                            Circle()
-                                .fill(
-                                    Color(
-                                        red: 1.0,
-                                        green: 0.90,
-                                        blue: 0.68
-                                    )
-                                )
-                                .frame(
-                                    width: height * 0.31,
-                                    height: height * 0.31
-                                )
+                        showStorySelection = true
 
-                            Image("Rhodey")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(
-                                    width: height * 0.23,
-                                    height: height * 0.23
-                                )
-                        }
+                    } label: {
 
-
-                        // MARK: Start Story
-                        Button {
-                            // Masukkan navigation Start Story kamu di sini
-                        } label: {
-                            HStack(spacing: 12) {
-                                Image(systemName: "play.fill")
-
-                                Text("Start a Story")
-                            }
-                            .font(
-                                .system(
-                                    size: 20,
-                                    weight: .bold,
-                                    design: .rounded
-                                )
-                            )
-                            .foregroundStyle(.white)
+                        Rectangle()
+                            .fill(Color.clear)
                             .frame(
-                                maxWidth: .infinity,
-                                minHeight: 58
+                                width: width * 0.35,
+                                height: height * 0.20
                             )
-                            .background(
-                                Color(
-                                    red: 0.08,
-                                    green: 0.55,
-                                    blue: 0.51
-                                )
-                            )
-                            .clipShape(
-                                RoundedRectangle(
-                                    cornerRadius: 20
-                                )
-                            )
-                        }
-                        .buttonStyle(.plain)
-
-
-                        // MARK: Browse Chapters
-                        Button {
-                            // Masukkan navigation Browse Chapters kamu di sini
-                        } label: {
-                            HStack(spacing: 12) {
-                                Image(
-                                    systemName:
-                                        "square.grid.2x2.fill"
-                                )
-
-                                Text("Browse Chapters")
-                            }
-                            .font(
-                                .system(
-                                    size: 19,
-                                    weight: .bold,
-                                    design: .rounded
-                                )
-                            )
-                            .foregroundStyle(
-                                Color(
-                                    red: 0.03,
-                                    green: 0.19,
-                                    blue: 0.22
-                                )
-                            )
-                            .frame(
-                                maxWidth: .infinity,
-                                minHeight: 58
-                            )
-                            .background(.white)
-                            .overlay {
-                                RoundedRectangle(
-                                    cornerRadius: 20
-                                )
-                                .stroke(
-                                    Color.gray.opacity(0.25),
-                                    lineWidth: 1.5
-                                )
-                            }
-                            .clipShape(
-                                RoundedRectangle(
-                                    cornerRadius: 20
-                                )
-                            )
-                        }
-                        .buttonStyle(.plain)
-
-
-                        Text(
-                            """
-                            No scores. No wrong answers.
-                            Your choices shape the response.
-                            """
-                        )
-                        .font(
-                            .system(
-                                size: 13,
-                                weight: .medium,
-                                design: .rounded
-                            )
-                        )
-                        .foregroundStyle(.gray)
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(2)
-
-                        Spacer()
-                            .frame(height: 12)
+                            .contentShape(Rectangle())
                     }
-                    .padding(.horizontal, 28)
-                    .frame(
-                        width: width * 0.34,
-                        height: height * 0.88
+                    .buttonStyle(.plain)
+                    .position(
+                        x: width * 0.65,
+                        y: height * 0.56
                     )
-                    .background(
-                        Color.white.opacity(0.94)
-                    )
-                    .clipShape(
-                        RoundedRectangle(
-                            cornerRadius: 34
-                        )
-                    )
-                    .shadow(
-                        color: .black.opacity(0.05),
-                        radius: 12,
-                        y: 5
-                    )
+                    .zIndex(2)
                 }
                 .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity
+                    width: width,
+                    height: height
                 )
-                .padding(.horizontal, 40)
-                .padding(.vertical, 18)
+                .clipped()
             }
-        }
+            .ignoresSafeArea()
+            .navigationBarHidden(true)
 
-        // MARK: - FONT CHECK
-        .onAppear {
-            print("========== VIRELS FONT CHECK ==========")
 
-            for family in UIFont.familyNames.sorted() {
-                for font in UIFont.fontNames(
-                    forFamilyName: family
-                ) {
-                    if font
-                        .lowercased()
-                        .contains("virel") {
+            // ==========================================
+            // STORY PICK
+            // ==========================================
 
-                        print("FONT FOUND:", font)
-                    }
-                }
+            .navigationDestination(
+                isPresented: $showStorySelection
+            ) {
+
+                StorySelectionView(
+                    stories: StoryCatalog.gameStories
+                )
             }
-
-            print("=======================================")
         }
     }
 }
 
 
-// MARK: - PREVIEW
+// ==========================================
+// PREVIEW
+// ==========================================
 
 #Preview {
+
     MainMenuView()
-        .previewInterfaceOrientation(
-            .landscapeLeft
-        )
 }
