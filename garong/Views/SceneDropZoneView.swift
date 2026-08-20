@@ -377,8 +377,7 @@ struct SceneDropZoneView: View {
             return index == 0 ? "blue_selector_half" : "green_selector_half"
         }
     }
-
-    }
+}
 
 
 /// A small rounded square drop badge located in the corner of a scene card (visible when an item is placed).

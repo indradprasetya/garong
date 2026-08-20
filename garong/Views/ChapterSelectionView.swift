@@ -434,12 +434,12 @@ private enum ChapterPickStatus {
 // MARK: - PREVIEW
 // =============================================================
 
-#Preview {
-
-    NavigationStack {
-
-        ChapterSelectionView(
-            story: StoryCatalog.gameStories[0]
-        )
+struct ChapterSelectionView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            ChapterSelectionView(
+                story: StoryCatalog.gameStories[0]
+            )
+        }
     }
 }

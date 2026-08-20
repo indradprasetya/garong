@@ -114,8 +114,11 @@ struct OnboardingView: View {
     }
 }
 
-#Preview(traits: .landscapeLeft) {
-    OnboardingView {
-        print("Go to Main Menu")
+struct OnboardingView_Previews: PreviewProvider {
+    static var previews: some View {
+        OnboardingView {
+            print("Go to Main Menu")
+        }
+        .previewLayout(.fixed(width: 812, height: 375))
     }
 }
