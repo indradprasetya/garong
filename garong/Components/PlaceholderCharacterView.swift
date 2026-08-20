@@ -34,7 +34,7 @@ struct PlaceholderCharacterView: View {
         }
         .scaleEffect(isReacting || bounce ? 1.1 : 1.0)
         .rotationEffect(.degrees(rotation))
-        .onChange(of: emotion.displayName) { _ in
+        .onChange(of: emotion.displayName) {
             triggerAnimation()
         }
         .onAppear {

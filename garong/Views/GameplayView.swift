@@ -17,16 +17,15 @@ struct GameplayView: View {
     var body: some View {
         ZStack {
             // Background fill extending into edges - Acts as unattach drop target when dragging placed items outside
-            GarongTheme.pageBackground
-                .ignoresSafeArea()
-                .dropDestination(for: GameObject.self) { items, _ in
-                    for item in items {
-                        withAnimation(.spring()) {
-                            viewModel.removeObjectGlobal(item)
-                        }
-                    }
-                    viewModel.setDraggingActive(false)
-                    return true
+            Group {
+                if AssetFallbackHelper.hasAsset(named: "gameplay_background") {
+                    Image("gameplay_background")
+                        .resizable()
+                        .scaledToFill()
+                        .ignoresSafeArea()
+                } else {
+                    Color(UIColor.systemGroupedBackground)
+                        .ignoresSafeArea()
                 }
             }
             .dropDestination(for: GameObject.self) { items, _ in
@@ -38,7 +37,7 @@ struct GameplayView: View {
                 viewModel.setDraggingActive(false)
                 return true
             }
-            
+
             // Content container padded away from device hardware edges and notch
             VStack(spacing: 6) {
                 // Top Bar
@@ -47,16 +46,23 @@ struct GameplayView: View {
                         SoundManager.shared.play(.backTap)
                         dismiss()
                     } label: {
-                        Image(systemName: "arrowshape.backward.fill")
-                            .font(.title2)
-                            .foregroundColor(GarongTheme.ink)
+                        if AssetFallbackHelper.hasAsset(named: "back_button") {
+                            Image("back_button")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 64, height: 64)
+                        } else {
+                            Image(systemName: "arrowshape.backward.fill")
+                                .font(.title2)
+                                .foregroundColor(.secondary)
+                        }
                     }
                     
                     Spacer()
                     
                     Text(viewModel.chapterName)
-                        .font(.system(.title3, design: .rounded, weight: .bold))
-                        .foregroundStyle(GarongTheme.ink)
+                        .font(.appFont(size: 38))
+                        .padding(.top, 12)
                     
                     Spacer()
                     
@@ -81,8 +87,8 @@ struct GameplayView: View {
                             .padding(.vertical, 4)
                             .background(
                                 RoundedRectangle(cornerRadius: 16)
-                                    .fill(isReady ? GarongTheme.teal : GarongTheme.ink.opacity(0.25))
-                                    .shadow(color: isReady ? GarongTheme.teal.opacity(0.4) : Color.clear, radius: 6, x: 0, y: 3)
+                                    .fill(isReady ? Color.accentColor : Color(UIColor.tertiaryLabel))
+                                    .shadow(color: isReady ? Color.accentColor.opacity(0.4) : Color.clear, radius: 6, x: 0, y: 3)
                             )
                         }
                         .disabled(!isReady)
@@ -140,9 +146,6 @@ struct GameplayView: View {
                 
                 // Bottom Tray (CENTERED Draggable Objects - also unattached when dropped here)
                 VStack(alignment: .center, spacing: 4) {
-                    Text("CHOOSE AN APPROACH")
-                        .font(.caption2.weight(.heavy)).tracking(1.2)
-                        .foregroundStyle(GarongTheme.coral)
                     HStack(spacing: 16) {
                         ForEach(viewModel.availableObjects, id: \.id) { object in
                             DraggableObjectView(object: object)
@@ -150,9 +153,7 @@ struct GameplayView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
-                .padding(.vertical, 8)
-                .frame(height: 104)
-                .background(.white.opacity(0.78), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .frame(height: 80)
                 .dropDestination(for: GameObject.self) { items, _ in
                     for item in items {
                         withAnimation(.spring()) {
@@ -182,40 +183,6 @@ struct GameplayView: View {
                 )
                 .padding(24)
                 .transition(.scale.combined(with: .opacity))
-                .zIndex(1)
-            }
-
-            if viewModel.phase == .needsBreak {
-                Color.black.opacity(0.4).ignoresSafeArea()
-
-                VStack(spacing: 18) {
-                    Text("😣")
-                        .font(.system(size: 58))
-                        .padding(10)
-                        .background(Circle().fill(Color.red.opacity(0.2)))
-                        .overlay(Circle().stroke(Color.red, lineWidth: 4))
-                    Text("Time for a Break")
-                        .font(.appFont(size: 30, relativeTo: .largeTitle))
-                    Text(viewModel.placementLimitMessage)
-                        .font(.appFont(size: 18, relativeTo: .body))
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-
-                    HStack(spacing: 16) {
-                        Button("Try Again") {
-                            viewModel.restart()
-                        }
-                        .buttonStyle(.bordered)
-
-                        Button("Back to Chapters") {
-                            dismiss()
-                        }
-                        .buttonStyle(.borderedProminent)
-                    }
-                }
-                .padding(36)
-                .frame(maxWidth: 480)
-                .background(RoundedRectangle(cornerRadius: 24).fill(Color(UIColor.systemBackground)))
                 .zIndex(1)
             }
         }

@@ -17,7 +17,7 @@ protocol ReactionEvaluating {
 /// Evaluates each scene's emotion based on its own item AND the global combination of items across all 3 scenes.
 final class DefaultReactionEvaluator: ReactionEvaluating {
     
-    nonisolated func evaluateReactions(for scenes: [GameScene]) -> [CharacterEmotion] {
+    func evaluateReactions(for scenes: [GameScene]) -> [CharacterEmotion] {
         guard !scenes.isEmpty else { return [] }
         
         let item1 = scenes.indices.contains(0) ? scenes[0].currentObject?.name : nil
@@ -115,7 +115,7 @@ final class DefaultReactionEvaluator: ReactionEvaluating {
         return emotions
     }
     
-    nonisolated func evaluate(objects: [GameObject]) -> CharacterEmotion {
+    func evaluate(objects: [GameObject]) -> CharacterEmotion {
         guard let first = objects.first else { return .neutral }
         switch first.name {
         case "Teddy":   return .happy

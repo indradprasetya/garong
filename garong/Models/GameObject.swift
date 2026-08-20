@@ -28,12 +28,12 @@ struct GameObject: Identifiable, Equatable, Hashable, Codable, Sendable {
 
 // MARK: - Transferable for Drag-and-Drop
 
-extension GameObject: Transferable {
+nonisolated extension GameObject: Transferable {
     static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(contentType: .gameObject)
     }
 }
 
-extension UTType {
+nonisolated extension UTType {
     static let gameObject = UTType(exportedAs: "com.alfathoshi.garong.gameobject")
 }

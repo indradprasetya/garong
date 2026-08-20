@@ -4,6 +4,10 @@ import SwiftUI
 struct garongApp: App {
     @State private var isShowingOnboarding = true
 
+    init() {
+        AppFont.registerFonts()
+    }
+
     var body: some Scene {
         WindowGroup {
             Group {

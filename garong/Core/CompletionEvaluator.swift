@@ -7,7 +7,7 @@ import Foundation
 /// Evaluates whether a chapter's completion conditions are met.
 final class CompletionEvaluator {
     
-    nonisolated func isComplete(
+    func isComplete(
         rule: CompletionRule,
         scenes: [GameScene],
         totalObjects: Int

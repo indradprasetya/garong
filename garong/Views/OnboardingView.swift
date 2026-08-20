@@ -114,9 +114,8 @@ struct OnboardingView: View {
     }
 }
 
-#Preview {
+#Preview(traits: .landscapeLeft) {
     OnboardingView {
         print("Go to Main Menu")
     }
-    .previewInterfaceOrientation(.landscapeLeft)
 }

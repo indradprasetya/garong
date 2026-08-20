@@ -28,27 +28,18 @@ struct DraggableObjectView: View {
             } else {
                 Image(systemName: object.sfSymbol)
                     .font(.system(size: 32))
-                    .foregroundColor(GarongTheme.teal)
-                    .shadow(color: GarongTheme.teal.opacity(0.6), radius: 2)
+                    .foregroundColor(.accentColor)
+                    .shadow(color: Color.accentColor.opacity(0.6), radius: 2)
             }
-            #else
-            Image(systemName: object.sfSymbol)
-                .font(.system(size: 32))
-                .foregroundColor(GarongTheme.teal)
-                .shadow(color: GarongTheme.teal.opacity(0.6), radius: 2)
-            #endif
             
             Text(object.name)
-                .font(.caption2)
-                .fontWeight(.bold)
-                .foregroundColor(GarongTheme.ink)
+                .font(.appFont(size: 12, relativeTo: .caption2))
+                .foregroundColor(.primary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
-        .background(.white.opacity(0.9), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(GarongTheme.teal.opacity(0.16)))
         .instantDraggable(object) {
             // Drag preview
             if hasValidAsset {
@@ -56,7 +47,7 @@ struct DraggableObjectView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 56, height: 56)
-                    .shadow(color: GarongTheme.teal, radius: 2)
+                    .shadow(color: Color.accentColor, radius: 2)
             } else {
                 Image(systemName: object.sfSymbol)
                     .font(.system(size: 48))
@@ -68,7 +59,7 @@ struct DraggableObjectView: View {
 
 struct DraggableObjectView_Previews: PreviewProvider {
     static var previews: some View {
-        DraggableObjectView(object: SampleGameData.toy)
+        DraggableObjectView(object: SampleGameData.teddy)
             .padding()
             .previewLayout(.sizeThatFits)
     }

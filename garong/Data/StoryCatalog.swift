@@ -60,7 +60,7 @@ enum StoryCatalog {
     }
 
     /// Presentation-ready stories backed by the JSON chapter catalog.
-    static var gameStories: [GameStory] {
+    @MainActor static var gameStories: [GameStory] {
         stories.map { group in
             GameStory(
                 id: "story-\(group.id)",
@@ -75,7 +75,7 @@ enum StoryCatalog {
         }
     }
 
-    static var allChapters: [Chapter] {
+    @MainActor static var allChapters: [Chapter] {
         stories.flatMap(\.chapters).map(Chapter.init(storyItem:))
     }
 
