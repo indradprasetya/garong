@@ -33,6 +33,10 @@ struct AssetFallbackHelperTests {
         precondition(AssetFallbackHelper.hasAsset(named: "container"))
         precondition(AssetFallbackHelper.hasAsset(named: "container_drag"))
         precondition(AssetFallbackHelper.hasAsset(named: "container_lock"))
+        precondition(AssetFallbackHelper.hasAsset(named: "blue_selector_full"))
+        precondition(AssetFallbackHelper.hasAsset(named: "blue_selector_half"))
+        precondition(AssetFallbackHelper.hasAsset(named: "green_selector_full"))
+        precondition(AssetFallbackHelper.hasAsset(named: "green_selector_half"))
         precondition(AssetFallbackHelper.hasAsset(named: "bubble_respond"))
         precondition(!AssetFallbackHelper.hasAsset(named: "non_existent_asset"))
 

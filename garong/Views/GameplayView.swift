@@ -9,6 +9,8 @@ import SwiftUI
 struct GameplayView: View {
     @StateObject private var viewModel: DragDropGameViewModel
     @Environment(\.dismiss) private var dismiss
+    @State private var showHintOverlay: Bool = false
+    @State private var isMeterWiggling: Bool = false
     
     init(chapter: Chapter) {
         _viewModel = StateObject(wrappedValue: DragDropGameViewModel(chapter: chapter))
@@ -43,7 +45,6 @@ struct GameplayView: View {
                 // Top Bar
                 HStack(spacing: 16) {
                     Button {
-                        SoundManager.shared.play(.backTap)
                         dismiss()
                     } label: {
                         if AssetFallbackHelper.hasAsset(named: "back_button") {
@@ -57,45 +58,79 @@ struct GameplayView: View {
                                 .foregroundColor(.secondary)
                         }
                     }
+                    .padding(.top, -12)
                     
-                    Spacer()
-                    
-                    Text(viewModel.chapterName)
-                        .font(.appFont(size: 38))
-                        .padding(.top, 12)
-                    
-                    Spacer()
-                    
-                    // Next Chapter Chevron Button ALWAYS visible beside outcome grid (disabled until unlocked)
-                    if let outcomeScene = viewModel.scenes.last {
-                        let isReady = outcomeScene.isUnlocked
+                    HStack {
+                        
+                        Spacer()
+                        
+                        Text(viewModel.chapterName)
+                            .font(.appFont(size: 38))
+                        
                         Button {
                             SoundManager.shared.play(.buttonTap)
                             withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                                viewModel.goToNextChapterOrFinish()
+                                showHintOverlay = true
                             }
                         } label: {
-                            HStack(spacing: 4) {
-                                Text("Next")
-                                    .font(.appFont(size: 13, relativeTo: .caption))
-                                
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 16, weight: .bold))
+                            if AssetFallbackHelper.hasAsset(named: "hint_icon") {
+                                Image("hint_icon")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 48)
+                            } else {
+                                Image(.hintIcon)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 48)
                             }
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 4)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(isReady ? Color.accentColor : Color(UIColor.tertiaryLabel))
-                                    .shadow(color: isReady ? Color.accentColor.opacity(0.4) : Color.clear, radius: 6, x: 0, y: 3)
-                            )
                         }
-                        .disabled(!isReady)
-                        .opacity(isReady ? 1.0 : 0.45)
+                        
+                        Spacer()
+                        
+                        // Next Chapter Chevron Button when finished, Meter when not finished
+                        if let outcomeScene = viewModel.scenes.last {
+                            let isReady = outcomeScene.isUnlocked
+                            if isReady {
+                                Button {
+                                    SoundManager.shared.play(.buttonTap)
+                                    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                                        viewModel.goToNextChapterOrFinish()
+                                    }
+                                } label: {
+                                    if AssetFallbackHelper.hasAsset(named: "next_button") {
+                                        Image("next_button")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 48)
+                                    } else {
+                                        HStack(spacing: 4) {
+                                            Text("Next")
+                                                .font(.appFont(size: 13, relativeTo: .caption))
+                                            
+                                            Image(systemName: "chevron.right")
+                                                .font(.system(size: 16, weight: .bold))
+                                        }
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 4)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .fill(Color.accentColor)
+                                                .shadow(color: Color.accentColor.opacity(0.4), radius: 6, x: 0, y: 3)
+                                        )
+                                    }
+                                }
+                            } else {
+                                meterView
+                            }
+                        }
                     }
+                    .padding(.top, 24)
+                        
+                    
+                    
                 }
-                .padding(.horizontal, 8)
                 .ignoresSafeArea(edges: .top)
                 
                 
@@ -105,39 +140,14 @@ struct GameplayView: View {
                 
                 // Main Scenes Area - 2x2 LazyVGrid for 4 scenes (fitted to container), horizontal layout for others
                 Group {
-                    if viewModel.scenes.count == 4 {
-                        GeometryReader { geo in
-                            let spacing: CGFloat = 8
-                            let cardAspectRatio: CGFloat = 212.0 / 147.0
-                            let hFromHeight = max(0, (geo.size.height - spacing) / 1.8)
-                            let hFromWidth = max(0, (geo.size.width - spacing) / (2 * cardAspectRatio))
-                            let cardH = min(hFromHeight, hFromWidth)
-                            let cardW = cardH * cardAspectRatio
-                            let gridColumns = [
-                                GridItem(.fixed(cardW), spacing: spacing),
-                                GridItem(.fixed(cardW), spacing: spacing)
-                            ]
-                            
-                            VStack {
-                                Spacer(minLength: 0)
-                                LazyVGrid(columns: gridColumns, spacing: spacing) {
-                                    ForEach(0..<viewModel.scenes.count, id: \.self) { index in
-                                        sceneView(for: viewModel.scenes[index])
-                                            .frame(width: cardW, height: cardH)
-                                    }
-                                }
-                                Spacer(minLength: 0)
-                            }
-                            .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
-                        }
-                    } else {
+                    
                         HStack(spacing: 8) {
                             ForEach(viewModel.scenes, id: \.id) { scene in
                                 sceneView(for: scene)
                             }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                    }
+                    
                 }
                 .padding(.horizontal, 2)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -164,8 +174,9 @@ struct GameplayView: View {
                     return true
                 }
             }
-            .padding(.horizontal, 46)
-            .padding(.bottom, 6)
+            .padding(.leading, 46)
+            .padding(.trailing, 12)
+            .padding(.bottom, 24)
             .ignoresSafeArea(edges: .bottom)
             
             // Completion Overlay
@@ -185,10 +196,101 @@ struct GameplayView: View {
                 .transition(.scale.combined(with: .opacity))
                 .zIndex(1)
             }
+            
+            // Paper Hint Overlay
+            if showHintOverlay {
+                Color.black.opacity(0.45)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showHintOverlay = false
+                        }
+                    }
+                
+                hintPaperView
+                    .transition(.scale(scale: 0.85).combined(with: .opacity))
+                    .zIndex(2)
+            }
         }
         .navigationBarHidden(true)
         .animation(.default, value: viewModel.phase)
         .environment(\.font, .custom("Virels-Regular", size: 14))
+        .onChange(of: viewModel.wrongAttempts) { _ in
+            if viewModel.wrongAttempts > 0 {
+                withAnimation(.spring(response: 0.15, dampingFraction: 0.3)) {
+                    isMeterWiggling = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    withAnimation(.spring(response: 0.2, dampingFraction: 0.7)) {
+                        isMeterWiggling = false
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var hintPaperView: some View {
+        ZStack {
+            if AssetFallbackHelper.hasAsset(named: "paper_hint") {
+                Image("paper_hint")
+                    .resizable()
+                    .scaledToFit()
+            } else {
+                Image(.paperHint)
+                    .resizable()
+                    .scaledToFit()
+            }
+            
+            VStack(spacing: 8) {
+                Text("HINT")
+                    .font(.appFont(size: 50))
+                    .foregroundColor(.blue)
+                
+                if let hint = viewModel.hintText, !hint.isEmpty {
+                    Text(hint)
+                        .font(.appFont(size: 32))
+                        .foregroundColor(Color(red: 0.15, green: 0.15, blue: 0.2))
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(4)
+                        .padding(.horizontal, 36)
+                } else {
+                    Text("Pay attention to how each action affects the characters' feelings.")
+                        .font(.appFont(size: 18))
+                        .foregroundColor(Color(red: 0.15, green: 0.15, blue: 0.2))
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(4)
+                        .padding(.horizontal, 36)
+                }
+            }
+            .padding(.leading, 32)
+            .padding(.trailing, 20)
+            .padding(.vertical, 24)
+        }
+        .frame(maxWidth: 480, maxHeight: 320)
+        .onTapGesture {
+            // No-op to prevent taps on paper hint from dismissing overlay
+        }
+    }
+
+    @ViewBuilder
+    private var meterView: some View {
+        let imageName = viewModel.meterImageName
+        Group {
+            if AssetFallbackHelper.hasAsset(named: imageName) {
+                Image(imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 52)
+            } else {
+                Image(systemName: "star.fill")
+                    .font(.title2)
+                    .foregroundColor(.yellow)
+            }
+        }
+        .rotationEffect(.degrees(isMeterWiggling ? 14 : 0))
+        .scaleEffect(isMeterWiggling ? 1.18 : 1.0)
+        .animation(.spring(response: 0.15, dampingFraction: 0.3), value: isMeterWiggling)
     }
 
     @ViewBuilder
@@ -199,6 +301,7 @@ struct GameplayView: View {
             isDraggingAnyItem: viewModel.isDraggingItem,
             onDrop: { object, slotID in
                 viewModel.dropObject(object, intoSlot: slotID, intoScene: scene.id)
+                viewModel.setDraggingActive(false)
             },
             onRemoveObject: { object, slotID in
                 viewModel.removeObject(object, fromSlot: slotID, fromScene: scene.id)

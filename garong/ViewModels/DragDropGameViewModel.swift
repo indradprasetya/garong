@@ -13,6 +13,8 @@ final class DragDropGameViewModel: ObservableObject {
     @Published private(set) var phase: DragDropPhase
     @Published private(set) var chapterResult: ChapterResult?
     @Published private(set) var chapterName: String
+    @Published private(set) var hintText: String?
+    @Published private(set) var wrongAttempts: Int = 0
     @Published var isDraggingItem: Bool = false
     @Published var animatingSceneID: UUID?
     
@@ -29,12 +31,35 @@ final class DragDropGameViewModel: ObservableObject {
         self.phase = engine.phase
         self.chapterResult = nil
         self.chapterName = chapter.name
+        self.hintText = chapter.storyDefinition?.hints?.compactMap { $0.en }.joined(separator: "\n\n") ?? (chapter.storyDefinition?.description.en ?? chapter.description)
+        self.wrongAttempts = engine.wrongAttempts
         
         if let storyDef = chapter.storyDefinition,
            let group = StoryCatalog.stories.first(where: { g in g.chapters.contains { $0.id == storyDef.id || $0.fileName.contains(storyDef.id) } }) {
             self.storyChapters = group.chapters
             self.currentChapterIndex = group.chapters.firstIndex(where: { $0.id == storyDef.id || $0.fileName.contains(storyDef.id) }) ?? 0
         }
+    }
+    
+    var meterCharacterName: String {
+        guard let story = engine.chapter.storyDefinition else { return "rhodey" }
+        let id = story.id.lowercased()
+        if id.contains("jojo") || storyChapters.first?.storyNumber == 2 {
+            return "jojo"
+        }
+        return "rhodey"
+    }
+
+    var meterImageName: String {
+        let character = meterCharacterName
+        let stars: Int
+        switch wrongAttempts {
+        case 0: stars = 3
+        case 1: stars = 2
+        case 2: stars = 1
+        default: stars = 0
+        }
+        return "\(character)_\(stars)_star"
     }
     
     var hasNextChapter: Bool {
@@ -50,6 +75,7 @@ final class DragDropGameViewModel: ObservableObject {
             let nextChapter = Chapter(storyItem: nextItem)
             self.engine = DragDropGameEngine(chapter: nextChapter)
             self.chapterName = nextChapter.name
+            self.hintText = nextChapter.storyDefinition?.hints?.compactMap { $0.en }.joined(separator: "\n\n") ?? (nextChapter.storyDefinition?.description.en ?? nextChapter.description)
             self.chapterResult = nil
             syncWithEngine()
         } else {
@@ -91,7 +117,7 @@ final class DragDropGameViewModel: ObservableObject {
                     SoundManager.shared.play(.itemPickup)
                 }
             } else {
-                SoundManager.shared.play(.chapterRetry)
+                SoundManager.shared.play(.itemPickup)
             }
         } else {
             hasPlayedCompletionSFX = false
@@ -144,9 +170,15 @@ final class DragDropGameViewModel: ObservableObject {
     
     private func syncWithEngine() {
         let oldPhase = self.phase
+        let oldWrongAttempts = self.wrongAttempts
         self.scenes = engine.scenes
         self.availableObjects = engine.availableObjects
         self.phase = engine.phase
+        self.wrongAttempts = engine.wrongAttempts
+        
+        if self.wrongAttempts > oldWrongAttempts {
+            SoundManager.shared.play(.chapterRetry)
+        }
         
         if engine.phase == .completed {
             self.chapterResult = engine.buildResult()
@@ -155,7 +187,7 @@ final class DragDropGameViewModel: ObservableObject {
                 if engine.isCurrentOutcomeIdeal {
                     SoundManager.shared.play(.chapterComplete)
                 } else {
-                    SoundManager.shared.play(.chapterRetry)
+                    SoundManager.shared.play(.itemPickup)
                 }
             }
         }
