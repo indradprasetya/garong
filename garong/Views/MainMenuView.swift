@@ -99,7 +99,8 @@ struct MainMenuView: View {
 // PREVIEW
 // ==========================================
 
-#Preview {
-
-    MainMenuView()
+struct MainMenuView_Previews: PreviewProvider {
+    static var previews: some View {
+        MainMenuView()
+    }
 }

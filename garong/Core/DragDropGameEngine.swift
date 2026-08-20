@@ -18,6 +18,9 @@ final class DragDropGameEngine {
     private(set) var phase: DragDropPhase = .playing
     private(set) var currentOutcome: StoryOutcome?
     private(set) var wrongAttempts: Int = 0
+    private(set) var placementCount: Int = 0
+    private(set) var starsEarned: Int?
+    private(set) var bestStars: Int?
     private var lastEvaluatedActionSequence: [String] = []
     
     init(
@@ -99,18 +102,19 @@ final class DragDropGameEngine {
         guard scenes[sceneIndex].isUnlocked else { return false }
         guard !scenes[sceneIndex].dropSlots.isEmpty else { return false }
         
-        if let slotID = slotID, let slotIndex = scenes[sceneIndex].dropSlots.firstIndex(where: { $0.id == slotID }) {
-            scenes[sceneIndex].dropSlots[slotIndex].currentObject = object
+        let targetSlotIndex: Int
+        if let slotID = slotID, let foundIndex = scenes[sceneIndex].dropSlots.firstIndex(where: { $0.id == slotID }) {
+            targetSlotIndex = foundIndex
         } else if let emptyIndex = scenes[sceneIndex].dropSlots.firstIndex(where: { $0.currentObject == nil }) {
-            slotIndex = emptyIndex
+            targetSlotIndex = emptyIndex
         } else if !scenes[sceneIndex].dropSlots.isEmpty {
-            slotIndex = 0
+            targetSlotIndex = 0
         } else {
             return false
         }
 
-        guard scenes[sceneIndex].dropSlots[slotIndex].currentObject?.name != object.name else { return false }
-        scenes[sceneIndex].dropSlots[slotIndex].currentObject = object
+        guard scenes[sceneIndex].dropSlots[targetSlotIndex].currentObject?.name != object.name else { return false }
+        scenes[sceneIndex].dropSlots[targetSlotIndex].currentObject = object
         placementCount += 1
         reevaluateAllReactions()
 
