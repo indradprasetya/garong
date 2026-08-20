@@ -1,104 +1,105 @@
-//
-//  MainMenuView.swift
-//  garong
-//
-
 import SwiftUI
 
 struct MainMenuView: View {
+
+    @State private var showStorySelection = false
+    @State private var showSettings = false
+
     var body: some View {
+
         NavigationStack {
-            ZStack {
-                Color(UIColor.systemGroupedBackground).ignoresSafeArea()
-                
-                VStack(spacing: 24) {
-                    Spacer()
-                    
-                    VStack(spacing: 12) {
-                        #if canImport(UIKit)
-                        if UIImage(named: "rhodey") != nil {
-                            Image("rhodey")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100)
-                                .shadow(color: .accentColor.opacity(0.3), radius: 10, x: 0, y: 5)
-                        } else {
-                            Image(systemName: "hand.raised.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100)
-                                .foregroundStyle(
-                                    LinearGradient(colors: [.accentColor, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
-                                )
-                                .shadow(color: .accentColor.opacity(0.3), radius: 10, x: 0, y: 5)
-                        }
-                        #else
-                        Image(systemName: "hand.raised.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100)
-                        #endif
-                        
-                        Text("Garong")
-                            .font(.system(size: 48, weight: .heavy, design: .rounded))
-                            .foregroundStyle(
-                                LinearGradient(colors: [.primary, .secondary], startPoint: .top, endPoint: .bottom)
+
+            GeometryReader { geo in
+
+                let width = geo.size.width
+                let height = geo.size.height
+
+                ZStack {
+
+                    // ==========================================
+                    // BACKGROUND
+                    // ==========================================
+
+                    Image("StoriesGreenGrid")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(
+                            width: width,
+                            height: height
+                        )
+                        .clipped()
+
+
+                    // ==========================================
+                    // START HOMEPAGE ASSET
+                    // ==========================================
+
+                    Image("Starthomepage")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: width * 0.999
+                        )
+                        .zIndex(1)
+
+
+                    // ==========================================
+                    // INVISIBLE START BUTTON
+                    // ==========================================
+
+                    Button {
+
+                        showStorySelection = true
+
+                    } label: {
+
+                        Rectangle()
+                            .fill(Color.clear)
+                            .frame(
+                                width: width * 0.35,
+                                height: height * 0.20
                             )
-                        
-                        Text("A Drag & Drop Sandbox Adventure")
-                            .font(.title3)
-                            .foregroundColor(.secondary)
+                            .contentShape(Rectangle())
                     }
-                    
-                    HStack(spacing: 20) {
-                        NavigationLink {
-                            if let firstItem = StoryCatalog.stories.first?.chapters.first {
-                                GameplayView(chapter: Chapter(storyItem: firstItem))
-                            } else {
-                                Text("No chapters available")
-                            }
-                        } label: {
-                            HStack {
-                                Image(systemName: "play.fill")
-                                Text("Start Game")
-                            }
-                            .font(.title3.bold())
-                            .foregroundColor(.white)
-                            .frame(width: 200, height: 50)
-                            .background(Color.accentColor)
-                            .cornerRadius(14)
-                            .shadow(color: Color.accentColor.opacity(0.3), radius: 6, x: 0, y: 3)
-                        }
-                        
-                        NavigationLink {
-                            ChapterSelectionView()
-                        } label: {
-                            HStack {
-                                Image(systemName: "square.grid.2x2.fill")
-                                Text("Chapters")
-                            }
-                            .font(.title3.bold())
-                            .foregroundColor(.accentColor)
-                            .frame(width: 200, height: 50)
-                            .background(Color(UIColor.secondarySystemGroupedBackground))
-                            .cornerRadius(14)
-                            .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 2)
-                        }
-                    }
-                    
-                    Spacer()
+                    .buttonStyle(.plain)
+                    .position(
+                        x: width * 0.65,
+                        y: height * 0.56
+                    )
+                    .zIndex(2)
                 }
-                .padding(.horizontal, 40)
-                .padding(.vertical, 20)
+                .frame(
+                    width: width,
+                    height: height
+                )
+                .clipped()
+            }
+            .ignoresSafeArea()
+            .navigationBarHidden(true)
+
+
+            // ==========================================
+            // STORY PICK
+            // ==========================================
+
+            .navigationDestination(
+                isPresented: $showStorySelection
+            ) {
+
+                StorySelectionView(
+                    stories: StoryCatalog.gameStories
+                )
             }
         }
-        .navigationViewStyle(.stack)
     }
 }
 
-struct MainMenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainMenuView()
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
+
+// ==========================================
+// PREVIEW
+// ==========================================
+
+#Preview {
+
+    MainMenuView()
 }

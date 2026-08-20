@@ -59,6 +59,26 @@ enum StoryCatalog {
         ]
     }
 
+    /// Presentation-ready stories backed by the JSON chapter catalog.
+    static var gameStories: [GameStory] {
+        stories.map { group in
+            GameStory(
+                id: "story-\(group.id)",
+                number: group.id,
+                title: group.title,
+                subtitle: "\(group.chapters.count) chapters",
+                synopsis: group.description,
+                symbol: group.id == 1 ? "paintpalette.fill" : "figure.play",
+                chapters: group.chapters.map(Chapter.init(storyItem:)),
+                isUnlocked: group.chapters.contains(where: \.isUnlocked)
+            )
+        }
+    }
+
+    static var allChapters: [Chapter] {
+        stories.flatMap(\.chapters).map(Chapter.init(storyItem:))
+    }
+
     private static func loadChapter(storyNumber: Int, chapterNumber: Int, fileName: String, isUnlocked: Bool) -> StoryChapterItem {
         let definition = try? StoryLoader.load(named: fileName)
         return StoryChapterItem(

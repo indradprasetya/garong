@@ -30,25 +30,27 @@ struct DraggableObjectView: View {
             } else {
                 Image(systemName: object.sfSymbol)
                     .font(.system(size: 32))
-                    .foregroundColor(.accentColor)
-                    .shadow(color: Color.accentColor.opacity(0.6), radius: 2)
+                    .foregroundColor(GarongTheme.teal)
+                    .shadow(color: GarongTheme.teal.opacity(0.6), radius: 2)
             }
             #else
             Image(systemName: object.sfSymbol)
                 .font(.system(size: 32))
-                .foregroundColor(.accentColor)
-                .shadow(color: Color.accentColor.opacity(0.6), radius: 2)
+                .foregroundColor(GarongTheme.teal)
+                .shadow(color: GarongTheme.teal.opacity(0.6), radius: 2)
             #endif
             
             Text(object.name)
                 .font(.caption2)
                 .fontWeight(.bold)
-                .foregroundColor(.primary)
+                .foregroundColor(GarongTheme.ink)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
+        .background(.white.opacity(0.9), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 14).stroke(GarongTheme.teal.opacity(0.16)))
         .instantDraggable(object) {
             // Drag preview
             #if canImport(UIKit)
@@ -57,7 +59,7 @@ struct DraggableObjectView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 56, height: 56)
-                    .shadow(color: Color.accentColor, radius: 2)
+                    .shadow(color: GarongTheme.teal, radius: 2)
             } else {
                 Image(systemName: object.sfSymbol)
                     .font(.system(size: 48))

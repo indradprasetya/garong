@@ -1,146 +1,445 @@
-//
-//  ChapterSelectionView.swift
-//  garong
-//
-
 import SwiftUI
 
 struct ChapterSelectionView: View {
-    let stories = StoryCatalog.stories
-    
-    var body: some View {
-        ZStack {
-            Color(UIColor.systemGroupedBackground).ignoresSafeArea()
-            
-            ScrollView(.vertical, showsIndicators: true) {
-                VStack(alignment: .leading, spacing: 24) {
-                    
-                    ForEach(stories) { group in
-                        VStack(alignment: .leading, spacing: 10) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(group.title)
-                                    .font(.title2.bold())
-                                    .foregroundColor(.primary)
-                                
-                                Text(group.description)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(.horizontal, 32)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 20) {
-                                    ForEach(group.chapters) { item in
-                                        let chapter = Chapter(storyItem: item)
-                                        if item.isUnlocked {
-                                            NavigationLink(destination: GameplayView(chapter: chapter)) {
-                                                chapterCard(for: item)
-                                            }
-                                            .buttonStyle(PlainButtonStyle())
-                                        } else {
-                                            chapterCard(for: item)
-                                                .opacity(0.6)
-                                        }
-                                    }
-                                }
-                                .padding(.horizontal, 32)
-                                .padding(.vertical, 8)
-                            }
-                        }
-                    }
-                }
-                .padding(.vertical, 16)
-            }
-        }
-        .navigationTitle("Story Chapters")
-        .navigationBarTitleDisplayMode(.inline)
+
+    let storyNumber: Int
+    let title: String
+    let subtitle: String
+    let chapters: [Chapter]
+
+    @Environment(\.dismiss)
+    private var dismiss
+
+    /*
+     TEST STATE:
+     0 = Cry Baby current
+     1 = Cry Baby completed, Be Quiet current
+     2 = Cry Baby + Be Quiet completed, Go Study current
+     3 = all completed
+    */
+    @State private var completedChapterCount: Int = 1
+
+
+    // MARK: - INIT
+
+    init(story: GameStory) {
+        self.storyNumber = story.number
+        self.title = story.title
+        self.subtitle = story.subtitle
+        self.chapters = story.chapters
     }
-    
-    @ViewBuilder
-    private func chapterCard(for item: StoryChapterItem) -> some View {
-        let charId = item.storyDefinition?.characters.first?.id ?? ""
-        let imageName = AssetFallbackHelper.imageName(for: charId)
-        
-        ZStack(alignment: .bottomLeading) {
-            // Card Image Background
-            #if canImport(UIKit)
-            if !imageName.isEmpty, UIImage(named: imageName) != nil {
-                Image(imageName)
+
+    init(
+        storyNumber: Int = 1,
+        title: String,
+        subtitle: String,
+        chapters: [Chapter]
+    ) {
+        self.storyNumber = storyNumber
+        self.title = title
+        self.subtitle = subtitle
+        self.chapters = chapters
+    }
+
+
+    // MARK: - BODY
+
+    var body: some View {
+
+        GeometryReader { geometry in
+
+            let width = geometry.size.width
+            let height = geometry.size.height
+
+            ZStack {
+
+                // =====================================================
+                // BACKGROUND
+                // =====================================================
+
+                Image("StoriesGreenGrid")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 240, height: 160)
-                    .opacity(0.5)
-                    .clipped()
-            } else {
-                Color(UIColor.secondarySystemGroupedBackground)
-                    .overlay(
-                        Image(systemName: "globe")
-                            .font(.system(size: 44))
-                            .foregroundColor(.accentColor.opacity(0.4))
+                    .frame(
+                        width: width,
+                        height: height
                     )
-            }
-            #else
-            Color(UIColor.secondarySystemGroupedBackground)
-                .overlay(
-                    Image(systemName: "globe")
-                        .font(.system(size: 44))
-                        .foregroundColor(.accentColor.opacity(0.4))
+                    .clipped()
+                    .ignoresSafeArea()
+
+
+                // =====================================================
+                // SCHOOL ARTWORK
+                // =====================================================
+
+                Image("SchoolArtwork")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(
+                        width: width * 0.98,
+                        height: height * 1.08
+                    )
+                    .position(
+                        x: width * 0.50,
+                        y: height * 0.49
+                    )
+
+
+                // =====================================================
+                // SCHOOL TITLE
+                // =====================================================
+
+                Image("School")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(
+                        width: width * 0.255
+                    )
+                    .position(
+                        x: width * 0.675,
+                        y: height * 0.285
+                    )
+
+
+                // =====================================================
+                // CHAPTER 1
+                // =====================================================
+
+                chapterButton(
+                    index: 0,
+                    width: width,
+                    height: height
                 )
-            #endif
-            
-            // Gradient Overlay for High Contrast Legibility
-            LinearGradient(
-                colors: [Color.black.opacity(0.75), Color.black.opacity(0.0)],
-                startPoint: .bottom,
-                endPoint: .center
-            )
-            
-            // Card Content (Chapter Title & Number - description removed)
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text("Chapter \(item.chapterNumber)")
-                        .font(.caption.bold())
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(Capsule().fill(Color.accentColor))
-                    
-                    Spacer()
-                    
-                    if !item.isUnlocked {
-                        Image(systemName: "lock.fill")
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .padding(6)
-                            .background(Circle().fill(Color.black.opacity(0.5)))
-                    }
+                .position(
+                    x: width * 0.675,
+                    y: height * 0.445
+                )
+
+
+                // =====================================================
+                // CHAPTER 2
+                // =====================================================
+
+                chapterButton(
+                    index: 1,
+                    width: width,
+                    height: height
+                )
+                .position(
+                    x: width * 0.675,
+                    y: height * 0.585
+                )
+
+
+                // =====================================================
+                // CHAPTER 3
+                // =====================================================
+
+                chapterButton(
+                    index: 2,
+                    width: width,
+                    height: height
+                )
+                .position(
+                    x: width * 0.675,
+                    y: height * 0.725
+                )
+
+
+                // =====================================================
+                // BACK BUTTON
+                // =====================================================
+
+                Button {
+                    dismiss()
+                } label: {
+
+                    Image("BackRibbon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: width * 0.060
+                        )
                 }
-                
-                Text(item.title)
-                    .font(.headline.bold())
-                    .foregroundColor(.white)
-                    .lineLimit(2)
-                    .shadow(color: Color.black.opacity(0.6), radius: 2, x: 0, y: 1)
-                
+                .buttonStyle(.plain)
+                .position(
+                    x: width * 0.075,
+                    y: height * 0.070
+                )
+
+
+                // =====================================================
+                // NEXT STORY ARROW
+                // =====================================================
+
+                Button {
+                    // next story nanti
+                } label: {
+
+                    Image("NextArrow")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: width * 0.070
+                        )
+                }
+                .buttonStyle(.plain)
+                .position(
+                    x: width * 0.905,
+                    y: height * 0.54
+                )
             }
-            .padding(14)
+            .frame(
+                width: width,
+                height: height
+            )
         }
-        .frame(width: 240, height: 160)
-        .cornerRadius(18)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color(UIColor.separator).opacity(0.6), lineWidth: 1)
+        .ignoresSafeArea()
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
+    }
+
+
+    // =========================================================
+    // MARK: - CHAPTER BUTTON
+    // =========================================================
+
+    @ViewBuilder
+    private func chapterButton(
+        index: Int,
+        width: CGFloat,
+        height: CGFloat
+    ) -> some View {
+
+        if index < chapters.count {
+
+            let status = chapterStatus(index: index)
+
+            switch status {
+
+            // =================================================
+            // COMPLETED
+            // WHITE BORDER + STAR + TEXT
+            // =================================================
+
+            case .completed:
+
+                ZStack {
+
+                    Image("ChapterButtonWhite")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: width * 0.27
+                        )
+                        .offset(
+                            x: -10,
+                            y: 0
+                        )
+
+                    HStack(spacing: width * 0.012) {
+
+                        Image("StarIcon")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(
+                                width: width * 0.021,
+                                height: width * 0.021
+                            )
+                            .offset(
+                                x: 15,
+                                y: 0
+                            )
+
+                        chapterTextAsset(index: index)
+                            .frame(
+                                width: width * 0.115,
+                                height: height * 0.040
+                            )
+                            .offset(
+                                x: 8,
+                                y: 0
+                            )
+
+                        Spacer()
+                    }
+                    .frame(
+                        width: width * 0.215
+                    )
+                }
+                .frame(
+                    width: width * 0.33,
+                    height: height * 0.20
+                )
+
+
+            // =================================================
+            // CURRENT / CONTINUE
+            // PAKAI ASSET DoChapter
+            // =================================================
+
+            case .current:
+
+                NavigationLink {
+
+                    ChapterIntroView(
+                        chapter: chapters[index]
+                    )
+
+                } label: {
+
+                    ZStack {
+
+                        // asset current/continue yang sudah jadi
+                        Image("DoChapter")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(
+                                width: width * 0.27
+                            )
+
+                        chapterTextAsset(index: index)
+                            .frame(
+                                width: width * 0.120,
+                                height: height * 0.040
+                            )
+
+                        Image(systemName: "chevron.right")
+                            .font(
+                                .system(
+                                    size: max(
+                                        14,
+                                        width * 0.017
+                                    ),
+                                    weight: .black
+                                )
+                            )
+                            .foregroundStyle(.black)
+                            .offset(
+                                x: width * 0.090,
+                                y: 0
+                            )
+                    }
+                    .frame(
+                        width: width * 0.30,
+                        height: height * 0.18
+                    )
+                }
+                .buttonStyle(.plain)
+
+
+            // =================================================
+            // LOCKED
+            // WHITE BORDER FADED
+            // =================================================
+
+            case .locked:
+
+                ZStack {
+
+                    Image("ChapterButtonWhite")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: width * 0.27
+                        )
+                        .offset(
+                            x: -10,
+                            y: 0
+                        )
+                        .opacity(0.45)
+
+                    chapterTextAsset(index: index)
+                        .frame(
+                            width: width * 0.115,
+                            height: height * 0.040
+                        )
+                        .opacity(0.32)
+                }
+                .frame(
+                    width: width * 0.33,
+                    height: height * 0.20
+                )
+                .allowsHitTesting(false)
+            }
+        }
+    }
+
+
+    // =========================================================
+    // MARK: - CHAPTER TEXT ASSETS
+    // =========================================================
+
+    @ViewBuilder
+    private func chapterTextAsset(
+        index: Int
+    ) -> some View {
+
+        switch index {
+
+        case 0:
+            Image("CRY BABY...")
+                .resizable()
+                .scaledToFit()
+
+        case 1:
+            Image("BE QUIET!")
+                .resizable()
+                .scaledToFit()
+
+        case 2:
+            Image("GO STUDY")
+                .resizable()
+                .scaledToFit()
+
+        default:
+            EmptyView()
+        }
+    }
+
+
+    // =========================================================
+    // MARK: - STATUS LOGIC
+    // =========================================================
+
+    private func chapterStatus(
+        index: Int
+    ) -> ChapterPickStatus {
+
+        if index < completedChapterCount {
+            return .completed
+        }
+
+        if index == completedChapterCount {
+            return .current
+        }
+
+        return .locked
+    }
+}
+
+
+// =============================================================
+// MARK: - STATUS ENUM
+// =============================================================
+
+private enum ChapterPickStatus {
+    case completed
+    case current
+    case locked
+}
+
+
+// =============================================================
+// MARK: - PREVIEW
+// =============================================================
+
+#Preview {
+
+    NavigationStack {
+
+        ChapterSelectionView(
+            story: StoryCatalog.gameStories[0]
         )
-        .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 3)
     }
 }
-
-struct ChapterSelectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            ChapterSelectionView()
-        }
-        .previewInterfaceOrientation(.landscapeLeft)
-    }
-}
-

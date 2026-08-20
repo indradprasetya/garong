@@ -1,25 +1,37 @@
-//
-//  garongApp.swift
-//  garong
-//
-//  Created by Indrayana Dian Prasetya on 11/08/26.
-//
-
 import SwiftUI
 
 @main
 struct garongApp: App {
-    init() {
-        #if DEBUG
-        Task { @MainActor in
-            DragDropGameTests.runAllTests()
-        }
-        #endif
-    }
+    @State private var isShowingOnboarding = true
 
     var body: some Scene {
         WindowGroup {
-            MainMenuView()
+            Group {
+                if isShowingOnboarding {
+                    OnboardingView {
+                        withAnimation(.easeInOut(duration: 0.65)) {
+                            isShowingOnboarding = false
+                        }
+                    }
+                    .transition(
+                        .opacity.combined(
+                            with: .scale(scale: 1.015)
+                        )
+                    )
+
+                } else {
+                    MainMenuView()
+                        .transition(
+                            .opacity.combined(
+                                with: .scale(scale: 0.985)
+                            )
+                        )
+                }
+            }
+            .ignoresSafeArea()
+            .onAppear {
+                BackgroundMusicManager.shared.play()
+            }
         }
     }
 }

@@ -103,7 +103,7 @@ struct SceneDropZoneView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color(UIColor.secondarySystemGroupedBackground).opacity(scene.isUnlocked ? 1.0 : 0.6))
+                .fill(.white.opacity(scene.isUnlocked ? 0.92 : 0.58))
                 .shadow(color: Color.black.opacity(0.06), radius: 3, x: 0, y: 2)
         )
         .overlay(
@@ -154,12 +154,12 @@ struct SceneColumnDropZone: View {
                     } else {
                         Image(systemName: placedObj.sfSymbol)
                             .font(.system(size: 16))
-                            .foregroundColor(.accentColor)
+                            .foregroundColor(GarongTheme.teal)
                     }
                     #else
                     Image(systemName: placedObj.sfSymbol)
                         .font(.system(size: 16))
-                        .foregroundColor(.accentColor)
+                        .foregroundColor(GarongTheme.teal)
                     #endif
                 }
                 .frame(maxWidth: .infinity)
@@ -167,7 +167,7 @@ struct SceneColumnDropZone: View {
                 .padding(.vertical, 4)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(UIColor.tertiarySystemGroupedBackground))
+                                .fill(GarongTheme.mint)
                 )
                 .instantDraggable(placedObj) {
                     #if canImport(UIKit)
@@ -190,13 +190,13 @@ struct SceneColumnDropZone: View {
             } else if slot.label != "Scene" {
                 Text(slot.label)
                     .font(.system(size: 9, weight: .bold))
-                    .foregroundColor(isTargeted ? .accentColor : .secondary)
+                    .foregroundColor(isTargeted ? GarongTheme.teal : .secondary)
                     .lineLimit(1)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 3)
                     .background(
                         Capsule()
-                            .fill(isTargeted ? Color.accentColor.opacity(0.18) : Color.clear)
+                            .fill(isTargeted ? GarongTheme.teal.opacity(0.18) : Color.clear)
                     )
             }
         }
@@ -204,12 +204,12 @@ struct SceneColumnDropZone: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(isTargeted ? Color.accentColor.opacity(0.18) : Color.clear)
+                .fill(isTargeted ? GarongTheme.teal.opacity(0.18) : Color.clear)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
                 .stroke(
-                    isTargeted ? Color.accentColor : Color.clear,
+                    isTargeted ? GarongTheme.teal : Color.clear,
                     style: StrokeStyle(lineWidth: isTargeted ? 3 : 0, dash: isTargeted ? [5, 3] : [])
                 )
         )
