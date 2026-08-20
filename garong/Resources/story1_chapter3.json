@@ -13,6 +13,14 @@
     "en": "Rhodey's drawing paper tears during class and the broken drawing feels important to him. He is upset not only because the paper is damaged, but because the work he cared about suddenly feels lost.",
     "id": "Kertas gambar Rhodey robek saat di kelas dan gambar itu terasa penting baginya. Ia kesal bukan hanya karena kertasnya rusak, tetapi karena karya yang ia pedulikan terasa hilang tiba-tiba."
   },
+  "completionSummary": {
+    "en": "Rhodey needed comfort before he could talk about what happened. Once he felt heard, he was ready to try again.",
+    "id": "Rhodey membutuhkan rasa nyaman sebelum ia bisa menceritakan apa yang terjadi. Setelah merasa didengarkan, ia siap mencoba lagi."
+  },
+  "completionTip": {
+    "en": "When something small upsets a child deeply, comfort them first. Let them tell you what happened before you offer a fix.",
+    "id": "Saat hal yang tampak kecil membuat anak sangat sedih, tenangkan ia terlebih dahulu. Biarkan ia menceritakan apa yang terjadi sebelum kamu menawarkan solusi."
+  },
   "hints": [
     {
       "en": "A distressed child may need calm presence before they can explain what happened.",

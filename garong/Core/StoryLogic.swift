@@ -80,7 +80,9 @@ private extension StoryDefinition {
               Set(grids.map(\.order)) == Set(1...gridCount),
               !shortTitle.en.isEmpty, !shortTitle.id.isEmpty,
               !title.en.isEmpty, !title.id.isEmpty,
-              !description.en.isEmpty, !description.id.isEmpty else {
+              !description.en.isEmpty, !description.id.isEmpty,
+              !completionSummary.en.isEmpty, !completionSummary.id.isEmpty,
+              !completionTip.en.isEmpty, !completionTip.id.isEmpty else {
             throw StoryValidationError.invalidGrid("story")
         }
 

@@ -9,6 +9,8 @@ struct StoryProgressEngineTests {
             .appendingPathComponent("garong/Resources/story1_chapter1.json")
         let story = try JSONDecoder().decode(StoryDefinition.self, from: Data(contentsOf: resourceURL))
         precondition(story.shortTitle.en == "Let's Draw!", "Swift must decode the localized short title")
+        precondition(story.completionSummary.en.hasPrefix("Rhodey needed to feel noticed"), "Swift must decode the completion summary")
+        precondition(story.completionTip.id.hasPrefix("Sebelum mengajak anak"), "Swift must decode the localized completion tip")
 
         let item = StoryChapterItem(
             id: story.id,

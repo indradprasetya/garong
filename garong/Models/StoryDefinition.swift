@@ -11,6 +11,8 @@ struct StoryDefinition: Codable {
     let shortTitle: LocalizedStoryText
     let title: LocalizedStoryText
     let description: LocalizedStoryText
+    let completionSummary: LocalizedStoryText
+    let completionTip: LocalizedStoryText
     let hints: [LocalizedStoryText]?
     let initialState: String?
     let gridCount: Int
