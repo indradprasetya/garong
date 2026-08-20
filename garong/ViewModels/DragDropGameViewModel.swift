@@ -102,6 +102,35 @@ final class DragDropGameViewModel: ObservableObject {
     var progressText: String {
         "\(placedObjectCount) / \(totalSceneCount) Scenes Filled"
     }
+
+    var placementFace: String {
+        switch engine.placementFeedbackState {
+        case .green: return "🙂"
+        case .yellow: return "😐"
+        case .orange: return "😟"
+        case .red: return "😣"
+        }
+    }
+
+    var placementColor: Color {
+        switch engine.placementFeedbackState {
+        case .green: return .green
+        case .yellow: return .yellow
+        case .orange: return .orange
+        case .red: return .red
+        }
+    }
+
+    var placementStateLabel: String {
+        switch engine.placementFeedbackState {
+        case .green: return "Green: 3-star range"
+        case .yellow: return "Yellow: 2-star range"
+        case .orange: return "Orange: 1-star range"
+        case .red: return "Red: chapter lost"
+        }
+    }
+
+    var placementLimitMessage: String { engine.placementLimitMessage }
     
     /// Drop or replace an object in a target scene slot.
     func dropObject(_ object: GameObject, intoSlot slotID: String? = nil, intoScene sceneID: UUID) {
@@ -190,6 +219,8 @@ final class DragDropGameViewModel: ObservableObject {
                     SoundManager.shared.play(.itemPickup)
                 }
             }
+        } else {
+            self.chapterResult = nil
         }
     }
 }

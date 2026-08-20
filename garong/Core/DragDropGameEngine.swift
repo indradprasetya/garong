@@ -72,6 +72,24 @@ final class DragDropGameEngine {
     
     /// Total objects available in tray.
     var totalObjectCount: Int { chapter.objects.count }
+
+    var maximumPlacements: Int? { chapter.storyDefinition?.maximumPlacements }
+
+    var placementLimitMessage: String {
+        chapter.storyDefinition?.placementLimitMessage.en ?? "The characters need a break."
+    }
+
+    var isCurrentOutcomeSuccessful: Bool {
+        currentOutcome?.category == "success"
+    }
+
+    var placementFeedbackState: PlacementFeedbackState {
+        guard phase != .needsBreak else { return .red }
+        guard let thresholds = chapter.storyDefinition?.starThresholds else { return .green }
+        if placementCount <= thresholds.threeStars { return .green }
+        if placementCount <= thresholds.twoStars { return .yellow }
+        return .orange
+    }
     
     /// Place or replace an object in a specific slot within a scene.
     @discardableResult
@@ -84,21 +102,33 @@ final class DragDropGameEngine {
         if let slotID = slotID, let slotIndex = scenes[sceneIndex].dropSlots.firstIndex(where: { $0.id == slotID }) {
             scenes[sceneIndex].dropSlots[slotIndex].currentObject = object
         } else if let emptyIndex = scenes[sceneIndex].dropSlots.firstIndex(where: { $0.currentObject == nil }) {
-            scenes[sceneIndex].dropSlots[emptyIndex].currentObject = object
+            slotIndex = emptyIndex
         } else if !scenes[sceneIndex].dropSlots.isEmpty {
-            scenes[sceneIndex].dropSlots[0].currentObject = object
+            slotIndex = 0
         } else {
             return false
         }
-        
+
+        guard scenes[sceneIndex].dropSlots[slotIndex].currentObject?.name != object.name else { return false }
+        scenes[sceneIndex].dropSlots[slotIndex].currentObject = object
+        placementCount += 1
         reevaluateAllReactions()
-        saveProgress()
+
+        if isAllScenesFilled && isCurrentOutcomeSuccessful {
+            completeStoryRun()
+        } else if let maximumPlacements, placementCount >= maximumPlacements {
+            phase = .needsBreak
+            saveProgress(status: .needsBreak)
+        } else {
+            saveProgress()
+        }
         return true
     }
     
     /// Remove an object globally from whichever slot/scene currently holds it.
     @discardableResult
     func removeObjectGlobal(_ object: GameObject) -> Bool {
+        guard phase == .playing else { return false }
         var removedAny = false
         for sceneIndex in scenes.indices {
             for slotIndex in scenes[sceneIndex].dropSlots.indices {
@@ -112,9 +142,6 @@ final class DragDropGameEngine {
         if removedAny {
             reevaluateAllReactions()
             saveProgress()
-            if phase == .completed {
-                phase = .playing
-            }
         }
         return removedAny
     }
@@ -139,16 +166,16 @@ final class DragDropGameEngine {
         reevaluateAllReactions()
         saveProgress()
         
-        if phase == .completed {
-            phase = .playing
-        }
-        
         return true
     }
     
     /// Explicitly finishes the chapter and transitions to the completion result overlay.
     func finishChapter() {
-        phase = .completed
+        if chapter.storyDefinition == nil {
+            phase = .completed
+        } else if isAllScenesFilled && isCurrentOutcomeSuccessful {
+            completeStoryRun()
+        }
     }
     
     /// Recalculates character emotions and speech text for scenes based on current global combinations.
@@ -266,6 +293,10 @@ final class DragDropGameEngine {
             chapterName: chapter.name,
             totalObjects: totalSceneCount,
             placedObjects: placedObjectCount,
+            placementCount: placementCount,
+            stars: starsEarned ?? 0,
+            completionSummary: chapter.storyDefinition?.completionSummary.en,
+            completionTip: chapter.storyDefinition?.completionTip.en,
             sceneStates: scenes.map { scene in
                 ChapterResult.SceneResultEntry(
                     sceneName: scene.name,
@@ -291,18 +322,24 @@ final class DragDropGameEngine {
         }
         availableObjects = chapter.objects
         phase = .playing
+        placementCount = 0
+        starsEarned = nil
         if let storyID = chapter.storyDefinition?.id {
-            try? progressStore.reset(storyID: storyID)
+            try? progressStore.clearActiveRun(storyID: storyID)
         }
         reevaluateAllReactions()
     }
 
     private func restoreProgress(for story: StoryDefinition) {
-        guard let progress = try? progressStore.progress(for: story.id) else { return }
+        guard let state = try? progressStore.state(for: story.id) else { return }
+        bestStars = state.completion?.bestStars
+        guard let activeRun = state.activeRun else { return }
+        placementCount = activeRun.placementCount
+        phase = activeRun.status == .needsBreak ? .needsBreak : .playing
         let objectsByActionID = Dictionary(uniqueKeysWithValues: zip(story.actions.map(\.id), availableObjects))
         let gridIndexes = Dictionary(uniqueKeysWithValues: story.grids.enumerated().map { ($0.element.id, $0.offset) })
 
-        for step in progress {
+        for step in activeRun.steps {
             guard let sceneIndex = gridIndexes[step.sourceGridID], scenes.indices.contains(sceneIndex) else { continue }
             for placement in step.placements {
                 guard let slotIndex = scenes[sceneIndex].dropSlots.firstIndex(where: { $0.id == placement.slotID }),
@@ -312,7 +349,7 @@ final class DragDropGameEngine {
         }
     }
 
-    private func saveProgress() {
+    private func saveProgress(status: StoryRunStatus = .playing) {
         guard let story = chapter.storyDefinition else { return }
         let actionIDsByName = Dictionary(uniqueKeysWithValues: story.actions.map { ($0.name.en, $0.id) })
         let progress = zip(story.grids, scenes).compactMap { grid, scene -> StoryProgressStep? in
@@ -322,7 +359,23 @@ final class DragDropGameEngine {
             }
             return placements.isEmpty ? nil : StoryProgressStep(sourceGridID: grid.id, placements: placements)
         }
-        try? progressStore.save(progress, for: story.id)
+        try? progressStore.saveActiveRun(
+            StoryActiveRun(steps: progress, placementCount: placementCount, status: status),
+            for: story.id
+        )
+    }
+
+    private func completeStoryRun() {
+        guard let story = chapter.storyDefinition else {
+            phase = .completed
+            return
+        }
+        let stars = placementCount <= story.starThresholds.threeStars
+            ? 3
+            : placementCount <= story.starThresholds.twoStars ? 2 : 1
+        starsEarned = stars
+        bestStars = max(bestStars ?? 0, stars)
+        phase = .completed
+        try? progressStore.complete(storyID: story.id, stars: stars, placementCount: placementCount)
     }
 }
-

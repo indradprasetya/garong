@@ -39,7 +39,7 @@ struct GameplayView: View {
                 viewModel.setDraggingActive(false)
                 return true
             }
-            
+
             // Content container padded away from device hardware edges and notch
             VStack(spacing: 6) {
                 // Top Bar
@@ -318,86 +318,7 @@ struct GameplayView: View {
 
 struct GameplayView_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            // 4-Scene Chapter Preview
-            GameplayView(chapter: preview4SceneChapter)
-                .previewDisplayName("4 Scenes Chapter")
-            
-            // 3-Scene Chapter Preview
-            GameplayView(chapter: preview3SceneChapter)
-                .previewDisplayName("3 Scenes Chapter")
-        }
-        .previewInterfaceOrientation(.landscapeLeft)
-    }
-    
-    private static var preview4SceneChapter: Chapter {
-        if let storyItem = StoryCatalog.stories.first?.chapters.first(where: { $0.storyDefinition?.gridCount == 4 }) {
-            return Chapter(storyItem: storyItem)
-        }
-        
-        let placedObj = GameObject(name: "Apologize", symbol: "action_apologize", sfSymbol: "hands.sparkles.fill")
-        let scenes = [
-            GameScene(
-                name: "Grid 1",
-                description: "Rhodey is upset",
-                dropSlots: [GameDropSlot(id: "s1", label: "Rhodey", targetCharacterID: "rhodey", currentObject: placedObj)],
-                characterEmotion: .angry,
-                speechBubbleText: "I don't want to go!",
-                characterImageNames: ["rhodey_crying"],
-                isUnlocked: true,
-                backgroundID: "background_classroom"
-            ),
-            GameScene(
-                name: "Grid 2",
-                description: "Jojo asking",
-                dropSlots: [GameDropSlot(id: "s2", label: "Jojo", targetCharacterID: "jojo", currentObject: nil)],
-                characterEmotion: .angry,
-                speechBubbleText: "What happened?",
-                characterImageNames: ["jojo_questioning"],
-                isUnlocked: true,
-                backgroundID: "background_classroom"
-            ),
-            GameScene(
-                name: "Grid 3",
-                description: "Rhodey calming down",
-                dropSlots: [GameDropSlot(id: "s3", label: "Rhodey", targetCharacterID: "rhodey", currentObject: nil)],
-                characterEmotion: .calm,
-                speechBubbleText: nil,
-                characterImageNames: ["rhodey_calm"],
-                isUnlocked: false,
-                backgroundID: "background_classroom"
-            ),
-            GameScene(
-                name: "Grid 4",
-                description: "Outcome",
-                dropSlots: [],
-                characterEmotion: .happy,
-                speechBubbleText: nil,
-                characterImageNames: ["jojo_rhodey_handshake"],
-                isUnlocked: false,
-                backgroundID: "background_classroom"
-            )
-        ]
-        return Chapter(
-            number: 2,
-            name: "A Broken Crayon",
-            description: "Work through resolving the situation.",
-            scenes: scenes,
-            objects: [
-                GameObject(name: "Apologize", symbol: "action_apologize", sfSymbol: "hands.sparkles.fill"),
-                GameObject(name: "Candy", symbol: "action_candy", sfSymbol: "circle.fill"),
-                GameObject(name: "Toy", symbol: "action_toy", sfSymbol: "play.fill"),
-                GameObject(name: "Paper", symbol: "action_paper", sfSymbol: "doc.fill")
-            ],
-            completionRule: .allObjectsPlaced,
-            isUnlocked: true
-        )
-    }
-    
-    private static var preview3SceneChapter: Chapter {
-        if let storyItem = StoryCatalog.stories.first?.chapters.first {
-            return Chapter(storyItem: storyItem)
-        }
-        return SampleGameData.chapters[0]
+        GameplayView(chapter: StoryCatalog.allChapters[0])
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

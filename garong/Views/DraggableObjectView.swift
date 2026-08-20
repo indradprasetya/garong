@@ -58,7 +58,7 @@ struct DraggableObjectView: View {
 
 struct DraggableObjectView_Previews: PreviewProvider {
     static var previews: some View {
-        DraggableObjectView(object: SampleGameData.toy)
+        DraggableObjectView(object: SampleGameData.teddy)
             .padding()
             .previewLayout(.sizeThatFits)
     }

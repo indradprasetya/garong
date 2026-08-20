@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "validate_jojo_feelings",
   "shortTitle": {
     "en": "That Hurt My Feelings",
@@ -13,6 +13,14 @@
     "en": "Jojo feels hurt in the playground after Rhodey says something unkind. The conflict is still small, but Jojo needs his feelings to be taken seriously before he can move on.",
     "id": "Jojo merasa sakit hati di taman setelah Rhodey mengatakan sesuatu yang tidak baik. Konfliknya masih kecil, tetapi Jojo perlu merasa perasaannya dianggap serius sebelum bisa lanjut bermain."
   },
+  "completionSummary": {
+    "en": "Jojo needed his feelings taken seriously before anything else. Feeling safe enough to speak came first.",
+    "id": "Jojo perlu merasa bahwa perasaannya dianggap serius sebelum hal lain dibahas. Ia perlu merasa cukup aman untuk bicara terlebih dahulu."
+  },
+  "completionTip": {
+    "en": "When a child gets hurt by another child, validate the feeling before sorting out who did what. That safety makes it possible to talk.",
+    "id": "Saat seorang anak tersakiti oleh anak lain, validasi perasaannya sebelum mencari tahu siapa yang melakukan apa. Rasa aman itu membuat percakapan menjadi mungkin."
+  },
   "hints": [
     {
       "en": "Validation starts by making the child feel safe enough to speak.",
@@ -22,6 +30,15 @@
   "initialState": "HURT",
   "gridCount": 3,
   "choiceCount": 2,
+  "maximumPlacements": 8,
+  "starThresholds": {
+    "threeStars": 3,
+    "twoStars": 5
+  },
+  "placementLimitMessage": {
+    "en": "Jojo and Rhodey are tired. You took too long.",
+    "id": "Jojo dan Rhodey kelelahan. Kamu terlalu lama."
+  },
   "actions": [
     {
       "id": "action_asking",
@@ -72,7 +89,7 @@
       "id": "grid_1",
       "order": 1,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -84,7 +101,7 @@
       "id": "grid_2",
       "order": 2,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -96,7 +113,7 @@
       "id": "grid_3",
       "order": 3,
       "locked": true,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": []
     }
   ],
