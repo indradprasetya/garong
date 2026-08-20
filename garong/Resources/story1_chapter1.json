@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "rhodey_wants_to_draw",
   "shortTitle": {
     "en": "Let's Draw!",
@@ -30,6 +30,15 @@
   "initialState": "REFUSING",
   "gridCount": 3,
   "choiceCount": 2,
+  "maximumPlacements": 8,
+  "starThresholds": {
+    "threeStars": 3,
+    "twoStars": 5
+  },
+  "placementLimitMessage": {
+    "en": "Rhodey is tired. You took too long.",
+    "id": "Rhodey kelelahan. Kamu terlalu lama."
+  },
   "actions": [
     {
       "id": "action_approach",

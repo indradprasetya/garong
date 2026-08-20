@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "jojo_settles_down_to_draw",
   "shortTitle": {
     "en": "Too Loud to Draw",
@@ -30,6 +30,15 @@
   "initialState": "NOISY",
   "gridCount": 4,
   "choiceCount": 3,
+  "maximumPlacements": 15,
+  "starThresholds": {
+    "threeStars": 5,
+    "twoStars": 9
+  },
+  "placementLimitMessage": {
+    "en": "Jojo and Rhodey are tired. You took too long.",
+    "id": "Jojo dan Rhodey kelelahan. Kamu terlalu lama."
+  },
   "actions": [
     {
       "id": "action_ask_quiet",

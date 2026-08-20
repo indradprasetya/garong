@@ -17,10 +17,31 @@ struct ChapterCompleteView: View {
             VStack(spacing: 8) {
                 Text("Chapter Complete!")
                     .font(.appFont(size: 32, relativeTo: .largeTitle))
-                
-                Text("Great job placing all objects!")
+
+                HStack(spacing: 8) {
+                    ForEach(1...3, id: \.self) { star in
+                        Image(systemName: star <= result.stars ? "star.fill" : "star")
+                            .font(.system(size: 32))
+                            .foregroundColor(star <= result.stars ? .yellow : .secondary)
+                    }
+                }
+
+                Text("\(result.placementCount) actions tried")
                     .font(.appFont(size: 18, relativeTo: .title3))
                     .foregroundColor(.secondary)
+
+                if let summary = result.completionSummary {
+                    Text(summary)
+                        .font(.appFont(size: 16, relativeTo: .body))
+                        .multilineTextAlignment(.center)
+                }
+
+                if let tip = result.completionTip {
+                    Text("Tip: \(tip)")
+                        .font(.appFont(size: 14, relativeTo: .callout))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
             }
             
             HStack(spacing: 20) {

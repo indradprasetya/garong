@@ -9,6 +9,10 @@ struct ChapterResult: Equatable {
     let chapterName: String
     let totalObjects: Int
     let placedObjects: Int
+    let placementCount: Int
+    let stars: Int
+    let completionSummary: String?
+    let completionTip: String?
     let sceneStates: [SceneResultEntry]
     
     struct SceneResultEntry: Equatable {

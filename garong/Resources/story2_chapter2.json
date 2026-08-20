@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "share_the_slide",
   "shortTitle": {
     "en": "The Slide Is Mine",
@@ -30,6 +30,15 @@
   "initialState": "CONFLICT",
   "gridCount": 4,
   "choiceCount": 3,
+  "maximumPlacements": 15,
+  "starThresholds": {
+    "threeStars": 5,
+    "twoStars": 9
+  },
+  "placementLimitMessage": {
+    "en": "Jojo and Rhodey are tired. You took too long.",
+    "id": "Jojo dan Rhodey kelelahan. Kamu terlalu lama."
+  },
   "actions": [
     {
       "id": "action_asking",
@@ -87,7 +96,7 @@
       "id": "grid_1",
       "order": 1,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -99,7 +108,7 @@
       "id": "grid_2",
       "order": 2,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -111,7 +120,7 @@
       "id": "grid_3",
       "order": 3,
       "locked": false,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": [
         {
           "id": "slot_scene",
@@ -123,7 +132,7 @@
       "id": "grid_4",
       "order": 4,
       "locked": true,
-      "backgroundID": "park_background",
+      "backgroundID": "background_playground",
       "dropSlots": []
     }
   ],

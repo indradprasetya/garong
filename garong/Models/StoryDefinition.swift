@@ -17,10 +17,18 @@ struct StoryDefinition: Codable {
     let initialState: String?
     let gridCount: Int
     let choiceCount: Int
+    let maximumPlacements: Int
+    let starThresholds: StoryStarThresholds
+    let placementLimitMessage: LocalizedStoryText
     let actions: [StoryActionDefinition]
     let characters: [StoryCharacterDefinition]
     let grids: [StoryGridDefinition]
     let outcomes: [StoryOutcome]
+}
+
+struct StoryStarThresholds: Codable, Equatable {
+    let threeStars: Int
+    let twoStars: Int
 }
 
 struct StoryActionDefinition: Codable, Identifiable {
