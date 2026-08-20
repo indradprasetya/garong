@@ -56,8 +56,19 @@ struct Chapter: Identifiable, Equatable {
         self.storyDefinition = storyItem.storyDefinition
 
         if let story = storyItem.storyDefinition {
+            let firstOutcome = story.outcomes.first
             self.scenes = story.grids.enumerated().map { index, grid in
-                let charNames = story.characters.map { AssetFallbackHelper.imageName(for: $0.id) }
+                let initialState = firstOutcome?.states.first(where: { $0.gridID == grid.id })
+                let initialImageNames: [String] = initialState?.visualSlotsList.map { visualSlot in
+                    let asset = visualSlot.assetID.isEmpty ? (visualSlot.characterIDs.first ?? "") : visualSlot.assetID
+                    return AssetFallbackHelper.imageName(for: asset)
+                } ?? []
+
+                let charNames = !initialImageNames.isEmpty
+                    ? initialImageNames
+                    : story.characters.map { AssetFallbackHelper.imageName(for: $0.id) }
+
+                let initialSpeechBubble = (index == 0) ? initialState?.textBubble?.text.en : nil
                 let dropSlots: [GameDropSlot]
                 let isOutcomeGrid: Bool
                 if let jsonSlots = grid.dropSlots, !jsonSlots.isEmpty {
@@ -86,8 +97,10 @@ struct Chapter: Identifiable, Equatable {
                     name: isOutcomeGrid ? "Outcome" : "Grid \(grid.order)",
                     description: isOutcomeGrid ? "Final Result" : "Scene \(grid.order)",
                     dropSlots: dropSlots,
+                    speechBubbleText: initialSpeechBubble,
                     characterImageNames: charNames.isEmpty ? ["fallback_globe"] : charNames,
-                    isUnlocked: index == 0
+                    isUnlocked: index == 0,
+                    backgroundID: grid.backgroundID ?? "background_classroom"
                 )
             }
             self.objects = story.actions.map { action in

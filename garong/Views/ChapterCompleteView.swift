@@ -22,10 +22,26 @@ struct ChapterCompleteView: View {
                 Text("Great job placing all objects!")
                     .font(.title3)
                     .foregroundColor(.secondary)
+
+                if let summary = result.completionSummary {
+                    Text(summary)
+                        .font(.appFont(size: 16, relativeTo: .body))
+                        .multilineTextAlignment(.center)
+                }
+
+                if let tip = result.completionTip {
+                    Text("Tip: \(tip)")
+                        .font(.appFont(size: 14, relativeTo: .callout))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
             }
             
             HStack(spacing: 20) {
-                Button(action: onRestart) {
+                Button {
+                    SoundManager.shared.play(.buttonTap)
+                    onRestart()
+                } label: {
                     Text("Play Again")
                         .font(.headline)
                         .foregroundColor(GarongTheme.teal)
@@ -38,9 +54,12 @@ struct ChapterCompleteView: View {
                         )
                 }
                 
-                Button(action: onDismiss) {
+                Button {
+                    SoundManager.shared.play(.backTap)
+                    onDismiss()
+                } label: {
                     Text("Back to Chapters")
-                        .font(.headline)
+                        .font(.appFont(size: 16, relativeTo: .headline))
                         .foregroundColor(.white)
                         .frame(width: 160, height: 50)
                         .background(GarongTheme.teal)

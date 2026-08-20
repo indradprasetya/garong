@@ -14,19 +14,17 @@ struct DraggableObjectView: View {
     var onDragStarted: (() -> Void)? = nil
     var onDragEnded: (() -> Void)? = nil
     
+    private var hasValidAsset: Bool {
+        !object.symbol.isEmpty && AssetFallbackHelper.hasAsset(named: object.symbol)
+    }
+    
     var body: some View {
         VStack(spacing: 4) {
-            #if canImport(UIKit)
-            if !object.symbol.isEmpty, UIImage(named: object.symbol) != nil {
+            if hasValidAsset {
                 Image(object.symbol)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 44, height: 44)
-                    // Multi-directional edge stroke tracing the exact PNG image silhouette contour
-                    .shadow(color: .gray, radius: 1, x: 1, y: 1)
-                    .shadow(color: .gray, radius: 1, x: -1, y: -1)
-                    .shadow(color: .gray, radius: 1, x: 1, y: -1)
-                    .shadow(color: .gray, radius: 1, x: -1, y: 1)
             } else {
                 Image(systemName: object.sfSymbol)
                     .font(.system(size: 32))
@@ -53,8 +51,7 @@ struct DraggableObjectView: View {
         .overlay(RoundedRectangle(cornerRadius: 14).stroke(GarongTheme.teal.opacity(0.16)))
         .instantDraggable(object) {
             // Drag preview
-            #if canImport(UIKit)
-            if !object.symbol.isEmpty, UIImage(named: object.symbol) != nil {
+            if hasValidAsset {
                 Image(object.symbol)
                     .resizable()
                     .scaledToFit()
@@ -65,18 +62,13 @@ struct DraggableObjectView: View {
                     .font(.system(size: 48))
                     .shadow(radius: 8)
             }
-            #else
-            Image(systemName: object.sfSymbol)
-                .font(.system(size: 48))
-                .shadow(radius: 8)
-            #endif
         }
     }
 }
 
 struct DraggableObjectView_Previews: PreviewProvider {
     static var previews: some View {
-        DraggableObjectView(object: SampleGameData.teddy)
+        DraggableObjectView(object: SampleGameData.toy)
             .padding()
             .previewLayout(.sizeThatFits)
     }

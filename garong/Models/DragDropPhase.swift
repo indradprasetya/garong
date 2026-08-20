@@ -8,6 +8,15 @@ import Foundation
 enum DragDropPhase: Equatable {
     /// Active gameplay — user can drag objects into scenes.
     case playing
+    /// Placement limit reached; the chapter character needs a break.
+    case needsBreak
     /// Chapter completion triggered.
     case completed
+}
+
+enum PlacementFeedbackState: Equatable {
+    case green
+    case yellow
+    case orange
+    case red
 }

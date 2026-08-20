@@ -19,6 +19,7 @@ final class DragDropGameViewModel: ObservableObject {
     private var engine: DragDropGameEngine
     private var currentChapterIndex: Int = 0
     private var storyChapters: [StoryChapterItem] = []
+    private var hasPlayedCompletionSFX: Bool = false
     
     init(chapter: Chapter) {
         let engine = DragDropGameEngine(chapter: chapter)
@@ -42,6 +43,7 @@ final class DragDropGameViewModel: ObservableObject {
     
     /// Navigates to next chapter automatically or displays completed dialog if final chapter in story.
     func goToNextChapterOrFinish() {
+        hasPlayedCompletionSFX = false
         if hasNextChapter {
             currentChapterIndex += 1
             let nextItem = storyChapters[currentChapterIndex]
@@ -56,6 +58,9 @@ final class DragDropGameViewModel: ObservableObject {
     }
     
     func setDraggingActive(_ active: Bool) {
+        if active {
+            SoundManager.shared.play(.itemPickup)
+        }
         withAnimation(.easeInOut(duration: 0.25)) {
             self.isDraggingItem = active
         }
@@ -71,11 +76,56 @@ final class DragDropGameViewModel: ObservableObject {
     var progressText: String {
         "\(placedObjectCount) / \(totalSceneCount) Scenes Filled"
     }
+
+    var placementFace: String {
+        switch engine.placementFeedbackState {
+        case .green: return "🙂"
+        case .yellow: return "😐"
+        case .orange: return "😟"
+        case .red: return "😣"
+        }
+    }
+
+    var placementColor: Color {
+        switch engine.placementFeedbackState {
+        case .green: return .green
+        case .yellow: return .yellow
+        case .orange: return .orange
+        case .red: return .red
+        }
+    }
+
+    var placementStateLabel: String {
+        switch engine.placementFeedbackState {
+        case .green: return "Green: 3-star range"
+        case .yellow: return "Yellow: 2-star range"
+        case .orange: return "Orange: 1-star range"
+        case .red: return "Red: chapter lost"
+        }
+    }
+
+    var placementLimitMessage: String { engine.placementLimitMessage }
     
     /// Drop or replace an object in a target scene slot.
     func dropObject(_ object: GameObject, intoSlot slotID: String? = nil, intoScene sceneID: UUID) {
         let success = engine.placeObject(object, inSlot: slotID, inScene: sceneID)
         guard success else { return }
+        
+        if engine.isAllScenesFilled {
+            if engine.isCurrentOutcomeIdeal {
+                if !hasPlayedCompletionSFX {
+                    hasPlayedCompletionSFX = true
+                    SoundManager.shared.play(.chapterComplete)
+                } else {
+                    SoundManager.shared.play(.itemPickup)
+                }
+            } else {
+                SoundManager.shared.play(.chapterRetry)
+            }
+        } else {
+            hasPlayedCompletionSFX = false
+            SoundManager.shared.play(.itemPickup)
+        }
         
         // Trigger visual reaction pulse
         animatingSceneID = sceneID
@@ -92,6 +142,8 @@ final class DragDropGameViewModel: ObservableObject {
     func removeObject(_ object: GameObject, fromSlot slotID: String? = nil, fromScene sceneID: UUID) {
         let success = engine.removeObject(object, fromSlot: slotID, fromScene: sceneID)
         guard success else { return }
+        hasPlayedCompletionSFX = false
+        SoundManager.shared.play(.itemRemove)
         syncWithEngine()
     }
     
@@ -99,6 +151,8 @@ final class DragDropGameViewModel: ObservableObject {
     func removeObjectGlobal(_ object: GameObject) {
         let success = engine.removeObjectGlobal(object)
         guard success else { return }
+        hasPlayedCompletionSFX = false
+        SoundManager.shared.play(.itemRemove)
         syncWithEngine()
     }
     
@@ -110,18 +164,31 @@ final class DragDropGameViewModel: ObservableObject {
     
     /// Restart the chapter.
     func restart() {
+        hasPlayedCompletionSFX = false
+        SoundManager.shared.play(.buttonTap)
         engine.restart()
         chapterResult = nil
         syncWithEngine()
     }
     
     private func syncWithEngine() {
+        let oldPhase = self.phase
         self.scenes = engine.scenes
         self.availableObjects = engine.availableObjects
         self.phase = engine.phase
         
         if engine.phase == .completed {
             self.chapterResult = engine.buildResult()
+            if oldPhase != .completed && !hasPlayedCompletionSFX {
+                hasPlayedCompletionSFX = true
+                if engine.isCurrentOutcomeIdeal {
+                    SoundManager.shared.play(.chapterComplete)
+                } else {
+                    SoundManager.shared.play(.chapterRetry)
+                }
+            }
+        } else {
+            self.chapterResult = nil
         }
     }
 }

@@ -22,11 +22,17 @@ enum StoryLoader {
 }
 
 struct StoryRunner {
+    let story: StoryDefinition
     private let outcomesByKey: [String: StoryOutcome]
 
     init(story: StoryDefinition) throws {
         try story.validate()
+        self.story = story
         outcomesByKey = Dictionary(uniqueKeysWithValues: story.outcomes.map { ($0.actionIDs.joined(separator: "|"), $0) })
+    }
+
+    var initialOutcome: StoryOutcome? {
+        story.outcomes.first
     }
 
     func outcome(for actionIDs: [String]) -> StoryOutcome? {
@@ -34,7 +40,7 @@ struct StoryRunner {
     }
 
     func partialOutcome(matching prefixActionIDs: [String]) -> StoryOutcome? {
-        guard !prefixActionIDs.isEmpty else { return nil }
+        guard !prefixActionIDs.isEmpty else { return initialOutcome }
         return outcomesByKey.values.first { outcome in
             let actionIDs = outcome.actionIDs
             guard actionIDs.count >= prefixActionIDs.count else { return false }
@@ -70,11 +76,19 @@ private extension StoryDefinition {
         let gridIDs = try uniqueIDs(grids.map(\.id))
 
         guard gridCount > 0, choiceCount > 0, !actions.isEmpty,
+              maximumPlacements > choiceCount,
+              starThresholds.threeStars >= choiceCount,
+              starThresholds.threeStars < starThresholds.twoStars,
+              starThresholds.twoStars < maximumPlacements,
               grids.count == gridCount,
               Set(grids.map(\.order)) == Set(1...gridCount),
               !shortTitle.en.isEmpty, !shortTitle.id.isEmpty,
               !title.en.isEmpty, !title.id.isEmpty,
-              !description.en.isEmpty, !description.id.isEmpty else {
+              !description.en.isEmpty, !description.id.isEmpty,
+              !completionSummary.en.isEmpty, !completionSummary.id.isEmpty,
+              !completionTip.en.isEmpty, !completionTip.id.isEmpty,
+              !placementLimitMessage.en.isEmpty, !placementLimitMessage.id.isEmpty,
+              characters.allSatisfy({ placementLimitMessage.en.contains($0.displayName) }) else {
             throw StoryValidationError.invalidGrid("story")
         }
 
