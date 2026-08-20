@@ -17,9 +17,8 @@ final class DragDropGameEngine {
     private(set) var availableObjects: [GameObject]
     private(set) var phase: DragDropPhase = .playing
     private(set) var currentOutcome: StoryOutcome?
-    private(set) var placementCount = 0
-    private(set) var starsEarned: Int?
-    private(set) var bestStars: Int?
+    private(set) var wrongAttempts: Int = 0
+    private var lastEvaluatedActionSequence: [String] = []
     
     init(
         chapter: Chapter,
@@ -98,10 +97,10 @@ final class DragDropGameEngine {
         guard phase == .playing else { return false }
         guard let sceneIndex = scenes.firstIndex(where: { $0.id == sceneID }) else { return false }
         guard scenes[sceneIndex].isUnlocked else { return false }
-
-        let slotIndex: Int
-        if let slotID = slotID, let index = scenes[sceneIndex].dropSlots.firstIndex(where: { $0.id == slotID }) {
-            slotIndex = index
+        guard !scenes[sceneIndex].dropSlots.isEmpty else { return false }
+        
+        if let slotID = slotID, let slotIndex = scenes[sceneIndex].dropSlots.firstIndex(where: { $0.id == slotID }) {
+            scenes[sceneIndex].dropSlots[slotIndex].currentObject = object
         } else if let emptyIndex = scenes[sceneIndex].dropSlots.firstIndex(where: { $0.currentObject == nil }) {
             slotIndex = emptyIndex
         } else if !scenes[sceneIndex].dropSlots.isEmpty {
@@ -195,6 +194,12 @@ final class DragDropGameEngine {
             if placedActionIDs.count == choiceCount {
                 activeOutcome = runner.outcome(for: placedActionIDs)
                 self.currentOutcome = activeOutcome
+                if placedActionIDs != lastEvaluatedActionSequence {
+                    lastEvaluatedActionSequence = placedActionIDs
+                    if activeOutcome?.isIdeal == false {
+                        wrongAttempts += 1
+                    }
+                }
             } else if !placedActionIDs.isEmpty {
                 activeOutcome = runner.partialOutcome(matching: placedActionIDs)
                 self.currentOutcome = nil
@@ -304,6 +309,8 @@ final class DragDropGameEngine {
     
     /// Reset the game session.
     func restart() {
+        wrongAttempts = 0
+        lastEvaluatedActionSequence = []
         scenes = chapter.scenes.map { scene in
             var s = scene
             for idx in s.dropSlots.indices {

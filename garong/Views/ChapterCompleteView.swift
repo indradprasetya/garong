@@ -41,7 +41,6 @@ struct ChapterCompleteView: View {
                 }
                 
                 Button {
-                    SoundManager.shared.play(.backTap)
                     onDismiss()
                 } label: {
                     Text("Back to Chapters")

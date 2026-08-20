@@ -28,9 +28,9 @@ struct SceneDropZoneView: View {
             let cornerRadius = max(6, cardH * 0.095)
 
             ZStack {
-                // 1. Container Frame Base
-                if AssetFallbackHelper.hasAsset(named: containerImageName) {
-                    Image(containerImageName)
+                // 1. Container Frame Base (Always rendered as the background card frame)
+                if AssetFallbackHelper.hasAsset(named: scene.isUnlocked ? "container" : "container_lock") {
+                    Image(scene.isUnlocked ? "container" : "container_lock")
                         .resizable()
                         .scaledToFit()
                 } else {
@@ -49,22 +49,11 @@ struct SceneDropZoneView: View {
                                 .clipped()
                         }
 
-                        // Determine characters to render (supports multiple character image names or target slots)
-                        let displayImages: [String] = {
-                            if !scene.characterImageNames.isEmpty {
-                                return scene.characterImageNames
-                            }
-                            let slotChars = scene.dropSlots.compactMap { slot -> String? in
-                                guard let charID = slot.targetCharacterID, !charID.isEmpty else { return nil }
-                                return AssetFallbackHelper.imageName(for: charID)
-                            }
-                            return slotChars.isEmpty ? ["fallback_globe"] : slotChars
-                        }()
-
+                        let displayImages = resolvedDisplayImages
                         let isMultiChar = displayImages.count > 1
-                        let charMaxH = isMultiChar ? cardH * 0.55 : cardH * 0.62
+                        let charMaxH = isMultiChar ? cardH * 0.82 : cardH * 0.92
 
-                        // Character(s) Anchored to Bottom
+                        // Character(s) Anchored to Bottom (Scaled up & cropped at bottom)
                         HStack(spacing: isMultiChar ? -cardW * 0.02 : 0) {
                             ForEach(Array(displayImages.enumerated()), id: \.offset) { index, charImage in
                                 let isWiggling = (targetedCharIndex == index)
@@ -75,7 +64,7 @@ struct SceneDropZoneView: View {
                                     isWiggling: isWiggling
                                 )
                                 .frame(maxHeight: charMaxH)
-                                .offset(y: cardH * 0.02)
+                                .offset(y: cardH * 0.14)
                             }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
@@ -83,8 +72,16 @@ struct SceneDropZoneView: View {
                         // Top Speech Bubble Banner
                         if let bubble = scene.speechBubbleText, !bubble.isEmpty {
                             let bubbleH = cardH * 0.38
-                            let fontSize = max(9, min(cardH * 0.09, cardW * 0.08))
-                            let bottomPadding = cardH * 0.12
+                            let baseFontSize = min(cardH * 0.12, cardW * 0.14)
+                            let scaleFactor: CGFloat = {
+                                let len = bubble.count
+                                if len <= 15 { return 1.0 }
+                                else if len <= 30 { return 0.85 }
+                                else if len <= 45 { return 0.70 }
+                                else { return 0.58 }
+                            }()
+                            let fontSize = max(8, baseFontSize * scaleFactor)
+                            let bottomPadding = cardH * 0.14
                             let horizPadding = cardW * 0.05
 
                             VStack(spacing: 0) {
@@ -103,7 +100,7 @@ struct SceneDropZoneView: View {
                                         .foregroundColor(.white)
                                         .multilineTextAlignment(.center)
                                         .lineLimit(2)
-                                        .minimumScaleFactor(0.5)
+                                        .minimumScaleFactor(0.4)
                                         .padding(.horizontal, horizPadding)
                                         .padding(.bottom, bottomPadding)
                                 }
@@ -124,6 +121,7 @@ struct SceneDropZoneView: View {
                                         guard let firstItem = items.first else { return false }
                                         withAnimation(.spring()) {
                                             targetedCharIndex = nil
+                                            isHoveringDrag = false
                                             onDrop(firstItem, scene.dropSlots[0].id)
                                         }
                                         return true
@@ -133,7 +131,7 @@ struct SceneDropZoneView: View {
                                                 HapticManager.shared.selection()
                                             }
                                             targetedCharIndex = targeted ? 0 : nil
-                                            if targeted { isHoveringDrag = true }
+                                            isHoveringDrag = targeted
                                         }
                                     }
                                 
@@ -143,6 +141,7 @@ struct SceneDropZoneView: View {
                                         guard let firstItem = items.first else { return false }
                                         withAnimation(.spring()) {
                                             targetedCharIndex = nil
+                                            isHoveringDrag = false
                                             onDrop(firstItem, scene.dropSlots[1].id)
                                         }
                                         return true
@@ -152,19 +151,20 @@ struct SceneDropZoneView: View {
                                                 HapticManager.shared.selection()
                                             }
                                             targetedCharIndex = targeted ? 1 : nil
-                                            if targeted { isHoveringDrag = true }
+                                            isHoveringDrag = targeted
                                         }
                                     }
                             }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        } else {
+                        } else if let firstSlot = scene.dropSlots.first {
                             Color.clear
                                 .contentShape(Rectangle())
                                 .dropDestination(for: GameObject.self) { items, _ in
-                                    guard let firstItem = items.first, let slot = scene.dropSlots.first else { return false }
+                                    guard let firstItem = items.first else { return false }
                                     withAnimation(.spring()) {
                                         targetedCharIndex = nil
-                                        onDrop(firstItem, slot.id)
+                                        isHoveringDrag = false
+                                        onDrop(firstItem, firstSlot.id)
                                     }
                                     return true
                                 } isTargeted: { targeted in
@@ -175,6 +175,14 @@ struct SceneDropZoneView: View {
                                         targetedCharIndex = targeted ? 0 : nil
                                         isHoveringDrag = targeted
                                     }
+                                }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        } else {
+                            // Outcome scene (no choice slots) — drop operations disabled
+                            Color.clear
+                                .contentShape(Rectangle())
+                                .dropDestination(for: GameObject.self) { _, _ in
+                                    return false
                                 }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
@@ -214,6 +222,42 @@ struct SceneDropZoneView: View {
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                     .padding(cardH * 0.035)
                     .clipped()
+
+                    // 3. Active Drag Selector Overlay (Front of stack, smaller inset inside container frame)
+                    if (isDraggingAnyItem || isHoveringDrag) && !scene.dropSlots.isEmpty {
+                        Group {
+                            if isTwoCharacterScene {
+                                HStack(spacing: 0) {
+                                    let leftSelector = halfSelectorImageName(forIndex: 0)
+                                    let rightSelector = halfSelectorImageName(forIndex: 1)
+                                    
+                                    if AssetFallbackHelper.hasAsset(named: leftSelector) {
+                                        Image(leftSelector)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .scaleEffect(targetedCharIndex == 0 ? 0.95 : 0.9)
+                                    }
+
+                                    if AssetFallbackHelper.hasAsset(named: rightSelector) {
+                                        Image(rightSelector)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .scaleEffect(targetedCharIndex == 1 ? 0.95 : 0.9)
+                                    }
+                                }
+                            } else {
+                                let selectorName = singleSelectorImageName
+                                if AssetFallbackHelper.hasAsset(named: selectorName) {
+                                    Image(selectorName)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .scaleEffect(isHoveringDrag ? 0.95 : 1.0)
+                                }
+                            }
+                        }
+                        .padding(cardH * 0.015)
+                        .allowsHitTesting(false)
+                    }
                 } else {
                     // Locked Scene Grid Frame
                     let lockIconSize = max(14, cardH * 0.15)
@@ -229,6 +273,10 @@ struct SceneDropZoneView: View {
                         Spacer()
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .contentShape(Rectangle())
+                    .dropDestination(for: GameObject.self) { _, _ in
+                        return false
+                    }
                 }
             }
         }
@@ -237,16 +285,101 @@ struct SceneDropZoneView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    private var containerImageName: String {
-        if !scene.isUnlocked {
-            return "container_lock"
-        }
-        if isDraggingAnyItem || isHoveringDrag {
-            return "container_drag"
-        }
-        return "container"
+    private enum CharacterIdentity {
+        case jojo
+        case rhodey
+        case unknown
     }
-}
+
+    private func characterIdentity(for string: String) -> CharacterIdentity {
+        let lower = string.lowercased()
+        if lower.contains("jojo") {
+            return .jojo
+        } else if lower.contains("rhodey") {
+            return .rhodey
+        }
+        return .unknown
+    }
+
+    private var isTwoCharacterScene: Bool {
+        scene.dropSlots.count > 1
+    }
+
+    private var resolvedDisplayImages: [String] {
+        if !scene.characterImageNames.isEmpty {
+            return scene.characterImageNames
+        }
+        let slotChars = scene.dropSlots.compactMap { slot -> String? in
+            guard let charID = slot.targetCharacterID, !charID.isEmpty else { return nil }
+            return AssetFallbackHelper.imageName(for: charID)
+        }
+        return slotChars.isEmpty ? ["fallback_globe"] : slotChars
+    }
+
+    private func characterIdentity(forSlotAt index: Int) -> CharacterIdentity {
+        if scene.dropSlots.indices.contains(index) {
+            let slot = scene.dropSlots[index]
+            if let charID = slot.targetCharacterID, !charID.isEmpty {
+                let identity = characterIdentity(for: charID)
+                if identity != .unknown { return identity }
+            }
+            let slotIDIdentity = characterIdentity(for: slot.id)
+            if slotIDIdentity != .unknown { return slotIDIdentity }
+            let labelIdentity = characterIdentity(for: slot.label)
+            if labelIdentity != .unknown { return labelIdentity }
+        }
+        if resolvedDisplayImages.indices.contains(index) {
+            let identity = characterIdentity(for: resolvedDisplayImages[index])
+            if identity != .unknown { return identity }
+        }
+        return index == 0 ? .jojo : .rhodey
+    }
+
+    private var singleCharacterIdentity: CharacterIdentity {
+        if let slot = scene.dropSlots.first {
+            if let charID = slot.targetCharacterID, !charID.isEmpty {
+                let identity = characterIdentity(for: charID)
+                if identity != .unknown { return identity }
+            }
+            let slotIDIdentity = characterIdentity(for: slot.id)
+            if slotIDIdentity != .unknown { return slotIDIdentity }
+            let labelIdentity = characterIdentity(for: slot.label)
+            if labelIdentity != .unknown { return labelIdentity }
+        }
+        for img in resolvedDisplayImages {
+            let identity = characterIdentity(for: img)
+            if identity != .unknown { return identity }
+        }
+        let descIdentity = characterIdentity(for: scene.description)
+        if descIdentity != .unknown { return descIdentity }
+        let nameIdentity = characterIdentity(for: scene.name)
+        if nameIdentity != .unknown { return nameIdentity }
+        return .jojo
+    }
+
+    private var singleSelectorImageName: String {
+        switch singleCharacterIdentity {
+        case .jojo, .unknown:
+            return "blue_selector_full"
+        case .rhodey:
+            return "green_selector_full"
+        }
+    }
+
+    private func halfSelectorImageName(forIndex index: Int) -> String {
+        let identity = characterIdentity(forSlotAt: index)
+        switch identity {
+        case .jojo:
+            return "blue_selector_half"
+        case .rhodey:
+            return "green_selector_half"
+        case .unknown:
+            return index == 0 ? "blue_selector_half" : "green_selector_half"
+        }
+    }
+
+    }
+
 
 /// A small rounded square drop badge located in the corner of a scene card (visible when an item is placed).
 struct CornerDropSlotBadge: View {

@@ -14,11 +14,11 @@ struct StoryChapterItem: Identifiable {
     let isUnlocked: Bool
     
     var title: String {
-        storyDefinition?.shortTitle.en ?? "Chapter \(chapterNumber)"
+        storyDefinition?.title.en ?? "Chapter \(chapterNumber)"
     }
     
     var titleID: String {
-        storyDefinition?.shortTitle.id ?? "Bab \(chapterNumber)"
+        storyDefinition?.title.id ?? "Bab \(chapterNumber)"
     }
     
     var description: String {
