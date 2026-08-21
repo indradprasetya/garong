@@ -35,6 +35,13 @@
   "gameplay.lost": { "en": "Red: chapter lost", "id": "Merah: bab belum berhasil" },
   "gameplay.breakFallback": { "en": "The characters need a break.", "id": "Para karakter perlu waktu untuk beristirahat." },
 
+  "tutorial.approach": { "en": "Drag Approach to Rhodey.", "id": "Tarik Dekati ke Rhodey." },
+  "tutorial.toy": { "en": "Now drag the Toy to Rhodey.", "id": "Sekarang tarik Mainan ke Rhodey." },
+  "tutorial.wrongAndHint": { "en": "A choice can be wrong. Open Hint to learn what Rhodey needs.", "id": "Pilihanmu bisa kurang tepat. Buka Petunjuk untuk melihat kebutuhan Rhodey." },
+  "tutorial.returnToy": { "en": "Drag the toy back to the tray to try again.", "id": "Tarik kembali mainan ke tempat pilihan untuk mencoba lagi." },
+  "tutorial.meter": { "en": "This meter tracks your attempts. Tap it to continue.", "id": "Meter ini menghitung percobaanmu. Ketuk untuk lanjut." },
+  "tutorial.crayon": { "en": "Now drag the Crayon to Rhodey.", "id": "Sekarang tarik Krayon ke Rhodey." },
+
   "result.tryAgain": { "en": "Try Again", "id": "Coba Lagi" },
   "result.next": { "en": "Next", "id": "Lanjut" },
   "result.title": { "en": "RESULT", "id": "HASIL" },

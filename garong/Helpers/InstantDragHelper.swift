@@ -13,7 +13,6 @@ import UIKit
 struct InstantDragModifier<T: Transferable, Preview: View>: ViewModifier {
     let item: T
     let onDragStarted: (() -> Void)?
-    let onDragEnded: (() -> Void)?
     let preview: () -> Preview
 
     func body(content: Content) -> some View {
@@ -23,8 +22,7 @@ struct InstantDragModifier<T: Transferable, Preview: View>: ViewModifier {
             }
             #if canImport(UIKit)
             .background(InstantDragHelperView(
-                onDragStarted: onDragStarted,
-                onDragEnded: onDragEnded
+                onDragStarted: onDragStarted
             ))
             #endif
     }
@@ -34,19 +32,17 @@ struct InstantDragActivity {
     private(set) var isActive = false
 
     mutating func update(isActive newValue: Bool) -> Bool? {
-        guard newValue != isActive else { return nil }
-        isActive = newValue
-        return newValue
+        defer { isActive = newValue }
+        return newValue && !isActive ? true : nil
     }
 }
 
 #if canImport(UIKit)
 private struct InstantDragHelperView: UIViewRepresentable {
     let onDragStarted: (() -> Void)?
-    let onDragEnded: (() -> Void)?
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(onDragStarted: onDragStarted, onDragEnded: onDragEnded)
+        Coordinator(onDragStarted: onDragStarted)
     }
 
     func makeUIView(context: Context) -> UIView {
@@ -62,7 +58,6 @@ private struct InstantDragHelperView: UIViewRepresentable {
     
     func updateUIView(_ uiView: UIView, context: Context) {
         context.coordinator.onDragStarted = onDragStarted
-        context.coordinator.onDragEnded = onDragEnded
         let coordinator = context.coordinator
         DispatchQueue.main.async {
             if let parent = uiView.superview {
@@ -71,10 +66,6 @@ private struct InstantDragHelperView: UIViewRepresentable {
         }
     }
 
-    static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
-        coordinator.finishIfNeeded()
-    }
-    
     private func configureDragGestures(in view: UIView, coordinator: Coordinator) {
         var current: UIView? = view
         var attachedObserver = false
@@ -95,13 +86,11 @@ private struct InstantDragHelperView: UIViewRepresentable {
 
     final class Coordinator: NSObject {
         var onDragStarted: (() -> Void)?
-        var onDragEnded: (() -> Void)?
         private var activity = InstantDragActivity()
         private var observedGestureIDs: Set<ObjectIdentifier> = []
 
-        init(onDragStarted: (() -> Void)?, onDragEnded: (() -> Void)?) {
+        init(onDragStarted: (() -> Void)?) {
             self.onDragStarted = onDragStarted
-            self.onDragEnded = onDragEnded
         }
 
         func observe(_ gesture: UILongPressGestureRecognizer) {
@@ -120,17 +109,10 @@ private struct InstantDragHelperView: UIViewRepresentable {
                 nextState = nil
             }
 
-            guard let nextState, let isActive = activity.update(isActive: nextState) else { return }
-            if isActive {
+            guard let nextState else { return }
+            if activity.update(isActive: nextState) == true {
                 onDragStarted?()
-            } else {
-                onDragEnded?()
             }
-        }
-
-        func finishIfNeeded() {
-            guard activity.update(isActive: false) == false else { return }
-            onDragEnded?()
         }
     }
 }
@@ -140,13 +122,11 @@ extension View {
     func instantDraggable<T: Transferable, Preview: View>(
         _ item: T,
         onDragStarted: (() -> Void)? = nil,
-        onDragEnded: (() -> Void)? = nil,
         @ViewBuilder preview: @escaping () -> Preview
     ) -> some View {
         modifier(InstantDragModifier(
             item: item,
             onDragStarted: onDragStarted,
-            onDragEnded: onDragEnded,
             preview: preview
         ))
     }

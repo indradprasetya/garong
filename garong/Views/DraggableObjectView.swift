@@ -11,14 +11,35 @@ import UniformTypeIdentifiers
 
 struct DraggableObjectView: View {
     let object: GameObject
+    var isEnabled: Bool = true
+    var isHighlighted: Bool = false
     var onDragStarted: (() -> Void)? = nil
-    var onDragEnded: (() -> Void)? = nil
     
     private var hasValidAsset: Bool {
         !object.symbol.isEmpty && AssetFallbackHelper.hasAsset(named: object.symbol)
     }
     
     var body: some View {
+        Group {
+            if isEnabled {
+                content
+                    .instantDraggable(
+                        object,
+                        onDragStarted: onDragStarted
+                    ) {
+                        dragPreview
+                    }
+            } else {
+                content
+            }
+        }
+        .opacity(isEnabled ? 1 : 0.35)
+        .tutorialTarget(isHighlighted)
+        .allowsHitTesting(isEnabled)
+        .accessibilityRespondsToUserInteraction(isEnabled)
+    }
+
+    private var content: some View {
         VStack(spacing: 4) {
             if hasValidAsset {
                 Image(object.symbol)
@@ -40,22 +61,19 @@ struct DraggableObjectView: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
-        .instantDraggable(
-            object,
-            onDragStarted: onDragStarted,
-            onDragEnded: onDragEnded
-        ) {
-            // Drag preview
-            if hasValidAsset {
-                Image(object.symbol)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 56, height: 56)
-            } else {
-                Image(systemName: object.sfSymbol)
-                    .font(.system(size: 48))
-                    .shadow(radius: 8)
-            }
+    }
+
+    @ViewBuilder
+    private var dragPreview: some View {
+        if hasValidAsset {
+            Image(object.symbol)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 56, height: 56)
+        } else {
+            Image(systemName: object.sfSymbol)
+                .font(.system(size: 48))
+                .shadow(radius: 8)
         }
     }
 }

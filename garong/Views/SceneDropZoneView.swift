@@ -15,6 +15,11 @@ struct SceneDropZoneView: View {
     let isDraggingAnyItem: Bool
     var celebratesWin: Bool = false
     var celebrationDelay: TimeInterval = 0
+    var isTutorialTarget: Bool = false
+    var highlightedPlacedActionID: String? = nil
+    var tutorialAccessibilityHint: String = ""
+    var isDropEnabled: Bool = true
+    var canDragPlacedObject: (GameObject) -> Bool = { _ in true }
     let onDrop: (GameObject, String?) -> Void
     let onRemoveObject: (GameObject, String?) -> Void
     var onDragStarted: (() -> Void)? = nil
@@ -123,7 +128,7 @@ struct SceneDropZoneView: View {
                                 Color.clear
                                     .contentShape(Rectangle())
                                     .dropDestination(for: GameObject.self) { items, _ in
-                                        guard let firstItem = items.first else { return false }
+                                        guard isDropEnabled, let firstItem = items.first else { return false }
                                         withAnimation(.spring()) {
                                             targetedCharIndex = nil
                                             isHoveringDrag = false
@@ -131,6 +136,7 @@ struct SceneDropZoneView: View {
                                         }
                                         return true
                                     } isTargeted: { targeted in
+                                        guard isDropEnabled else { return }
                                         withAnimation(.easeInOut(duration: 0.2)) {
                                             if targeted && targetedCharIndex != 0 {
                                                 HapticManager.shared.selection()
@@ -143,7 +149,7 @@ struct SceneDropZoneView: View {
                                 Color.clear
                                     .contentShape(Rectangle())
                                     .dropDestination(for: GameObject.self) { items, _ in
-                                        guard let firstItem = items.first else { return false }
+                                        guard isDropEnabled, let firstItem = items.first else { return false }
                                         withAnimation(.spring()) {
                                             targetedCharIndex = nil
                                             isHoveringDrag = false
@@ -151,6 +157,7 @@ struct SceneDropZoneView: View {
                                         }
                                         return true
                                     } isTargeted: { targeted in
+                                        guard isDropEnabled else { return }
                                         withAnimation(.easeInOut(duration: 0.2)) {
                                             if targeted && targetedCharIndex != 1 {
                                                 HapticManager.shared.selection()
@@ -165,7 +172,7 @@ struct SceneDropZoneView: View {
                             Color.clear
                                 .contentShape(Rectangle())
                                 .dropDestination(for: GameObject.self) { items, _ in
-                                    guard let firstItem = items.first else { return false }
+                                    guard isDropEnabled, let firstItem = items.first else { return false }
                                     withAnimation(.spring()) {
                                         targetedCharIndex = nil
                                         isHoveringDrag = false
@@ -173,6 +180,7 @@ struct SceneDropZoneView: View {
                                     }
                                     return true
                                 } isTargeted: { targeted in
+                                    guard isDropEnabled else { return }
                                     withAnimation(.easeInOut(duration: 0.2)) {
                                         if targeted && targetedCharIndex != 0 {
                                             HapticManager.shared.selection()
@@ -187,6 +195,7 @@ struct SceneDropZoneView: View {
                             Color.clear
                                 .contentShape(Rectangle())
                                 .dropDestination(for: GameObject.self) { _, _ in
+                                    onDragEnded?()
                                     return false
                                 }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -201,9 +210,12 @@ struct SceneDropZoneView: View {
                                         slot: firstSlot,
                                         placedObject: placedObj,
                                         badgeSize: badgeSize,
+                                        isDragEnabled: canDragPlacedObject(placedObj),
+                                        isHighlighted: highlightedPlacedActionID == placedObj.symbol,
+                                        isDropEnabled: isDropEnabled,
+                                        tutorialAccessibilityHint: tutorialAccessibilityHint,
                                         onTargetChanged: { targeted in isHoveringDrag = targeted },
                                         onDragStarted: onDragStarted,
-                                        onDragEnded: onDragEnded,
                                         onDrop: { obj in onDrop(obj, firstSlot.id) },
                                         onRemove: { obj in onRemoveObject(obj, firstSlot.id) }
                                     )
@@ -216,9 +228,12 @@ struct SceneDropZoneView: View {
                                         slot: scene.dropSlots[1],
                                         placedObject: secondPlacedObj,
                                         badgeSize: badgeSize,
+                                        isDragEnabled: canDragPlacedObject(secondPlacedObj),
+                                        isHighlighted: highlightedPlacedActionID == secondPlacedObj.symbol,
+                                        isDropEnabled: isDropEnabled,
+                                        tutorialAccessibilityHint: tutorialAccessibilityHint,
                                         onTargetChanged: { targeted in isHoveringDrag = targeted },
                                         onDragStarted: onDragStarted,
-                                        onDragEnded: onDragEnded,
                                         onDrop: { obj in onDrop(obj, scene.dropSlots[1].id) },
                                         onRemove: { obj in onRemoveObject(obj, scene.dropSlots[1].id) }
                                     )
@@ -284,12 +299,14 @@ struct SceneDropZoneView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .contentShape(Rectangle())
                     .dropDestination(for: GameObject.self) { _, _ in
+                        onDragEnded?()
                         return false
                     }
                 }
             }
         }
         .aspectRatio(212.0 / 147.0, contentMode: .fit)
+        .accessibilityHint(isTutorialTarget ? tutorialAccessibilityHint : "")
         .keyframeAnimator(
             initialValue: WinCelebrationValues(),
             trigger: celebratesWin && !reduceMotion
@@ -449,9 +466,12 @@ struct CornerDropSlotBadge: View {
     let slot: GameDropSlot
     let placedObject: GameObject
     var badgeSize: CGFloat = 42
+    var isDragEnabled: Bool = true
+    var isHighlighted: Bool = false
+    var isDropEnabled: Bool = true
+    var tutorialAccessibilityHint: String = ""
     var onTargetChanged: ((Bool) -> Void)? = nil
     var onDragStarted: (() -> Void)? = nil
-    var onDragEnded: (() -> Void)? = nil
     let onDrop: (GameObject) -> Void
     let onRemove: (GameObject) -> Void
 
@@ -463,7 +483,7 @@ struct CornerDropSlotBadge: View {
         let iconFontSize = max(12, badgeSize * 0.48)
         let imagePadding = max(2, badgeSize * 0.095)
 
-        ZStack {
+        let badge = ZStack {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(Color.white)
                 .shadow(color: Color.black.opacity(0.15), radius: 3, x: 0, y: 1)
@@ -486,30 +506,41 @@ struct CornerDropSlotBadge: View {
         }
         .frame(width: badgeSize, height: badgeSize)
         .scaleEffect(isTargeted ? 1.1 : 1.0)
-        .instantDraggable(
-            placedObject,
-            onDragStarted: onDragStarted,
-            onDragEnded: onDragEnded
-        ) {
-            if hasAsset {
-                Image(placedObject.symbol)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: badgeSize * 1.14, height: badgeSize * 1.14)
-                    .shadow(radius: 6)
+
+        Group {
+            if isDragEnabled {
+                badge.instantDraggable(
+                    placedObject,
+                    onDragStarted: onDragStarted
+                ) {
+                    if hasAsset {
+                        Image(placedObject.symbol)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: badgeSize * 1.14, height: badgeSize * 1.14)
+                            .shadow(radius: 6)
+                    } else {
+                        Image(systemName: placedObject.sfSymbol)
+                            .font(.system(size: iconFontSize * 1.9))
+                            .shadow(radius: 6)
+                    }
+                }
             } else {
-                Image(systemName: placedObject.sfSymbol)
-                    .font(.system(size: iconFontSize * 1.9))
-                    .shadow(radius: 6)
+                badge
             }
         }
+        .opacity(isDragEnabled || isHighlighted ? 1 : 0.55)
+        .tutorialTarget(isHighlighted)
+        .accessibilityHint(isHighlighted ? tutorialAccessibilityHint : "")
+        .accessibilityRespondsToUserInteraction(isDragEnabled)
         .dropDestination(for: GameObject.self) { items, location in
-            guard let firstItem = items.first else { return false }
+            guard isDropEnabled, let firstItem = items.first else { return false }
             withAnimation(.spring()) {
                 onDrop(firstItem)
             }
             return true
         } isTargeted: { targeted in
+            guard isDropEnabled else { return }
             withAnimation(.easeInOut(duration: 0.2)) {
                 isTargeted = targeted
                 onTargetChanged?(targeted)

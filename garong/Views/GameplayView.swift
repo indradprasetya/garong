@@ -67,6 +67,7 @@ struct GameplayView: View {
                         }
                     }
                     .padding(.top, -12)
+                    .disabled(viewModel.isGuidedTutorialActive)
                     
                     HStack {
                         
@@ -76,28 +77,28 @@ struct GameplayView: View {
                             .font(.appFont(size: 38))
                         
                         Button {
+                            guard viewModel.canUseHint else { return }
                             SoundManager.shared.play(.buttonTap)
                             viewModel.dismissPeekHint()
                             withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
                                 showHintOverlay = true
                             }
                         } label: {
-                            if AssetFallbackHelper.hasAsset(named: "hint_icon") {
-                                Image("hint_icon")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 48)
-                            } else {
-                                Image(.hintIcon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 48)
-                            }
+                            hintIconView
                         }
+                        .disabled(!viewModel.canUseHint)
+                        .opacity(viewModel.canUseHint ? 1 : 0.35)
+                        .tutorialTarget(viewModel.tutorialStep == .wrongAndHint)
+                        .accessibilityHint(
+                            viewModel.tutorialStep == .wrongAndHint
+                                ? localization.text("tutorial.wrongAndHint")
+                                : ""
+                        )
                         .overlay(alignment: .leading) {
                             if viewModel.showPeekHint {
                                 peekHintView
                                     .fixedSize()
+                                    .tutorialWiggle()
                                     .offset(x: 28, y: 16)
                                     .allowsHitTesting(false)
                                     .transition(.scale.combined(with: .opacity))
@@ -144,6 +145,18 @@ struct GameplayView: View {
                             .transition(.scale.combined(with: .opacity))
                         } else {
                             meterView
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    guard viewModel.tutorialStep == .meter else { return }
+                                    SoundManager.shared.play(.buttonTap)
+                                    viewModel.acknowledgeTutorialMeter()
+                                }
+                                .tutorialTarget(viewModel.tutorialStep == .meter)
+                                .accessibilityHint(
+                                    viewModel.tutorialStep == .meter
+                                        ? localization.text("tutorial.meter")
+                                        : ""
+                                )
                         }
                     }
                     .padding(.top, 24)
@@ -180,14 +193,21 @@ struct GameplayView: View {
                         ForEach(viewModel.availableObjects, id: \.id) { object in
                             DraggableObjectView(
                                 object: object,
-                                onDragStarted: { viewModel.setDraggingActive(true) },
-                                onDragEnded: { viewModel.setDraggingActive(false) }
+                                isEnabled: viewModel.canDrag(object),
+                                isHighlighted: viewModel.isTutorialItem(object),
+                                onDragStarted: { viewModel.setDraggingActive(true) }
+                            )
+                            .accessibilityHint(
+                                viewModel.isTutorialItem(object) ? tutorialMessage : ""
                             )
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
                 .frame(height: 80)
+                .accessibilityHint(
+                    viewModel.tutorialStep == .returnToy ? tutorialMessage : ""
+                )
                 .dropDestination(for: GameObject.self) { items, _ in
                     for item in items {
                         withAnimation(.spring()) {
@@ -244,23 +264,6 @@ struct GameplayView: View {
                     .zIndex(10)
             }
             
-            // Standalone Absolute Overlay Layer for Tutorial Hints (drop_here_hint & red_arrow_hint)
-            GeometryReader { geo in
-                let w = geo.size.width
-                let h = geo.size.height
-
-                if viewModel.showChapter1TutorialHint {
-                    redArrowHintView
-                        .position(x: w * 0.2, y: h * 0.18)
-                        .transition(.opacity)
-
-                    dropHereHintView
-                        .position(x: w * 0.32, y: h * 0.82)
-                        .transition(.opacity)
-                }
-            }
-            .allowsHitTesting(false)
-
             // Center Mistake Feedback Meter Overlay
             if showCenterMeter && viewModel.phase == .playing {
                 ZStack {
@@ -285,15 +288,32 @@ struct GameplayView: View {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             showHintOverlay = false
                         }
+                        viewModel.didDismissTutorialHint()
                     }
+                    .zIndex(8)
                 
                 hintPaperView
                     .transition(.scale(scale: 0.85).combined(with: .opacity))
-                    .zIndex(2)
+                    .zIndex(9)
+            }
+        }
+        .overlayPreferenceValue(TutorialTargetPreferenceKey.self) { targets in
+            GeometryReader { proxy in
+                if viewModel.isGuidedTutorialActive && !showHintOverlay {
+                    ChapterTutorialOverlayView(
+                        step: viewModel.tutorialStep,
+                        message: tutorialMessage,
+                        targetRects: targets.map { proxy[$0] }
+                    ) { target in
+                        liftedTutorialTarget(in: target)
+                    }
+                    .transition(.opacity)
+                }
             }
         }
         .navigationBarHidden(true)
         .animation(.default, value: viewModel.phase)
+        .animation(.easeInOut(duration: 0.2), value: viewModel.tutorialStep)
         .environment(\.font, .custom("Virels-Regular", size: 14))
         .onChange(of: viewModel.phase) { newPhase in
             if newPhase == .playing {
@@ -348,35 +368,17 @@ struct GameplayView: View {
     }
 
     @ViewBuilder
-    private var redArrowHintView: some View {
-        if AssetFallbackHelper.hasAsset(named: "red_arrow_hint") {
-            Image("red_arrow_hint")
+    private var hintIconView: some View {
+        if AssetFallbackHelper.hasAsset(named: "hint_icon") {
+            Image("hint_icon")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 44, height: 44)
+                .frame(height: 48)
         } else {
-            Image(systemName: "arrow.down.fill")
-                .font(.title)
-                .foregroundColor(.red)
-        }
-    }
-
-    @ViewBuilder
-    private var dropHereHintView: some View {
-        if AssetFallbackHelper.hasAsset(named: "drop_here_hint") {
-            Image("drop_here_hint")
+            Image(.hintIcon)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 120, height: 80)
-        } else {
-            HStack(spacing: 4) {
-                Text("drop here")
-                    .font(.appFont(size: 16))
-                    .foregroundColor(.orange)
-                Image(systemName: "arrow.up.left")
-                    .font(.title2)
-                    .foregroundColor(.orange)
-            }
+                .frame(height: 48)
         }
     }
 
@@ -445,6 +447,63 @@ struct GameplayView: View {
         .accessibilityLabel(viewModel.placementStateLabel)
     }
 
+    private var tutorialMessage: String {
+        let key = switch viewModel.tutorialStep {
+        case .approach: "tutorial.approach"
+        case .toy: "tutorial.toy"
+        case .wrongAndHint: "tutorial.wrongAndHint"
+        case .returnToy: "tutorial.returnToy"
+        case .meter: "tutorial.meter"
+        case .crayon: "tutorial.crayon"
+        case .inactive: ""
+        }
+        return key.isEmpty ? "" : localization.text(key)
+    }
+
+    @ViewBuilder
+    private func liftedTutorialTarget(in target: CGRect) -> some View {
+        switch viewModel.tutorialStep {
+        case .approach, .toy, .crayon:
+            if let object = tutorialActionObject {
+                DraggableObjectView(object: object)
+            }
+        case .wrongAndHint:
+            hintIconView
+        case .returnToy:
+            if let placement = tutorialToyPlacement {
+                CornerDropSlotBadge(
+                    slot: placement.slot,
+                    placedObject: placement.object,
+                    badgeSize: min(target.width, target.height),
+                    isDropEnabled: false,
+                    onDrop: { _ in },
+                    onRemove: { _ in }
+                )
+            }
+        case .meter:
+            meterView
+        case .inactive:
+            EmptyView()
+        }
+    }
+
+    private var tutorialActionObject: GameObject? {
+        let symbol = switch viewModel.tutorialStep {
+        case .approach: "action_approach"
+        case .toy: "action_toy"
+        case .crayon: "action_crayon"
+        default: ""
+        }
+        return viewModel.availableObjects.first { $0.symbol == symbol }
+    }
+
+    private var tutorialToyPlacement: (slot: GameDropSlot, object: GameObject)? {
+        viewModel.scenes
+            .flatMap(\.dropSlots)
+            .first { $0.currentObject?.symbol == "action_toy" }
+            .flatMap { slot in slot.currentObject.map { (slot, $0) } }
+    }
+
     @ViewBuilder
     private func sceneView(for scene: GameScene, at index: Int) -> some View {
         SceneDropZoneView(
@@ -456,6 +515,11 @@ struct GameplayView: View {
                 for: index,
                 totalCount: viewModel.scenes.count
             ),
+            isTutorialTarget: viewModel.isTutorialTarget(scene),
+            highlightedPlacedActionID: viewModel.tutorialStep == .returnToy ? "action_toy" : nil,
+            tutorialAccessibilityHint: tutorialMessage,
+            isDropEnabled: !viewModel.isGuidedTutorialActive || viewModel.isTutorialTarget(scene),
+            canDragPlacedObject: viewModel.canDragPlacedObject,
             onDrop: { object, slotID in
                 viewModel.dropObject(object, intoSlot: slotID, intoScene: scene.id)
                 viewModel.setDraggingActive(false)
@@ -473,18 +537,22 @@ struct GameplayView: View {
     }
 }
 
-struct GameplayView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            GameplayView(viewModel: DragDropGameViewModel(chapter: StoryCatalog.allChapters[0], showTutorialHintForPreview: true))
-                .previewDisplayName("Chapter 1 Tutorial Overlay")
+private struct TutorialWiggleModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-            GameplayView(viewModel: DragDropGameViewModel(chapter: StoryCatalog.allChapters[0], showPeekHintForPreview: true))
-                .previewDisplayName("Mistake Peek Hint Overlay")
-
-            GameplayView(chapter: StoryCatalog.allChapters[0])
-                .previewDisplayName("Standard Gameplay")
+    func body(content: Content) -> some View {
+        content.phaseAnimator(reduceMotion ? [CGFloat.zero] : [-1, 1]) { view, phase in
+            view
+                .rotationEffect(.degrees(phase * 3))
+                .offset(y: phase * 2)
+        } animation: { _ in
+            .easeInOut(duration: 0.45)
         }
-        .previewInterfaceOrientation(.landscapeLeft)
+    }
+}
+
+private extension View {
+    func tutorialWiggle() -> some View {
+        modifier(TutorialWiggleModifier())
     }
 }
