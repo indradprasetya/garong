@@ -42,8 +42,9 @@ struct ChapterSelectionView: View {
 
             let width = geometry.size.width
             let height = geometry.size.height
-            let storyBackgroundWidth = min(width * 0.79, height * 1.72)
-            let storyArrowOffset = storyBackgroundWidth / 2 + width * 0.015
+            let storyPaperWidth = min(width * 0.79, height * 1.72)
+            let storyPaperHeight = storyPaperWidth / 1.77
+            let storyArrowOffset = storyPaperWidth / 2 + width * 0.015
 
             ZStack {
 
@@ -67,26 +68,54 @@ struct ChapterSelectionView: View {
                 // =====================================================
 
                 if let currentStory {
-                    Image("story\(currentStory.number)_background")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: storyBackgroundWidth)
-                        .position(
-                            x: width * 0.50,
-                            y: height * 0.49
-                        )
+                    ZStack {
+                        Image("paper_background")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: storyPaperWidth)
+                            .position(
+                                x: width * 0.50,
+                                y: height * 0.56
+                            )
 
-                    ForEach(0..<min(chapters.count, 3), id: \.self) { index in
-                        chapterButton(
-                            index: index,
-                            width: width,
-                            height: height
-                        )
-                        .position(
-                            x: width * 0.675,
-                            y: height * (0.445 + CGFloat(index) * 0.14)
-                        )
+                        Image(currentStory.artworkAssetName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(
+                                width: storyPaperWidth * 0.43,
+                                height: storyPaperHeight * 0.78
+                            )
+                            .position(
+                                x: width * 0.35,
+                                y: height * 0.52
+                            )
+
+                        Text(localization.localized(currentStory.name).uppercased())
+                            .font(.appFont(size: max(34, width * 0.045)))
+                            .foregroundStyle(.black)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.65)
+                            .frame(width: storyPaperWidth * 0.34)
+                            .position(
+                                x: width * 0.675,
+                                y: height * 0.30
+                            )
+
+                        ForEach(0..<min(chapters.count, 3), id: \.self) { index in
+                            chapterButton(
+                                index: index,
+                                width: width,
+                                height: height
+                            )
+                            .position(
+                                x: width * 0.675,
+                                y: height * (0.445 + CGFloat(index) * 0.14)
+                            )
+                        }
                     }
+                    .frame(width: width, height: height)
+                    .offset (y: -12)
                 }
 
 

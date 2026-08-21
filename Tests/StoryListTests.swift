@@ -15,6 +15,7 @@ enum StoryListTests {
         let stories = try StoryListLoader.decode(data) { resources.contains($0) }
 
         precondition(stories.map(\.id) == ["school", "playground"])
+        precondition(stories.map(\.artworkAssetName) == ["story1_img", "story2_img"])
         precondition(stories.map { $0.name.localized(language: "id") } == ["Sekolah", "Taman Bermain"])
         precondition(stories[0].chapters.map { $0.shortTitle.localized(language: "en") } == ["Let's Draw!", "Too Loud to Draw", "My Drawing Tore"])
         precondition(stories[0].chapters.map(\.resource) == ["story1_chapter1", "story1_chapter2", "story1_chapter3"])
