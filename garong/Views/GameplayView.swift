@@ -10,6 +10,7 @@ struct GameplayView: View {
     @StateObject private var viewModel: DragDropGameViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var showHintOverlay: Bool = false
+    @State private var showResultOverlay: Bool = false
     @State private var isMeterWiggling: Bool = false
     
     init(chapter: Chapter) {
@@ -88,7 +89,36 @@ struct GameplayView: View {
                         
                         Spacer()
                         
-                        meterView
+                        if viewModel.phase == .completed && !showResultOverlay {
+                            Button {
+                                SoundManager.shared.play(.buttonTap)
+                                withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                                    showResultOverlay = true
+                                }
+                            } label: {
+                                if AssetFallbackHelper.hasAsset(named: "next_button") {
+                                    Image("next_button")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 52)
+                                } else {
+                                    HStack(spacing: 6) {
+                                        Text("Next")
+                                            .font(.appFont(size: 28))
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 20, weight: .bold))
+                                    }
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(Capsule().fill(Color.green))
+                                }
+                            }
+                            .buttonStyle(.plain)
+                            .transition(.scale.combined(with: .opacity))
+                        } else {
+                            meterView
+                        }
                     }
                     .padding(.top, 24)
                         
@@ -144,13 +174,14 @@ struct GameplayView: View {
             .ignoresSafeArea(edges: .bottom)
             
             // Completion Overlay
-            if viewModel.phase == .completed, let result = viewModel.chapterResult {
+            if viewModel.phase == .completed && showResultOverlay, let result = viewModel.chapterResult {
                 ChapterResultView(
                     result: result,
                     onBack: {
                         dismiss()
                     },
                     onNext: {
+                        showResultOverlay = false
                         if viewModel.hasNextChapter {
                             withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
                                 viewModel.loadNextChapter()
@@ -172,6 +203,7 @@ struct GameplayView: View {
                         dismiss()
                     },
                     onTryAgain: {
+                        showResultOverlay = false
                         withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
                             viewModel.restart()
                         }
@@ -200,6 +232,11 @@ struct GameplayView: View {
         .navigationBarHidden(true)
         .animation(.default, value: viewModel.phase)
         .environment(\.font, .custom("Virels-Regular", size: 14))
+        .onChange(of: viewModel.phase) { newPhase in
+            if newPhase == .playing {
+                showResultOverlay = false
+            }
+        }
         .onChange(of: viewModel.wrongAttempts) { _ in
             if viewModel.wrongAttempts > 0 {
                 withAnimation(.spring(response: 0.15, dampingFraction: 0.3)) {
