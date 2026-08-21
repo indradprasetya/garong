@@ -2,23 +2,24 @@ import SwiftUI
 
 struct MainMenuView: View {
 
-    @State private var showStorySelection = false
+    @State private var showChapterSelection = false
+    @State private var showGuidebook = false
     @State private var showSettings = false
 
     var body: some View {
 
         NavigationStack {
 
-            GeometryReader { geo in
+            GeometryReader { geometry in
 
-                let width = geo.size.width
-                let height = geo.size.height
+                let width = geometry.size.width
+                let height = geometry.size.height
 
                 ZStack {
 
-                    // ==========================================
+                    // =====================================================
                     // BACKGROUND
-                    // ==========================================
+                    // =====================================================
 
                     Image("StoriesGreenGrid")
                         .resizable()
@@ -28,78 +29,256 @@ struct MainMenuView: View {
                             height: height
                         )
                         .clipped()
+                        .ignoresSafeArea()
 
 
-                    // ==========================================
-                    // START HOMEPAGE ASSET
-                    // ==========================================
+                    // =====================================================
+                    // HOME ARTWORK
+                    // =====================================================
 
-                    Image("Starthomepage")
+                    Image("HomeArtwork")
                         .resizable()
                         .scaledToFit()
                         .frame(
-                            width: width * 0.999
+                            width: width * 0.98,
+                            height: height * 0.98
                         )
-                        .zIndex(1)
+                        .position(
+                            x: width * 0.50,
+                            y: height * 0.52
+                        )
 
 
-                    // ==========================================
-                    // INVISIBLE START BUTTON
-                    // ==========================================
+                    // =====================================================
+                    // START BUTTON
+                    // langsung ke ChapterSelectionView
+                    // =====================================================
 
                     Button {
 
-                        showStorySelection = true
+                        showChapterSelection = true
 
                     } label: {
 
-                        Rectangle()
-                            .fill(Color.clear)
+                        Image("StartButton")
+                            .resizable()
+                            .scaledToFit()
                             .frame(
-                                width: width * 0.35,
-                                height: height * 0.20
+                                width: width * 0.39
                             )
-                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .position(
-                        x: width * 0.65,
+                        x: width * 0.64,
                         y: height * 0.56
                     )
-                    .zIndex(2)
+
+
+                    // =====================================================
+                    // GUIDEBOOK BUTTON
+                    // =====================================================
+
+                    Button {
+
+                        showGuidebook = true
+
+                    } label: {
+
+                        Image("GuidebookButton")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(
+                                width: width * 0.060
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .position(
+                        x: width * 0.84,
+                        y: height * 0.075
+                    )
+
+
+                    // =====================================================
+                    // SETTINGS BUTTON
+                    // =====================================================
+
+                    Button {
+
+                        showSettings = true
+
+                    } label: {
+
+                        Image("SettingsButton")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(
+                                width: width * 0.060
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .position(
+                        x: width * 0.91,
+                        y: height * 0.075
+                    )
                 }
                 .frame(
                     width: width,
                     height: height
                 )
-                .clipped()
             }
             .ignoresSafeArea()
             .navigationBarHidden(true)
 
 
-            // ==========================================
-            // STORY PICK
-            // ==========================================
+            // =========================================================
+            // START → CHAPTER SELECTION
+            // =========================================================
 
             .navigationDestination(
-                isPresented: $showStorySelection
+                isPresented: $showChapterSelection
             ) {
 
-                StorySelectionView(
-                    stories: StoryCatalog.gameStories
+                ChapterSelectionView(
+                    story: StoryCatalog.gameStories[0]
                 )
+            }
+
+
+            // =========================================================
+            // GUIDEBOOK
+            // =========================================================
+
+            .navigationDestination(
+                isPresented: $showGuidebook
+            ) {
+
+                GuidebookPlaceholderView()
+            }
+
+
+            // =========================================================
+            // SETTINGS
+            // =========================================================
+
+            .navigationDestination(
+                isPresented: $showSettings
+            ) {
+
+                SettingsPlaceholderView()
             }
         }
     }
 }
 
 
-// ==========================================
-// PREVIEW
-// ==========================================
+// =============================================================
+// MARK: - GUIDEBOOK PLACEHOLDER
+// =============================================================
+
+private struct GuidebookPlaceholderView: View {
+
+    @Environment(\.dismiss)
+    private var dismiss
+
+    var body: some View {
+
+        ZStack {
+
+            Image("StoriesGreenGrid")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+
+
+            VStack(spacing: 24) {
+
+                Text("GUIDEBOOK")
+                    .font(
+                        .system(
+                            size: 40,
+                            weight: .black,
+                            design: .rounded
+                        )
+                    )
+
+                Button {
+
+                    dismiss()
+
+                } label: {
+
+                    Text("Back")
+                        .font(
+                            .system(
+                                size: 20,
+                                weight: .bold,
+                                design: .rounded
+                            )
+                        )
+                }
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+    }
+}
+
+
+// =============================================================
+// MARK: - SETTINGS PLACEHOLDER
+// =============================================================
+
+private struct SettingsPlaceholderView: View {
+
+    @Environment(\.dismiss)
+    private var dismiss
+
+    var body: some View {
+
+        ZStack {
+
+            Image("StoriesGreenGrid")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+
+
+            VStack(spacing: 24) {
+
+                Text("SETTINGS")
+                    .font(
+                        .system(
+                            size: 40,
+                            weight: .black,
+                            design: .rounded
+                        )
+                    )
+
+                Button {
+
+                    dismiss()
+
+                } label: {
+
+                    Text("Back")
+                        .font(
+                            .system(
+                                size: 20,
+                                weight: .bold,
+                                design: .rounded
+                            )
+                        )
+                }
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+    }
+}
+
+
+// =============================================================
+// MARK: - PREVIEW
+// =============================================================
 
 #Preview {
-
     MainMenuView()
 }

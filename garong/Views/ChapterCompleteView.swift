@@ -1,54 +1,97 @@
 import SwiftUI
 
 struct ChapterCompleteView: View {
+
     let result: ChapterResult
+
     let onDismiss: () -> Void
     let onRestart: () -> Void
-    
+
     var body: some View {
+
         VStack(spacing: 24) {
-            Image(systemName: "trophy.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(
-                    LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom)
+
+            HStack(spacing: 12) {
+
+                StoryArtworkView(
+                    assetName: "GiveBandage",
+                    size: 84
                 )
-                .shadow(color: .orange.opacity(0.5), radius: 10, x: 0, y: 5)
-            
-            VStack(spacing: 8) {
-                Text("Chapter Complete!")
-                    .font(.appFont(size: 32, relativeTo: .largeTitle))
-                
-                Text("Great job placing all objects!")
-                    .font(.appFont(size: 18, relativeTo: .title3))
-                    .foregroundColor(.secondary)
+
+                StoryArtworkView(
+                    assetName: "Apologize",
+                    size: 84
+                )
             }
-            
-            HStack(spacing: 20) {
-                Button {
-                    SoundManager.shared.play(.buttonTap)
-                    onRestart()
-                } label: {
-                    Text("Play Again")
-                        .font(.appFont(size: 16, relativeTo: .headline))
-                        .foregroundColor(.accentColor)
-                        .frame(width: 160, height: 50)
-                        .background(Color(UIColor.secondarySystemBackground))
-                        .cornerRadius(12)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.accentColor, lineWidth: 2)
+
+            VStack(spacing: 8) {
+
+                Text("Chapter Complete!")
+                    .font(
+                        .system(
+                            .largeTitle,
+                            design: .rounded,
+                            weight: .bold
                         )
+                    )
+                    .foregroundStyle(
+                        GarongTheme.ink
+                    )
+
+                Text(
+                    "Great job placing all objects!"
+                )
+                .font(.title3)
+                .foregroundColor(.secondary)
+            }
+
+            HStack(spacing: 20) {
+
+                Button(
+                    action: onRestart
+                ) {
+
+                    Text("Play Again")
+                        .font(.headline)
+                        .foregroundColor(
+                            GarongTheme.teal
+                        )
+                        .frame(
+                            width: 160,
+                            height: 50
+                        )
+                        .background(
+                            Color(
+                                UIColor.secondarySystemBackground
+                            )
+                        )
+                        .cornerRadius(12)
+                        .overlay {
+
+                            RoundedRectangle(
+                                cornerRadius: 12
+                            )
+                            .stroke(
+                                GarongTheme.teal,
+                                lineWidth: 2
+                            )
+                        }
                 }
-                
-                Button {
-                    SoundManager.shared.play(.backTap)
-                    onDismiss()
-                } label: {
+
+                Button(
+                    action: onDismiss
+                ) {
+
                     Text("Back to Chapters")
-                        .font(.appFont(size: 16, relativeTo: .headline))
+                        .font(.headline)
                         .foregroundColor(.white)
-                        .frame(width: 160, height: 50)
-                        .background(Color.accentColor)
+                        .frame(
+                            width: 160,
+                            height: 50
+                        )
+                        .background(
+                            GarongTheme.teal
+                        )
                         .cornerRadius(12)
                         .shadow(radius: 3)
                 }
@@ -56,17 +99,29 @@ struct ChapterCompleteView: View {
             .padding(.top, 10)
         }
         .padding(40)
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(Color(UIColor.systemBackground))
-                .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 10)
-        )
+        .background {
+
+            RoundedRectangle(
+                cornerRadius: 24
+            )
+            .fill(
+                GarongTheme.cream
+            )
+            .shadow(
+                color: Color.black.opacity(0.2),
+                radius: 20,
+                x: 0,
+                y: 10
+            )
+        }
         .frame(maxWidth: 500)
     }
 }
 
-struct ChapterCompleteView_Previews: PreviewProvider {
-    static var previews: some View {
-        Text("ChapterCompleteView Preview")
-    }
+
+#Preview {
+
+    Text(
+        "ChapterCompleteView Preview"
+    )
 }
