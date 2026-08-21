@@ -10,6 +10,8 @@ struct StoryListStory: Decodable, Identifiable {
     let number: Int
     let name: LocalizedStoryText
     let chapters: [StoryChapterReference]
+
+    var artworkAssetName: String { "story\(number)_img" }
 }
 
 struct StoryChapterReference: Decodable, Identifiable {
