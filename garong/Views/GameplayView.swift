@@ -51,14 +51,14 @@ struct GameplayView: View {
                             Image("back_button")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 64, height: 64)
+                                .frame(height: 48)
                         } else {
                             Image(systemName: "arrowshape.backward.fill")
                                 .font(.title2)
                                 .foregroundColor(.secondary)
                         }
                     }
-                    .padding(.top, -12)
+                    .padding(.top, -32)
                     
                     HStack {
                         
@@ -88,43 +88,7 @@ struct GameplayView: View {
                         
                         Spacer()
                         
-                        // Next Chapter Chevron Button when finished, Meter when not finished
-                        if let outcomeScene = viewModel.scenes.last {
-                            let isReady = outcomeScene.isUnlocked
-                            if isReady {
-                                Button {
-                                    SoundManager.shared.play(.buttonTap)
-                                    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                                        viewModel.goToNextChapterOrFinish()
-                                    }
-                                } label: {
-                                    if AssetFallbackHelper.hasAsset(named: "next_button") {
-                                        Image("next_button")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 48)
-                                    } else {
-                                        HStack(spacing: 4) {
-                                            Text("Next")
-                                                .font(.appFont(size: 13, relativeTo: .caption))
-                                            
-                                            Image(systemName: "chevron.right")
-                                                .font(.system(size: 16, weight: .bold))
-                                        }
-                                        .foregroundColor(.white)
-                                        .padding(.horizontal, 12)
-                                        .padding(.vertical, 4)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 16)
-                                                .fill(Color.accentColor)
-                                                .shadow(color: Color.accentColor.opacity(0.4), radius: 6, x: 0, y: 3)
-                                        )
-                                    }
-                                }
-                            } else {
-                                meterView
-                            }
-                        }
+                        meterView
                     }
                     .padding(.top, 24)
                         
@@ -198,6 +162,24 @@ struct GameplayView: View {
                 )
                 .transition(.opacity)
                 .zIndex(10)
+            }
+
+            if viewModel.phase == .needsBreak, let result = viewModel.chapterResult {
+                ChapterResultView(
+                    result: result,
+                    onBack: {
+                        viewModel.restart(playSound: false)
+                        dismiss()
+                    },
+                    onTryAgain: {
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                            viewModel.restart()
+                        }
+                    },
+                    statusMessage: viewModel.placementLimitMessage
+                )
+                    .transition(.opacity)
+                    .zIndex(10)
             }
             
             // Paper Hint Overlay
@@ -294,6 +276,7 @@ struct GameplayView: View {
         .rotationEffect(.degrees(isMeterWiggling ? 14 : 0))
         .scaleEffect(isMeterWiggling ? 1.18 : 1.0)
         .animation(.spring(response: 0.15, dampingFraction: 0.3), value: isMeterWiggling)
+        .accessibilityLabel(viewModel.placementStateLabel)
     }
 
     @ViewBuilder

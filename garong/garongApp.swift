@@ -32,6 +32,7 @@ struct garongApp: App {
                         )
                 }
             }
+            .preferredColorScheme(.light)
             .ignoresSafeArea()
             .onAppear {
                 BackgroundMusicManager.shared.play()

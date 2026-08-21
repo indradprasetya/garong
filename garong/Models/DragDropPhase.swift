@@ -19,4 +19,13 @@ enum PlacementFeedbackState: Equatable {
     case yellow
     case orange
     case red
+
+    var meterStars: Int {
+        switch self {
+        case .green: 3
+        case .yellow: 2
+        case .orange: 1
+        case .red: 0
+        }
+    }
 }

@@ -3,7 +3,6 @@ import SwiftUI
 struct MainMenuView: View {
 
     @State private var showChapterSelection = false
-    @State private var showGuidebook = false
     @State private var showSettings = false
     @State private var showGuidebook = false
     @State private var isLoading = false
@@ -12,16 +11,16 @@ struct MainMenuView: View {
 
         NavigationStack {
 
-            GeometryReader { geometry in
+            GeometryReader { geo in
 
-                let width = geometry.size.width
-                let height = geometry.size.height
+                let width = geo.size.width
+                let height = geo.size.height
 
                 ZStack {
 
-                    // =====================================================
+                    // ==========================================
                     // BACKGROUND
-                    // =====================================================
+                    // ==========================================
 
                     Image("StoriesGreenGrid")
                         .resizable()
@@ -31,30 +30,24 @@ struct MainMenuView: View {
                             height: height
                         )
                         .clipped()
-                        .ignoresSafeArea()
 
 
-                    // =====================================================
-                    // HOME ARTWORK
-                    // =====================================================
+                    // ==========================================
+                    // START HOMEPAGE ASSET
+                    // ==========================================
 
-                    Image("HomeArtwork")
+                    Image("Starthomepage")
                         .resizable()
                         .scaledToFit()
                         .frame(
-                            width: width * 0.98,
-                            height: height * 0.98
+                            width: width * 0.999
                         )
-                        .position(
-                            x: width * 0.50,
-                            y: height * 0.52
-                        )
+                        .zIndex(1)
 
 
-                    // =====================================================
-                    // START BUTTON
-                    // langsung ke ChapterSelectionView
-                    // =====================================================
+                    // ==========================================
+                    // INVISIBLE START BUTTON
+                    // ==========================================
 
                     Button {
                         SoundManager.shared.play(.buttonTap)
@@ -63,16 +56,17 @@ struct MainMenuView: View {
                         }
                     } label: {
 
-                        Image("StartButton")
-                            .resizable()
-                            .scaledToFit()
+                        Rectangle()
+                            .fill(Color.clear)
                             .frame(
-                                width: width * 0.39
+                                width: width * 0.35,
+                                height: height * 0.20
                             )
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .position(
-                        x: width * 0.64,
+                        x: width * 0.65,
                         y: height * 0.56
                     )
                     .zIndex(2)
@@ -164,7 +158,7 @@ struct MainMenuView: View {
                             onComplete: {
                                 withAnimation(.easeInOut(duration: 0.35)) {
                                     isLoading = false
-                                    showStorySelection = true
+                                    showChapterSelection = true
                                 }
                             }
                         )
@@ -176,160 +170,34 @@ struct MainMenuView: View {
                     width: width,
                     height: height
                 )
+                .clipped()
             }
             .ignoresSafeArea()
             .navigationBarHidden(true)
 
 
-            // =========================================================
-            // START → CHAPTER SELECTION
-            // =========================================================
+            // ==========================================
+            // CHAPTER PICK
+            // ==========================================
 
             .navigationDestination(
                 isPresented: $showChapterSelection
             ) {
-
                 ChapterSelectionView(
-                    story: StoryCatalog.gameStories[0]
+                    stories: StoryCatalog.gameStories
                 )
             }
-
-
-            // =========================================================
-            // GUIDEBOOK
-            // =========================================================
-
-            .navigationDestination(
-                isPresented: $showGuidebook
-            ) {
-
-                GuidebookPlaceholderView()
-            }
-
-
-            // =========================================================
-            // SETTINGS
-            // =========================================================
-
-            .navigationDestination(
-                isPresented: $showSettings
-            ) {
-
-                SettingsPlaceholderView()
-            }
         }
     }
 }
 
 
-// =============================================================
-// MARK: - GUIDEBOOK PLACEHOLDER
-// =============================================================
+// ==========================================
+// PREVIEW
+// ==========================================
 
-private struct GuidebookPlaceholderView: View {
-
-    @Environment(\.dismiss)
-    private var dismiss
-
-    var body: some View {
-
-        ZStack {
-
-            Image("StoriesGreenGrid")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-
-
-            VStack(spacing: 24) {
-
-                Text("GUIDEBOOK")
-                    .font(
-                        .system(
-                            size: 40,
-                            weight: .black,
-                            design: .rounded
-                        )
-                    )
-
-                Button {
-
-                    dismiss()
-
-                } label: {
-
-                    Text("Back")
-                        .font(
-                            .system(
-                                size: 20,
-                                weight: .bold,
-                                design: .rounded
-                            )
-                        )
-                }
-            }
-        }
-        .navigationBarBackButtonHidden(true)
+struct MainMenuView_Previews: PreviewProvider {
+    static var previews: some View {
+        MainMenuView()
     }
-}
-
-
-// =============================================================
-// MARK: - SETTINGS PLACEHOLDER
-// =============================================================
-
-private struct SettingsPlaceholderView: View {
-
-    @Environment(\.dismiss)
-    private var dismiss
-
-    var body: some View {
-
-        ZStack {
-
-            Image("StoriesGreenGrid")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-
-
-            VStack(spacing: 24) {
-
-                Text("SETTINGS")
-                    .font(
-                        .system(
-                            size: 40,
-                            weight: .black,
-                            design: .rounded
-                        )
-                    )
-
-                Button {
-
-                    dismiss()
-
-                } label: {
-
-                    Text("Back")
-                        .font(
-                            .system(
-                                size: 20,
-                                weight: .bold,
-                                design: .rounded
-                            )
-                        )
-                }
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-    }
-}
-
-
-// =============================================================
-// MARK: - PREVIEW
-// =============================================================
-
-#Preview {
-    MainMenuView()
 }

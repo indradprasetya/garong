@@ -7,6 +7,56 @@ struct StoryProgressStoreTests {
         let defaults = UserDefaults(suiteName: suiteName)!
         defer { defaults.removePersistentDomain(forName: suiteName) }
 
+        let noCompletions: [StoryCompletion?] = [nil, nil, nil]
+        precondition(
+            ChapterProgressStatus.resolve(at: 0, completions: noCompletions) == .current,
+            "The first unfinished chapter must be current"
+        )
+        precondition(
+            ChapterProgressStatus.resolve(at: 1, completions: noCompletions) == .locked,
+            "A chapter must stay locked until every previous chapter is complete"
+        )
+        precondition(
+            ChapterProgressStatus.resolve(
+                at: 0,
+                completions: noCompletions,
+                previousStoriesComplete: false
+            ) == .locked,
+            "Story 2 must stay locked until every level in Story 1 is complete"
+        )
+
+        let firstCompleted = StoryCompletion(bestStars: 2, bestPlacementCount: 5)
+        let firstChapterDone: [StoryCompletion?] = [firstCompleted, nil, nil]
+        precondition(
+            ChapterProgressStatus.resolve(at: 0, completions: firstChapterDone) == .completed(stars: 2),
+            "A completed chapter must expose its saved best stars"
+        )
+        precondition(
+            ChapterProgressStatus.resolve(at: 1, completions: firstChapterDone) == .current,
+            "Completing a chapter must unlock the next chapter"
+        )
+
+        precondition(
+            ChapterPageNavigation.destinationIndex(from: 0, direction: .next, pageCount: 3) == 1,
+            "The School page arrow must open Playground"
+        )
+        precondition(
+            ChapterPageNavigation.destinationIndex(from: 1, direction: .next, pageCount: 3) == 2,
+            "A middle page must advance to the following page"
+        )
+        precondition(
+            ChapterPageNavigation.destinationIndex(from: 2, direction: .previous, pageCount: 3) == 1,
+            "The final page must return to the middle page"
+        )
+        precondition(
+            ChapterPageNavigation.destinationIndex(from: 1, direction: .previous, pageCount: 3) == 0,
+            "A middle page must return to the preceding page"
+        )
+        precondition(
+            ChapterPageNavigation.destinationIndex(from: 0, direction: .next, pageCount: 1) == 0,
+            "A single chapter page must remain selected"
+        )
+
         let progress = [
             StoryProgressStep(
                 sourceGridID: "grid_1",
