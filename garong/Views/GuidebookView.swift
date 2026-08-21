@@ -39,9 +39,10 @@ struct GuidebookView: View {
                         Spacer()
 
                         Text(localization.text("guidebook.title"))
-                            .font(.appFont(size: 48))
+                            .font(.appFont(size: 58))
                             .foregroundStyle(.white)
                             .padding(.top, 24)
+                            .bold()
 
                         Spacer()
 
@@ -64,11 +65,11 @@ struct GuidebookView: View {
                                 }
                             }
                         } label: {
-                            Image("guidebook_arrow")
+                            Image("chevron_right")
                                 .resizable()
                                 .scaledToFit()
                                 .rotationEffect(.degrees(180))
-                                .frame(width: 36, height: 36)
+                                .frame(width: width * 0.070)
                                 .opacity(currentPage > 0 ? 1.0 : 0.0)
                         }
                         .disabled(currentPage == 0)
@@ -189,10 +190,10 @@ struct GuidebookView: View {
                                 }
                             }
                         } label: {
-                            Image("guidebook_arrow")
+                            Image("chevron_right")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 36, height: 36)
+                                .frame(width: width * 0.070)
                                 .opacity(currentPage < items.count - 1 ? 1.0 : 0.0)
                         }
                         .disabled(currentPage == items.count - 1)
