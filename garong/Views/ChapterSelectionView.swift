@@ -199,6 +199,7 @@ struct ChapterSelectionView: View {
                 direction: direction,
                 pageCount: stories.count
             )
+            SoundManager.shared.play(.buttonTap)
             withAnimation(.easeInOut(duration: 0.25)) {
                 selectedStoryIndex = destination
             }
