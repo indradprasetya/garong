@@ -46,6 +46,18 @@ final class SoundManager: ObservableObject {
         play(named: effect.rawValue)
     }
     
+    var volume: Float {
+        get {
+            if let stored = UserDefaults.standard.object(forKey: "sfxVolume") as? Float {
+                return stored
+            }
+            return 1.0
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "sfxVolume")
+        }
+    }
+    
     /// Play a sound effect by file name (without extension).
     func play(named soundName: String) {
         guard !isMuted else { return }
@@ -55,9 +67,11 @@ final class SoundManager: ObservableObject {
             return
         }
         
+        let currentVolume = volume
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             do {
                 let player = try AVAudioPlayer(contentsOf: url)
+                player.volume = currentVolume
                 player.prepareToPlay()
                 player.play()
                 

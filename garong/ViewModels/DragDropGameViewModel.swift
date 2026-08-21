@@ -68,6 +68,11 @@ final class DragDropGameViewModel: ObservableObject {
     
     /// Navigates to next chapter automatically or displays completed dialog if final chapter in story.
     func goToNextChapterOrFinish() {
+        finishChapter()
+    }
+    
+    /// Loads the next chapter in sequence.
+    func loadNextChapter() {
         hasPlayedCompletionSFX = false
         if hasNextChapter {
             currentChapterIndex += 1
@@ -78,8 +83,6 @@ final class DragDropGameViewModel: ObservableObject {
             self.hintText = nextChapter.storyDefinition?.hints?.compactMap { $0.en }.joined(separator: "\n\n") ?? (nextChapter.storyDefinition?.description.en ?? nextChapter.description)
             self.chapterResult = nil
             syncWithEngine()
-        } else {
-            finishChapter()
         }
     }
     

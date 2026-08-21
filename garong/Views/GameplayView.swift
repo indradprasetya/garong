@@ -181,20 +181,23 @@ struct GameplayView: View {
             
             // Completion Overlay
             if viewModel.phase == .completed, let result = viewModel.chapterResult {
-                Color.black.opacity(0.4).ignoresSafeArea()
-                
-                ChapterCompleteView(
+                ChapterResultView(
                     result: result,
-                    onDismiss: { dismiss() },
-                    onRestart: {
-                        withAnimation(.easeInOut) {
-                            viewModel.restart()
+                    onBack: {
+                        dismiss()
+                    },
+                    onNext: {
+                        if viewModel.hasNextChapter {
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                                viewModel.loadNextChapter()
+                            }
+                        } else {
+                            dismiss()
                         }
                     }
                 )
-                .padding(24)
-                .transition(.scale.combined(with: .opacity))
-                .zIndex(1)
+                .transition(.opacity)
+                .zIndex(10)
             }
             
             // Paper Hint Overlay

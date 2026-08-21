@@ -4,6 +4,8 @@ struct MainMenuView: View {
 
     @State private var showStorySelection = false
     @State private var showSettings = false
+    @State private var showGuidebook = false
+    @State private var isLoading = false
 
     var body: some View {
 
@@ -48,9 +50,10 @@ struct MainMenuView: View {
                     // ==========================================
 
                     Button {
-
-                        showStorySelection = true
-
+                        SoundManager.shared.play(.buttonTap)
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            isLoading = true
+                        }
                     } label: {
 
                         Rectangle()
@@ -67,6 +70,101 @@ struct MainMenuView: View {
                         y: height * 0.56
                     )
                     .zIndex(2)
+
+
+                    // ==========================================
+                    // TOP RIGHT BUTTONS (GUIDE + SETTING)
+                    // ==========================================
+
+                    VStack {
+                        HStack(spacing: 12) {
+                            Spacer()
+
+                            // GUIDEBOOK BUTTON (Beside Setting Button)
+                            Button {
+                                SoundManager.shared.play(.buttonTap)
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    showGuidebook = true
+                                }
+                            } label: {
+                                Image("guide_button")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 56, height: 56)
+                            }
+                            .buttonStyle(.plain)
+
+                            // SETTING BUTTON
+                            Button {
+                                SoundManager.shared.play(.buttonTap)
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    showSettings = true
+                                }
+                            } label: {
+                                Image("setting_button")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 56, height: 56)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        Spacer()
+                    }
+                    .padding(.trailing, 64)
+                    .zIndex(3)
+
+
+                    // ==========================================
+                    // SETTINGS MODAL OVERLAY
+                    // ==========================================
+
+                    if showSettings {
+                        SettingView(
+                            onClose: {
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    showSettings = false
+                                }
+                            }
+                        )
+                        .transition(.opacity.combined(with: .scale(scale: 0.96)))
+                        .zIndex(10)
+                    }
+
+
+                    // ==========================================
+                    // GUIDEBOOK MODAL OVERLAY
+                    // ==========================================
+
+                    if showGuidebook {
+                        GuidebookView(
+                            onBack: {
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    showGuidebook = false
+                                }
+                            }
+                        )
+                        .transition(.opacity.combined(with: .scale(scale: 0.98)))
+                        .zIndex(10)
+                    }
+
+
+                    // ==========================================
+                    // LOADING VIEW OVERLAY
+                    // ==========================================
+
+                    if isLoading {
+                        LoadingView(
+                            duration: 2.0,
+                            onComplete: {
+                                withAnimation(.easeInOut(duration: 0.35)) {
+                                    isLoading = false
+                                    showStorySelection = true
+                                }
+                            }
+                        )
+                        .transition(.opacity)
+                        .zIndex(20)
+                    }
                 }
                 .frame(
                     width: width,
