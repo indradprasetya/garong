@@ -5,6 +5,8 @@ struct MainMenuView: View {
     @State private var showChapterSelection = false
     @State private var showGuidebook = false
     @State private var showSettings = false
+    @State private var showGuidebook = false
+    @State private var isLoading = false
 
     var body: some View {
 
@@ -55,9 +57,10 @@ struct MainMenuView: View {
                     // =====================================================
 
                     Button {
-
-                        showChapterSelection = true
-
+                        SoundManager.shared.play(.buttonTap)
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            isLoading = true
+                        }
                     } label: {
 
                         Image("StartButton")
@@ -72,54 +75,102 @@ struct MainMenuView: View {
                         x: width * 0.64,
                         y: height * 0.56
                     )
+                    .zIndex(2)
 
 
-                    // =====================================================
-                    // GUIDEBOOK BUTTON
-                    // =====================================================
+                    // ==========================================
+                    // TOP RIGHT BUTTONS (GUIDE + SETTING)
+                    // ==========================================
 
-                    Button {
+                    VStack {
+                        HStack(spacing: 12) {
+                            Spacer()
 
-                        showGuidebook = true
+                            // GUIDEBOOK BUTTON (Beside Setting Button)
+                            Button {
+                                SoundManager.shared.play(.buttonTap)
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    showGuidebook = true
+                                }
+                            } label: {
+                                Image("guide_button")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 56, height: 56)
+                            }
+                            .buttonStyle(.plain)
 
-                    } label: {
-
-                        Image("GuidebookButton")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(
-                                width: width * 0.060
-                            )
+                            // SETTING BUTTON
+                            Button {
+                                SoundManager.shared.play(.buttonTap)
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    showSettings = true
+                                }
+                            } label: {
+                                Image("setting_button")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 56, height: 56)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        Spacer()
                     }
-                    .buttonStyle(.plain)
-                    .position(
-                        x: width * 0.84,
-                        y: height * 0.075
-                    )
+                    .padding(.trailing, 64)
+                    .zIndex(3)
 
 
-                    // =====================================================
-                    // SETTINGS BUTTON
-                    // =====================================================
+                    // ==========================================
+                    // SETTINGS MODAL OVERLAY
+                    // ==========================================
 
-                    Button {
-
-                        showSettings = true
-
-                    } label: {
-
-                        Image("SettingsButton")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(
-                                width: width * 0.060
-                            )
+                    if showSettings {
+                        SettingView(
+                            onClose: {
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    showSettings = false
+                                }
+                            }
+                        )
+                        .transition(.opacity.combined(with: .scale(scale: 0.96)))
+                        .zIndex(10)
                     }
-                    .buttonStyle(.plain)
-                    .position(
-                        x: width * 0.91,
-                        y: height * 0.075
-                    )
+
+
+                    // ==========================================
+                    // GUIDEBOOK MODAL OVERLAY
+                    // ==========================================
+
+                    if showGuidebook {
+                        GuidebookView(
+                            onBack: {
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    showGuidebook = false
+                                }
+                            }
+                        )
+                        .transition(.opacity.combined(with: .scale(scale: 0.98)))
+                        .zIndex(10)
+                    }
+
+
+                    // ==========================================
+                    // LOADING VIEW OVERLAY
+                    // ==========================================
+
+                    if isLoading {
+                        LoadingView(
+                            duration: 2.0,
+                            onComplete: {
+                                withAnimation(.easeInOut(duration: 0.35)) {
+                                    isLoading = false
+                                    showStorySelection = true
+                                }
+                            }
+                        )
+                        .transition(.opacity)
+                        .zIndex(20)
+                    }
                 }
                 .frame(
                     width: width,

@@ -14,6 +14,8 @@ struct ChapterResult: Equatable {
     let completionSummary: String?
     let completionTip: String?
     let sceneStates: [SceneResultEntry]
+    let characterName: String
+    let meterImageName: String
     
     struct SceneResultEntry: Equatable {
         let sceneName: String
