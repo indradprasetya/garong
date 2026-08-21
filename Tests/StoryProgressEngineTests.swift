@@ -86,9 +86,10 @@ struct StoryProgressEngineTests {
         precondition(nonIdealEngine.placeObject(asking, inScene: nonIdealEngine.scenes[0].id))
         precondition(nonIdealEngine.placeObject(story2Approach, inScene: nonIdealEngine.scenes[1].id))
         precondition(nonIdealEngine.currentOutcome?.category == "success" && !nonIdealEngine.isCurrentOutcomeIdeal)
-        precondition(nonIdealEngine.phase == .playing, "A non-ideal success must remain playable")
+        precondition(nonIdealEngine.phase == .completed, "Every success outcome must complete the chapter")
+        precondition(nonIdealEngine.wrongAttempts == 0, "A safe non-ideal success must not count as a wrong attempt")
         let nonIdealState = try nonIdealStore.state(for: story2.id)
-        precondition(nonIdealState.completion == nil, "A non-ideal success must not unlock progress")
+        precondition(nonIdealState.completion == StoryCompletion(bestStars: 3, bestPlacementCount: 2), "A safe non-ideal success must save progress")
 
         let exhausted = DragDropGameEngine(chapter: chapter, progressStore: store)
         let toy = try require(chapter.objects.first { $0.name == "Toy" }, "Toy action")

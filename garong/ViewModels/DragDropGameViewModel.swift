@@ -130,7 +130,7 @@ final class DragDropGameViewModel: ObservableObject {
         guard success else { return }
         
         if engine.isAllScenesFilled {
-            if engine.isCurrentOutcomeIdeal {
+            if engine.isCurrentOutcomeSuccessful {
                 if !hasPlayedCompletionSFX {
                     hasPlayedCompletionSFX = true
                     SoundManager.shared.play(.chapterComplete)
@@ -199,11 +199,7 @@ final class DragDropGameViewModel: ObservableObject {
             self.chapterResult = engine.buildResult()
             if oldPhase != .completed && !hasPlayedCompletionSFX {
                 hasPlayedCompletionSFX = true
-                if engine.isCurrentOutcomeIdeal {
-                    SoundManager.shared.play(.chapterComplete)
-                } else {
-                    SoundManager.shared.play(.itemPickup)
-                }
+                SoundManager.shared.play(.chapterComplete)
             }
         } else if engine.phase == .needsBreak {
             self.chapterResult = engine.buildResult()

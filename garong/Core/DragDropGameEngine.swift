@@ -72,6 +72,11 @@ final class DragDropGameEngine {
         guard chapter.storyDefinition != nil else { return true }
         return currentOutcome?.isIdeal == true
     }
+
+    var isCurrentOutcomeSuccessful: Bool {
+        guard chapter.storyDefinition != nil else { return true }
+        return currentOutcome?.category == "success"
+    }
     
     /// Total objects available in tray.
     var totalObjectCount: Int { chapter.objects.count }
@@ -114,7 +119,7 @@ final class DragDropGameEngine {
         placementCount += 1
         reevaluateAllReactions()
 
-        if isAllScenesFilled && isCurrentOutcomeIdeal {
+        if isAllScenesFilled && isCurrentOutcomeSuccessful {
             completeStoryRun()
         } else if let maximumPlacements, placementCount >= maximumPlacements {
             phase = .needsBreak
@@ -171,7 +176,7 @@ final class DragDropGameEngine {
     
     /// Explicitly finishes the chapter and transitions to the completion result overlay.
     func finishChapter() {
-        guard chapter.storyDefinition == nil || (isAllScenesFilled && isCurrentOutcomeIdeal) else { return }
+        guard chapter.storyDefinition == nil || (isAllScenesFilled && isCurrentOutcomeSuccessful) else { return }
         completeStoryRun()
     }
     
@@ -193,7 +198,7 @@ final class DragDropGameEngine {
                 self.currentOutcome = activeOutcome
                 if placedActionIDs != lastEvaluatedActionSequence {
                     lastEvaluatedActionSequence = placedActionIDs
-                    if activeOutcome?.isIdeal == false {
+                    if activeOutcome?.category == "retry" {
                         wrongAttempts += 1
                     }
                 }
