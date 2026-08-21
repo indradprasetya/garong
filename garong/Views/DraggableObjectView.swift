@@ -40,7 +40,11 @@ struct DraggableObjectView: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
-        .instantDraggable(object) {
+        .instantDraggable(
+            object,
+            onDragStarted: onDragStarted,
+            onDragEnded: onDragEnded
+        ) {
             // Drag preview
             if hasValidAsset {
                 Image(object.symbol)

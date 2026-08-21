@@ -10,6 +10,7 @@ struct GameplayView: View {
     @StateObject private var viewModel: DragDropGameViewModel
     @ObservedObject private var localization = AppLocalization.shared
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showHintOverlay: Bool = false
     @State private var showResultOverlay: Bool = false
     @State private var isMeterWiggling: Bool = false
@@ -131,6 +132,15 @@ struct GameplayView: View {
                                 }
                             }
                             .buttonStyle(.plain)
+                            .phaseAnimator(
+                                reduceMotion ? [CGFloat.zero] : [0, 0, 0, 1, 0]
+                            ) { content, phase in
+                                content
+                                    .offset(x: phase * 5)
+                                    .scaleEffect(phase == 1 ? 1.02 : 1)
+                            } animation: { _ in
+                                .easeInOut(duration: 0.5)
+                            }
                             .transition(.scale.combined(with: .opacity))
                         } else {
                             meterView
@@ -152,8 +162,8 @@ struct GameplayView: View {
                 Group {
                     
                         HStack(spacing: 8) {
-                            ForEach(viewModel.scenes, id: \.id) { scene in
-                                sceneView(for: scene)
+                            ForEach(Array(viewModel.scenes.enumerated()), id: \.element.id) { index, scene in
+                                sceneView(for: scene, at: index)
                             }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
@@ -168,7 +178,11 @@ struct GameplayView: View {
                 VStack(alignment: .center, spacing: 4) {
                     HStack(spacing: 16) {
                         ForEach(viewModel.availableObjects, id: \.id) { object in
-                            DraggableObjectView(object: object)
+                            DraggableObjectView(
+                                object: object,
+                                onDragStarted: { viewModel.setDraggingActive(true) },
+                                onDragEnded: { viewModel.setDraggingActive(false) }
+                            )
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -248,7 +262,7 @@ struct GameplayView: View {
             .allowsHitTesting(false)
 
             // Center Mistake Feedback Meter Overlay
-            if showCenterMeter {
+            if showCenterMeter && viewModel.phase == .playing {
                 ZStack {
                     Color.black.opacity(0.45)
                         .ignoresSafeArea()
@@ -284,6 +298,8 @@ struct GameplayView: View {
         .onChange(of: viewModel.phase) { newPhase in
             if newPhase == .playing {
                 showResultOverlay = false
+            } else {
+                showCenterMeter = false
             }
         }
         .onChange(of: viewModel.wrongAttempts) { _ in
@@ -430,11 +446,16 @@ struct GameplayView: View {
     }
 
     @ViewBuilder
-    private func sceneView(for scene: GameScene) -> some View {
+    private func sceneView(for scene: GameScene, at index: Int) -> some View {
         SceneDropZoneView(
             scene: scene,
             isAnimating: viewModel.animatingSceneID == scene.id,
             isDraggingAnyItem: viewModel.isDraggingItem,
+            celebratesWin: viewModel.phase == .completed,
+            celebrationDelay: WinCelebrationSequence.delay(
+                for: index,
+                totalCount: viewModel.scenes.count
+            ),
             onDrop: { object, slotID in
                 viewModel.dropObject(object, intoSlot: slotID, intoScene: scene.id)
                 viewModel.setDraggingActive(false)
@@ -467,4 +488,3 @@ struct GameplayView_Previews: PreviewProvider {
         .previewInterfaceOrientation(.landscapeLeft)
     }
 }
-
