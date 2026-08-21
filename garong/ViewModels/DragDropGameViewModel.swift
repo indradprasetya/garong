@@ -15,6 +15,9 @@ final class DragDropGameViewModel: ObservableObject {
     @Published private(set) var chapterName: String
     @Published private(set) var hintText: String?
     @Published private(set) var wrongAttempts: Int = 0
+    @Published private(set) var currentStars: Int = 3
+    @Published private(set) var hasDroppedFirstItemInChapter1: Bool = false
+    @Published private(set) var showPeekHint: Bool = false
     @Published var isDraggingItem: Bool = false
     @Published var animatingSceneID: UUID?
     
@@ -23,6 +26,24 @@ final class DragDropGameViewModel: ObservableObject {
     private var storyChapters: [StoryChapterReference] = []
     private var storyNumber = 1
     private var hasPlayedCompletionSFX: Bool = false
+    private static let peekHintEverKey = "hasShownPeekHintEver"
+
+    var hasShownPeekHintEver: Bool {
+        get { UserDefaults.standard.bool(forKey: Self.peekHintEverKey) }
+        set { UserDefaults.standard.set(newValue, forKey: Self.peekHintEverKey) }
+    }
+
+    var isChapter1: Bool {
+        engine.chapter.number == 1 || (currentChapterIndex == 0 && storyNumber == 1)
+    }
+
+    var showChapter1TutorialHint: Bool {
+        isChapter1 && !hasDroppedFirstItemInChapter1 && phase == .playing
+    }
+
+    func dismissPeekHint() {
+        showPeekHint = false
+    }
     
     init(chapter: Chapter) {
         let engine = DragDropGameEngine(chapter: chapter)
@@ -34,6 +55,7 @@ final class DragDropGameViewModel: ObservableObject {
         self.chapterName = chapter.name
         self.hintText = Self.localizedHint(for: chapter)
         self.wrongAttempts = engine.wrongAttempts
+        self.currentStars = engine.placementFeedbackState.meterStars
         
         if let storyDef = chapter.storyDefinition,
            let group = StoryCatalog.stories.first(where: { group in
@@ -44,6 +66,20 @@ final class DragDropGameViewModel: ObservableObject {
             self.currentChapterIndex = group.chapters.firstIndex(where: { $0.id == storyDef.id }) ?? 0
         }
     }
+
+    #if DEBUG
+    convenience init(chapter: Chapter, showTutorialHintForPreview: Bool = false, showPeekHintForPreview: Bool = false) {
+        self.init(chapter: chapter)
+        if showTutorialHintForPreview {
+            self.hasDroppedFirstItemInChapter1 = false
+        } else {
+            self.hasDroppedFirstItemInChapter1 = true
+        }
+        if showPeekHintForPreview {
+            self.showPeekHint = true
+        }
+    }
+    #endif
     
     var meterCharacterName: String {
         guard let story = engine.chapter.storyDefinition else { return "rhodey" }
@@ -80,6 +116,8 @@ final class DragDropGameViewModel: ObservableObject {
             self.chapterName = nextChapter.name
             self.hintText = Self.localizedHint(for: nextChapter)
             self.chapterResult = nil
+            self.hasDroppedFirstItemInChapter1 = false
+            self.showPeekHint = false
             syncWithEngine()
         }
     }
@@ -149,6 +187,12 @@ final class DragDropGameViewModel: ObservableObject {
     func dropObject(_ object: GameObject, intoSlot slotID: String? = nil, intoScene sceneID: UUID) {
         let success = engine.placeObject(object, inSlot: slotID, inScene: sceneID)
         guard success else { return }
+
+        if isChapter1 {
+            withAnimation {
+                hasDroppedFirstItemInChapter1 = true
+            }
+        }
         
         if engine.isAllScenesFilled {
             if engine.isCurrentOutcomeSuccessful {
@@ -201,6 +245,8 @@ final class DragDropGameViewModel: ObservableObject {
         }
         engine.restart()
         chapterResult = nil
+        hasDroppedFirstItemInChapter1 = false
+        showPeekHint = false
         syncWithEngine()
     }
     
@@ -211,9 +257,16 @@ final class DragDropGameViewModel: ObservableObject {
         self.availableObjects = engine.availableObjects
         self.phase = engine.phase
         self.wrongAttempts = engine.wrongAttempts
+        self.currentStars = engine.placementFeedbackState.meterStars
         
         if self.wrongAttempts > oldWrongAttempts {
             SoundManager.shared.play(.chapterRetry)
+            if !hasShownPeekHintEver {
+                withAnimation {
+                    showPeekHint = true
+                    hasShownPeekHintEver = true
+                }
+            }
         }
         
         if engine.phase == .completed {
