@@ -177,6 +177,7 @@ struct SettingView: View {
             Button(localization.text("settings.cancel"), role: .cancel) {}
             Button(localization.text("settings.reset"), role: .destructive) {
                 StoryProgressStore().resetAll()
+                ChapterTutorialSession.resetCompletion()
                 onResetProgress?()
                 DispatchQueue.main.async {
                     showResetSuccess = true

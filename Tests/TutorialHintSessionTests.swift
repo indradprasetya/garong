@@ -11,10 +11,6 @@ struct TutorialHintSessionTests {
         session.reset()
         precondition(session.shouldShowPeekHint(), "A restarted or newly loaded level must reveal the hint again")
 
-        precondition(TutorialHintSession.showsOnboarding(storyNumber: 1, chapterNumber: 1))
-        precondition(!TutorialHintSession.showsOnboarding(storyNumber: 2, chapterNumber: 1), "Story 2 chapter 1 must not repeat onboarding")
-        precondition(!TutorialHintSession.showsOnboarding(storyNumber: 1, chapterNumber: 2), "Story 1 chapter 2 must not repeat onboarding")
-
         print("TutorialHintSessionTests passed")
     }
 }

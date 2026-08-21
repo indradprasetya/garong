@@ -16,8 +16,8 @@ final class DragDropGameViewModel: ObservableObject {
     @Published private(set) var hintText: String?
     @Published private(set) var wrongAttempts: Int = 0
     @Published private(set) var currentStars: Int = 3
-    @Published private(set) var hasDroppedFirstItemInChapter1: Bool = false
     @Published private(set) var showPeekHint: Bool = false
+    @Published private(set) var tutorialStep: ChapterTutorialStep
     @Published var isDraggingItem: Bool = false
     @Published var animatingSceneID: UUID?
     
@@ -27,25 +27,35 @@ final class DragDropGameViewModel: ObservableObject {
     private var storyNumber = 1
     private var hasPlayedCompletionSFX: Bool = false
     private var tutorialHintSession = TutorialHintSession()
+    private var chapterTutorial: ChapterTutorialSession
 
-    private var isStory1Chapter1: Bool {
-        TutorialHintSession.showsOnboarding(
-            storyNumber: storyNumber,
-            chapterNumber: engine.chapter.number
-        )
-    }
-
-    var showChapter1TutorialHint: Bool {
-        isStory1Chapter1 && !hasDroppedFirstItemInChapter1 && phase == .playing
-    }
+    var isGuidedTutorialActive: Bool { tutorialStep != .inactive }
 
     func dismissPeekHint() {
         showPeekHint = false
     }
     
     init(chapter: Chapter) {
+        let group = chapter.storyDefinition.flatMap { story in
+            StoryCatalog.stories.first { group in
+                group.chapters.contains { $0.id == story.id }
+            }
+        }
+        let savedCompletion = chapter.storyDefinition.flatMap { story in
+            try? StoryProgressStore().state(for: story.id).completion
+        }
+        let chapterTutorial = ChapterTutorialSession(
+            storyNumber: group?.number ?? 0,
+            chapterNumber: chapter.number,
+            chapterAlreadyCompleted: savedCompletion != nil
+        )
         let engine = DragDropGameEngine(chapter: chapter)
+        if chapterTutorial.isActive {
+            engine.restart()
+        }
         self.engine = engine
+        self.chapterTutorial = chapterTutorial
+        self.tutorialStep = chapterTutorial.step
         self.scenes = engine.scenes
         self.availableObjects = engine.availableObjects
         self.phase = engine.phase
@@ -55,30 +65,14 @@ final class DragDropGameViewModel: ObservableObject {
         self.wrongAttempts = engine.wrongAttempts
         self.currentStars = engine.placementFeedbackState.meterStars
         
-        if let storyDef = chapter.storyDefinition,
-           let group = StoryCatalog.stories.first(where: { group in
-               group.chapters.contains { $0.id == storyDef.id }
-           }) {
+        if let group,
+           let storyDef = chapter.storyDefinition {
             self.storyChapters = group.chapters
             self.storyNumber = group.number
             self.currentChapterIndex = group.chapters.firstIndex(where: { $0.id == storyDef.id }) ?? 0
         }
     }
 
-    #if DEBUG
-    convenience init(chapter: Chapter, showTutorialHintForPreview: Bool = false, showPeekHintForPreview: Bool = false) {
-        self.init(chapter: chapter)
-        if showTutorialHintForPreview {
-            self.hasDroppedFirstItemInChapter1 = false
-        } else {
-            self.hasDroppedFirstItemInChapter1 = true
-        }
-        if showPeekHintForPreview {
-            self.showPeekHint = true
-        }
-    }
-    #endif
-    
     var meterCharacterName: String {
         guard let story = engine.chapter.storyDefinition else { return "rhodey" }
         let id = story.id.lowercased()
@@ -97,6 +91,36 @@ final class DragDropGameViewModel: ObservableObject {
     var hasNextChapter: Bool {
         !storyChapters.isEmpty && currentChapterIndex + 1 < storyChapters.count
     }
+
+    func canDrag(_ object: GameObject) -> Bool {
+        chapterTutorial.allowsTrayAction(object.symbol)
+    }
+
+    func canDragPlacedObject(_ object: GameObject) -> Bool {
+        chapterTutorial.allowsRemoval(object.symbol)
+    }
+
+    func isTutorialItem(_ object: GameObject) -> Bool {
+        switch tutorialStep {
+        case .approach: object.symbol == "action_approach"
+        case .toy: object.symbol == "action_toy"
+        case .crayon: object.symbol == "action_crayon"
+        default: false
+        }
+    }
+
+    func isTutorialTarget(_ scene: GameScene) -> Bool {
+        guard let index = scenes.firstIndex(where: { $0.id == scene.id }) else { return false }
+        return switch tutorialStep {
+        case .approach: index == 0
+        case .toy, .crayon: index == 1
+        default: false
+        }
+    }
+
+    var canUseHint: Bool {
+        !isGuidedTutorialActive || tutorialStep == .wrongAndHint
+    }
     
     /// Loads the next chapter in sequence.
     func loadNextChapter() {
@@ -114,9 +138,14 @@ final class DragDropGameViewModel: ObservableObject {
             self.chapterName = nextChapter.name
             self.hintText = Self.localizedHint(for: nextChapter)
             self.chapterResult = nil
-            self.hasDroppedFirstItemInChapter1 = false
             self.showPeekHint = false
             self.tutorialHintSession.reset()
+            self.chapterTutorial = ChapterTutorialSession(
+                storyNumber: storyNumber,
+                chapterNumber: nextChapter.number,
+                chapterAlreadyCompleted: false
+            )
+            syncTutorialStep()
             syncWithEngine()
         }
     }
@@ -185,15 +214,17 @@ final class DragDropGameViewModel: ObservableObject {
     
     /// Drop or replace an object in a target scene slot.
     func dropObject(_ object: GameObject, intoSlot slotID: String? = nil, intoScene sceneID: UUID) {
+        guard let sceneIndex = engine.scenes.firstIndex(where: { $0.id == sceneID }),
+              chapterTutorial.allowsDrop(actionID: object.symbol, sceneIndex: sceneIndex) else { return }
         let success = engine.placeObject(object, inSlot: slotID, inScene: sceneID)
         guard success else { return }
 
-        if isStory1Chapter1 {
-            withAnimation {
-                hasDroppedFirstItemInChapter1 = true
-            }
+        chapterTutorial.didPlace(actionID: object.symbol, sceneIndex: sceneIndex)
+        if engine.phase == .completed {
+            chapterTutorial.didCompleteChapter()
         }
-        
+        syncTutorialStep()
+
         if engine.isAllScenesFilled {
             if engine.isCurrentOutcomeSuccessful {
                 if !hasPlayedCompletionSFX {
@@ -221,8 +252,11 @@ final class DragDropGameViewModel: ObservableObject {
     
     /// Remove an object from a scene slot.
     func removeObject(_ object: GameObject, fromSlot slotID: String? = nil, fromScene sceneID: UUID) {
+        guard chapterTutorial.allowsRemoval(object.symbol) else { return }
         let success = engine.removeObject(object, fromSlot: slotID, fromScene: sceneID)
         guard success else { return }
+        chapterTutorial.didRemove(object.symbol)
+        syncTutorialStep()
         hasPlayedCompletionSFX = false
         SoundManager.shared.play(.itemRemove)
         syncWithEngine()
@@ -230,8 +264,11 @@ final class DragDropGameViewModel: ObservableObject {
     
     /// Remove an object globally from whichever scene currently holds it.
     func removeObjectGlobal(_ object: GameObject) {
+        guard chapterTutorial.allowsRemoval(object.symbol) else { return }
         let success = engine.removeObjectGlobal(object)
         guard success else { return }
+        chapterTutorial.didRemove(object.symbol)
+        syncTutorialStep()
         hasPlayedCompletionSFX = false
         SoundManager.shared.play(.itemRemove)
         syncWithEngine()
@@ -245,10 +282,25 @@ final class DragDropGameViewModel: ObservableObject {
         }
         engine.restart()
         chapterResult = nil
-        hasDroppedFirstItemInChapter1 = false
         showPeekHint = false
         tutorialHintSession.reset()
+        chapterTutorial.resetForRestart()
+        syncTutorialStep()
         syncWithEngine()
+    }
+
+    func didDismissTutorialHint() {
+        chapterTutorial.didDismissHint()
+        syncTutorialStep()
+    }
+
+    func acknowledgeTutorialMeter() {
+        chapterTutorial.didAcknowledgeMeter()
+        syncTutorialStep()
+    }
+
+    private func syncTutorialStep() {
+        tutorialStep = chapterTutorial.step
     }
     
     private func syncWithEngine() {
