@@ -1,102 +1,43 @@
 import SwiftUI
 
 struct ChapterSelectionView: View {
-
-    // =========================================================
-    // MARK: - DATA
-    // =========================================================
-
-    private let stories: [GameStory]
-
-    @State private var selectedStoryIndex: Int
+    let stories: [GameStory]
 
     @Environment(\.dismiss)
     private var dismiss
 
-
-    // =========================================================
-    // MARK: - PROGRESS
-    //
-    // Sementara untuk testing.
-    //
-    // 0 = chapter 1 current
-    // 1 = chapter 1 complete, chapter 2 current
-    // 2 = chapter 1 + 2 complete, chapter 3 current
-    // 3 = semua complete
-    //
-    // Progress School dan Playground dipisah.
-    // =========================================================
-
-    @State private var completedChaptersByStory: [Int: Int] = [
-        0: 1,
-        1: 1
-    ]
+    @State private var progressByStoryID: [String: StoryProgressState] = [:]
+    @State private var selectedStoryIndex = 0
+    @State private var selectedChapter: Chapter?
+    @State private var isLoadingGameplay = false
+    @State private var showGameplay = false
+    private let progressStore = StoryProgressStore()
 
 
-    // =========================================================
     // MARK: - INIT
-    // =========================================================
 
     init(story: GameStory) {
-
-        let allStories =
-            StoryCatalog.gameStories
-
-        self.stories =
-            allStories
-
-        let startingIndex =
-            allStories.firstIndex {
-                $0.id == story.id
-            } ?? 0
-
-        _selectedStoryIndex =
-            State(
-                initialValue: startingIndex
-            )
+        self.stories = [story]
     }
 
-
-    // =========================================================
-    // MARK: - CURRENT STORY
-    // =========================================================
-
-    private var currentStory: GameStory {
-
-        stories[
-            selectedStoryIndex
-        ]
+    init(stories: [GameStory]) {
+        self.stories = stories
     }
 
-
-    private var currentChapters: [Chapter] {
-
-        currentStory.chapters
-    }
+    private var currentStory: GameStory { stories[selectedStoryIndex] }
+    private var chapters: [Chapter] { currentStory.chapters }
 
 
-    private var completedChapterCount: Int {
-
-        completedChaptersByStory[
-            selectedStoryIndex
-        ] ?? 0
-    }
-
-
-    // =========================================================
     // MARK: - BODY
-    // =========================================================
 
     var body: some View {
 
         GeometryReader { geometry in
 
-            let width =
-                geometry.size.width
-
-            let height =
-                geometry.size.height
-
+            let width = geometry.size.width
+            let height = geometry.size.height
+            let storyBackgroundWidth = min(width * 0.79, height * 1.72)
+            let storyArrowOffset = storyBackgroundWidth / 2 + width * 0.015
 
             ZStack {
 
@@ -104,151 +45,42 @@ struct ChapterSelectionView: View {
                 // BACKGROUND
                 // =====================================================
 
-                Image(
-                    "StoriesGreenGrid"
-                )
-                .resizable()
-                .scaledToFill()
-                .frame(
-                    width: width,
-                    height: height
-                )
-                .clipped()
-                .ignoresSafeArea()
+                Image("StoriesGreenGrid")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(
+                        width: width,
+                        height: height
+                    )
+                    .clipped()
+                    .ignoresSafeArea()
 
 
                 // =====================================================
-                // STORY CONTENT
+                // STORY ARTWORK + TITLE
                 // =====================================================
 
-                ZStack {
-
-                    // ===============================================
-                    // SCHOOL
-                    // ===============================================
-
-                    if selectedStoryIndex == 0 {
-
-                        Image(
-                            "SchoolArtwork"
-                        )
-                        .resizable()
-                        .scaledToFit()
-                        .frame(
-                            width: width * 0.98,
-                            height: height * 1.08
-                        )
-                        .position(
-                            x: width * 0.50,
-                            y: height * 0.49
-                        )
+                Image("story\(currentStory.number)_background")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: storyBackgroundWidth)
+                    .position(
+                        x: width * 0.50,
+                        y: height * 0.49
+                    )
 
 
-                        Image(
-                            "School"
-                        )
-                        .resizable()
-                        .scaledToFit()
-                        .frame(
-                            width:
-                                width * 0.255
-                        )
-                        .position(
-                            x: width * 0.675,
-                            y: height * 0.285
-                        )
-                    }
-
-
-                    // ===============================================
-                    // PLAYGROUND
-                    // title sudah menyatu di artwork
-                    // ===============================================
-
-                    if selectedStoryIndex == 1 {
-
-                        Image(
-                            "PlaygroundArtwork"
-                        )
-                        .resizable()
-                        .scaledToFit()
-                        .frame(
-                            width:
-                                width * 0.72
-                        )
-                        .position(
-                            x: width * 0.50,
-                            y: height * 0.51
-                        )
-                    }
-
-
-                    // ===============================================
-                    // CHAPTER 1
-                    // ===============================================
-
+                ForEach(0..<min(chapters.count, 3), id: \.self) { index in
                     chapterButton(
-                        index: 0,
+                        index: index,
                         width: width,
                         height: height
                     )
                     .position(
-                        x: width * 0.66,
-                        y: height * 0.445
-                    )
-
-
-                    // ===============================================
-                    // CHAPTER 2
-                    // ===============================================
-
-                    chapterButton(
-                        index: 1,
-                        width: width,
-                        height: height
-                    )
-                    .position(
-                        x: width * 0.66,
-                        y: height * 0.585
-                    )
-
-
-                    // ===============================================
-                    // CHAPTER 3
-                    // ===============================================
-
-                    chapterButton(
-                        index: 2,
-                        width: width,
-                        height: height
-                    )
-                    .position(
-                        x: width * 0.66,
-                        y: height * 0.725
+                        x: width * 0.675,
+                        y: height * (0.445 + CGFloat(index) * 0.14)
                     )
                 }
-                .id(
-                    selectedStoryIndex
-                )
-                .transition(
-                    .asymmetric(
-                        insertion:
-                            .move(
-                                edge: .trailing
-                            )
-                            .combined(
-                                with: .opacity
-                            ),
-
-                        removal:
-                            .move(
-                                edge: .leading
-                            )
-                            .combined(
-                                with: .opacity
-                            )
-                    )
-                )
 
 
                 // =====================================================
@@ -256,84 +88,51 @@ struct ChapterSelectionView: View {
                 // =====================================================
 
                 Button {
-
                     dismiss()
-
                 } label: {
 
-                    Image(
-                        "BackRibbon"
-                    )
-                    .resizable()
-                    .scaledToFit()
-                    .frame(
-                        width:
-                            width * 0.060
-                    )
+                    Image("back_ribbon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 48)
                 }
                 .buttonStyle(.plain)
                 .position(
                     x: width * 0.075,
-                    y: height * 0.070
+                    y: 20
                 )
 
 
                 // =====================================================
-                // PREVIOUS STORY - LEFT ARROW
+                // NEXT STORY ARROW
                 // =====================================================
 
-                Button {
-
-                    showPreviousStory()
-
-                } label: {
-
-                    Image(
-                        "NextArrow"
-                    )
-                    .resizable()
-                    .scaledToFit()
-                    .frame(
-                        width:
-                            width * 0.070
-                    )
-                    .scaleEffect(
-                        x: -1,
-                        y: 1
+                if selectedStoryIndex > 0 {
+                    storyArrow(direction: .previous, width: width)
+                    .position(
+                        x: width * 0.5 - storyArrowOffset,
+                        y: height * 0.54
                     )
                 }
-                .buttonStyle(.plain)
-                .position(
-                    x: width * 0.095,
-                    y: height * 0.54
-                )
 
-
-                // =====================================================
-                // NEXT STORY - RIGHT ARROW
-                // =====================================================
-
-                Button {
-
-                    showNextStory()
-
-                } label: {
-
-                    Image(
-                        "NextArrow"
-                    )
-                    .resizable()
-                    .scaledToFit()
-                    .frame(
-                        width:
-                            width * 0.070
-                    )
+                if selectedStoryIndex < stories.count - 1 {
+                    storyArrow(direction: .next, width: width)
+                        .position(
+                            x: width * 0.5 + storyArrowOffset,
+                            y: height * 0.54
+                        )
                 }
-                .buttonStyle(.plain)
-                .position(
-                    x: width * 0.905,
-                    y: height * 0.54
-                )
+
+                if isLoadingGameplay {
+                    LoadingView(duration: 2.0) {
+                        withAnimation(.easeInOut(duration: 0.35)) {
+                            isLoadingGameplay = false
+                            showGameplay = selectedChapter != nil
+                        }
+                    }
+                    .transition(.opacity)
+                    .zIndex(20)
+                }
             }
             .frame(
                 width: width,
@@ -341,75 +140,42 @@ struct ChapterSelectionView: View {
             )
         }
         .ignoresSafeArea()
-        .navigationBarBackButtonHidden(
-            true
-        )
-        .toolbar(
-            .hidden,
-            for: .navigationBar
-        )
-    }
-
-
-    // =========================================================
-    // MARK: - NEXT STORY
-    // =========================================================
-
-    private func showNextStory() {
-
-        guard !stories.isEmpty else {
-            return
-        }
-
-        withAnimation(
-            .easeInOut(
-                duration: 0.38
-            )
-        ) {
-
-            selectedStoryIndex =
-                (
-                    selectedStoryIndex + 1
-                )
-                % stories.count
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
+        .onAppear(perform: loadProgress)
+        .navigationDestination(isPresented: $showGameplay) {
+            if let selectedChapter {
+                GameplayView(chapter: selectedChapter)
+            }
         }
     }
 
-
-    // =========================================================
-    // MARK: - PREVIOUS STORY
-    // =========================================================
-
-    private func showPreviousStory() {
-
-        guard !stories.isEmpty else {
-            return
-        }
-
-        withAnimation(
-            .easeInOut(
-                duration: 0.38
-            )
-        ) {
-
-            selectedStoryIndex =
-                (
-                    selectedStoryIndex - 1 + stories.count
+    private func storyArrow(
+        direction: ChapterPageDirection,
+        width: CGFloat
+    ) -> some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                selectedStoryIndex = ChapterPageNavigation.destinationIndex(
+                    from: selectedStoryIndex,
+                    direction: direction,
+                    pageCount: stories.count
                 )
-                % stories.count
+            }
+        } label: {
+            Image("NextArrow")
+                .resizable()
+                .scaledToFit()
+                .frame(width: width * 0.070)
+                .rotationEffect(.degrees(direction == .previous ? 180 : 0))
         }
+        .buttonStyle(.plain)
+        .accessibilityLabel(direction == .previous ? "Previous chapter page" : "Next chapter page")
     }
 
 
     // =========================================================
     // MARK: - CHAPTER BUTTON
-    //
-    // SATU FUNCTION INI DIPAKAI:
-    // SCHOOL
-    // PLAYGROUND
-    // STORY BERIKUTNYA
-    //
-    // Jadi ukuran/style cukup diubah di sini.
     // =========================================================
 
     @ViewBuilder
@@ -418,329 +184,178 @@ struct ChapterSelectionView: View {
         width: CGFloat,
         height: CGFloat
     ) -> some View {
+        let status = chapterStatus(index: index)
 
-        if index <
-            currentChapters.count {
+        switch status {
+        case .completed(let stars):
+            chapterNavigationLink(index: index, status: status, width: width, height: height)
+                .accessibilityLabel("\(chapters[index].name), completed, \(stars) stars")
 
-            let status =
-                chapterStatus(
-                    index: index
-                )
+        case .current:
+            chapterNavigationLink(index: index, status: status, width: width, height: height)
+                .accessibilityLabel("\(chapters[index].name), current chapter")
 
+        case .locked:
+            chapterButtonLabel(index: index, status: status, width: width, height: height)
+                .allowsHitTesting(false)
+                .accessibilityLabel("\(chapters[index].name), locked")
+        }
+    }
 
-            // =====================================================
-            // REUSABLE CONFIG
-            // =====================================================
+    private func chapterNavigationLink(
+        index: Int,
+        status: ChapterProgressStatus,
+        width: CGFloat,
+        height: CGFloat
+    ) -> some View {
+        Button {
+            SoundManager.shared.play(.buttonTap)
+            selectedChapter = chapters[index]
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isLoadingGameplay = true
+            }
+        } label: {
+            chapterButtonLabel(index: index, status: status, width: width, height: height)
+        }
+        .buttonStyle(.plain)
+    }
 
-            let buttonWidth =
-                width * 0.26
+    private func chapterButtonLabel(
+        index: Int,
+        status: ChapterProgressStatus,
+        width: CGFloat,
+        height: CGFloat
+    ) -> some View {
+        ZStack {
+            chapterButtonBackground(status: status, width: width)
 
-            let buttonContainerWidth =
-                width * 0.48
+            HStack(spacing: width * 0.008) {
+                chapterTitle(index: index, width: width)
 
-            let buttonContainerHeight =
-                height * 0.22
+                chapterAccessory(status: status, width: width)
+                    .fixedSize()
+            }
+            .frame(maxWidth: width * 0.23)
+        }
+        .frame(width: width * 0.30, height: height * 0.18)
+        .opacity(status == .locked ? 0.35 : 1)
+    }
 
-            let textWidth =
-                width * 0.11
+    @ViewBuilder
+    private func chapterButtonBackground(
+        status: ChapterProgressStatus,
+        width: CGFloat
+    ) -> some View {
+        switch status {
+        case .current:
+            Image("chapter_button_yellow")
+                .resizable()
+                .scaledToFit()
+                .frame(width: width * 0.27)
 
-            let textHeight =
-                height * 0.043
+        case .completed, .locked:
+            Image("chapter_button_white")
+                .resizable()
+                .scaledToFit()
+                .frame(width: width * 0.27)
+        }
+    }
 
-            let starSize =
-                width * 0.017
+    @ViewBuilder
+    private func chapterAccessory(
+        status: ChapterProgressStatus,
+        width: CGFloat
+    ) -> some View {
+        switch status {
+        case .completed(let stars):
+            starRating(stars, width: width)
+                .accessibilityHidden(true)
 
+        case .current:
+            Image(systemName: "chevron.right")
+                .font(.system(size: max(16, width * 0.018), weight: .black))
+                .foregroundStyle(.black)
 
-            switch status {
+        case .locked:
+            EmptyView()
+        }
+    }
 
-            // =================================================
-            // COMPLETED
-            //
-            // WHITE + STAR
-            // =================================================
+    private func starRating(_ stars: Int, width: CGFloat) -> some View {
+        let count = min(max(stars, 1), 3)
 
-            case .completed:
+        return VStack(spacing: -width * 0.004) {
+            if count == 1 || count == 3 {
+                starIcon(width: width)
+            }
 
-                ZStack {
-
-                    Image(
-                        "ChapterButtonWhite"
-                    )
-                    .resizable()
-                    .scaledToFit()
-                    .frame(
-                        width:
-                            buttonWidth
-                    )
-
-
-                    HStack(
-                        spacing:
-                            width * 0.010
-                    ) {
-
-                        Image(
-                            "StarIcon"
-                        )
-                        .resizable()
-                        .scaledToFit()
-                        .frame(
-                            width:
-                                starSize,
-                            height:
-                                starSize
-                        )
-                        .offset(
-                            x: 112,
-                            y: -6
-                        )
-
-
-                        chapterTextAsset(
-                            index: index
-                        )
-                        .frame(
-                            width:
-                                textWidth,
-                            height:
-                                textHeight
-                        )
-                        .offset(
-                            x: -25,
-                            y: 0
-                        )
+            if count >= 2 {
+                HStack(spacing: width * 0.002) {
+                    ForEach(0..<2, id: \.self) { _ in
+                        starIcon(width: width)
                     }
                 }
-                .frame(
-                    width:
-                        buttonContainerWidth,
-                    height:
-                        buttonContainerHeight
-                )
-
-
-                // =================================================
-                // CURRENT / NEXT CHAPTER
-                //
-                // YELLOW + ARROW
-                // Klik langsung masuk GAMEPLAY
-                // =================================================
-
-                case .current:
-
-                    NavigationLink {
-
-                        GameplayView(
-                            chapter: currentChapters[index]
-                        )
-
-                    } label: {
-
-                        ZStack {
-
-                            Image(
-                                "DoChapter"
-                            )
-                            .resizable()
-                            .scaledToFit()
-                            .frame(
-                                width: buttonWidth
-                            )
-
-                            chapterTextAsset(
-                                index: index
-                            )
-                            .frame(
-                                width: textWidth,
-                                height: textHeight
-                            )
-
-                            Image(
-                                systemName: "chevron.right"
-                            )
-                            .font(
-                                .system(
-                                    size: max(
-                                        14,
-                                        width * 0.017
-                                    ),
-                                    weight: .black
-                                )
-                            )
-                            .foregroundStyle(
-                                .black
-                            )
-                            .offset(
-                                x: width * 0.070,
-                                y: -6
-                            )
-                        }
-                        .frame(
-                            width: buttonContainerWidth,
-                            height: buttonContainerHeight
-                        )
-                    }
-                    .buttonStyle(.plain)
-
-
-            // =================================================
-            // LOCKED
-            //
-            // WHITE TRANSPARENT
-            // =================================================
-
-            case .locked:
-
-                ZStack {
-
-                    Image(
-                        "ChapterButtonWhite"
-                    )
-                    .resizable()
-                    .scaledToFit()
-                    .frame(
-                        width:
-                            buttonWidth
-                    )
-                    .opacity(
-                        0.40
-                    )
-
-
-                    chapterTextAsset(
-                        index: index
-                    )
-                    .frame(
-                        width:
-                            textWidth,
-                        height:
-                            textHeight
-                    )
-                    .opacity(
-                        0.28
-                    )
-                }
-                .frame(
-                    width:
-                        buttonContainerWidth,
-                    height:
-                        buttonContainerHeight
-                )
-                .allowsHitTesting(
-                    false
-                )
             }
         }
+        .frame(width: width * 0.04, height: width * 0.034)
+    }
+
+    private func starIcon(width: CGFloat) -> some View {
+        Image("StarIcon")
+            .resizable()
+            .scaledToFit()
+            .frame(width: width * 0.016, height: width * 0.016)
     }
 
 
     // =========================================================
-    // MARK: - CHAPTER TEXT ASSETS
+    // MARK: - CHAPTER TITLE
     // =========================================================
 
-    @ViewBuilder
-    private func chapterTextAsset(
-        index: Int
+    private func chapterTitle(
+        index: Int,
+        width: CGFloat
     ) -> some View {
-
-        switch index {
-
-        case 0:
-
-            Image(
-                "CRY BABY..."
-            )
-            .resizable()
-            .scaledToFit()
-
-
-        case 1:
-
-            Image(
-                "BE QUIET!"
-            )
-            .resizable()
-            .scaledToFit()
-
-
-        case 2:
-
-            Image(
-                "GO STUDY"
-            )
-            .resizable()
-            .scaledToFit()
-
-
-        default:
-
-            EmptyView()
-        }
+        Text(chapters[index].storyDefinition?.shortTitle.en ?? chapters[index].name)
+            .font(.appFont(size: max(20, width * 0.024)))
+            .foregroundStyle(.black)
+            .multilineTextAlignment(.center)
+            .lineLimit(1)
+            .minimumScaleFactor(0.65)
     }
 
 
     // =========================================================
     // MARK: - STATUS LOGIC
-    //
-    // completed < current < locked
     // =========================================================
 
     private func chapterStatus(
         index: Int
-    ) -> ChapterPickStatus {
-
-        if index <
-            completedChapterCount {
-
-            return .completed
+    ) -> ChapterProgressStatus {
+        let previousStoriesComplete = stories.prefix(selectedStoryIndex)
+            .flatMap(\.chapters)
+            .allSatisfy { chapter in
+                guard let storyID = chapter.storyDefinition?.id else { return false }
+                return progressByStoryID[storyID]?.completion != nil
+            }
+        let completions = chapters.map { chapter -> StoryCompletion? in
+            guard let storyID = chapter.storyDefinition?.id else { return nil }
+            return progressByStoryID[storyID]?.completion
         }
-
-        if index ==
-            completedChapterCount {
-
-            return .current
-        }
-
-        return .locked
+        return ChapterProgressStatus.resolve(
+            at: index,
+            completions: completions,
+            previousStoriesComplete: previousStoriesComplete
+        )
     }
 
-
-    // =========================================================
-    // MARK: - COMPLETE CHAPTER
-    // =========================================================
-
-    private func completeChapter(
-        _ chapterIndex: Int
-    ) {
-
-        let newCompletedCount =
-            chapterIndex + 1
-
-        completedChaptersByStory[
-            selectedStoryIndex
-        ] =
-            max(
-                completedChaptersByStory[
-                    selectedStoryIndex
-                ] ?? 0,
-
-                newCompletedCount
-            )
+    private func loadProgress() {
+        progressByStoryID = stories.flatMap(\.chapters).reduce(into: [:]) { result, chapter in
+            guard let storyID = chapter.storyDefinition?.id,
+                  let state = try? progressStore.state(for: storyID) else { return }
+            result[storyID] = state
+        }
     }
-}
-
-
-// =============================================================
-// MARK: - STATUS ENUM
-// =============================================================
-
-private enum ChapterPickStatus {
-
-    case completed
-
-    case current
-
-    case locked
 }
 
 
@@ -748,13 +363,12 @@ private enum ChapterPickStatus {
 // MARK: - PREVIEW
 // =============================================================
 
-#Preview {
-
-    NavigationStack {
-
-        ChapterSelectionView(
-            story:
-                StoryCatalog.gameStories[0]
-        )
+struct ChapterSelectionView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            ChapterSelectionView(
+                story: StoryCatalog.gameStories[0]
+            )
+        }
     }
 }

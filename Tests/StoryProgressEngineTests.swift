@@ -14,6 +14,10 @@ struct StoryProgressEngineTests {
         precondition(story.maximumPlacements == 8, "Swift must decode the placement limit")
         precondition(story.starThresholds == StoryStarThresholds(threeStars: 3, twoStars: 5), "Swift must decode star thresholds")
         precondition(story.placementLimitMessage.en == "Rhodey is tired. You took too long.", "Swift must decode the character-specific limit message")
+        precondition(PlacementFeedbackState.green.meterStars == 3)
+        precondition(PlacementFeedbackState.yellow.meterStars == 2)
+        precondition(PlacementFeedbackState.orange.meterStars == 1)
+        precondition(PlacementFeedbackState.red.meterStars == 0)
 
         let item = StoryChapterItem(
             id: story.id,
@@ -61,6 +65,30 @@ struct StoryProgressEngineTests {
         let replayState = try store.state(for: story.id)
         precondition(replayState.activeRun == nil, "Restart must clear the active replay")
         precondition(replayState.completion?.bestStars == 3, "Restart must preserve completed stars")
+
+        let story2URL = resourceURL.deletingLastPathComponent().appendingPathComponent("story2_chapter1.json")
+        let story2 = try JSONDecoder().decode(StoryDefinition.self, from: Data(contentsOf: story2URL))
+        let story2Chapter = Chapter(storyItem: StoryChapterItem(
+            id: story2.id,
+            storyNumber: 2,
+            chapterNumber: 1,
+            fileName: "story2_chapter1",
+            storyDefinition: story2,
+            isUnlocked: true
+        ))
+        let nonIdealSuite = "StoryProgressNonIdealTests.\(UUID().uuidString)"
+        let nonIdealDefaults = UserDefaults(suiteName: nonIdealSuite)!
+        defer { nonIdealDefaults.removePersistentDomain(forName: nonIdealSuite) }
+        let nonIdealStore = StoryProgressStore(defaults: nonIdealDefaults)
+        let nonIdealEngine = DragDropGameEngine(chapter: story2Chapter, progressStore: nonIdealStore)
+        let asking = try require(story2Chapter.objects.first { $0.name == "Ask" }, "Ask action")
+        let story2Approach = try require(story2Chapter.objects.first { $0.name == "Approach" }, "Approach action")
+        precondition(nonIdealEngine.placeObject(asking, inScene: nonIdealEngine.scenes[0].id))
+        precondition(nonIdealEngine.placeObject(story2Approach, inScene: nonIdealEngine.scenes[1].id))
+        precondition(nonIdealEngine.currentOutcome?.category == "success" && !nonIdealEngine.isCurrentOutcomeIdeal)
+        precondition(nonIdealEngine.phase == .playing, "A non-ideal success must remain playable")
+        let nonIdealState = try nonIdealStore.state(for: story2.id)
+        precondition(nonIdealState.completion == nil, "A non-ideal success must not unlock progress")
 
         let exhausted = DragDropGameEngine(chapter: chapter, progressStore: store)
         let toy = try require(chapter.objects.first { $0.name == "Toy" }, "Toy action")

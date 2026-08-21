@@ -11,6 +11,8 @@ struct ChapterResultView: View {
     let result: ChapterResult
     var onBack: (() -> Void)? = nil
     var onNext: (() -> Void)? = nil
+    var onTryAgain: (() -> Void)? = nil
+    var statusMessage: String? = nil
 
     var body: some View {
         GeometryReader { geo in
@@ -47,26 +49,45 @@ struct ChapterResultView: View {
 
                         Spacer()
 
-                        Button {
-                            SoundManager.shared.play(.buttonTap)
-                            onNext?()
-                        } label: {
-                            if AssetFallbackHelper.hasAsset(named: "next_button") {
-                                Image(.nextButtonResult)
-                                    .resizable()
-                                    .scaledToFit()
+                        if let onTryAgain {
+                            Button {
+                                SoundManager.shared.play(.buttonTap)
+                                onTryAgain()
+                            } label: {
+                                Text("Try Again")
+                                    .font(.appFont(size: 28))
+                                    .foregroundStyle(.red)
+                                    .padding(.horizontal, 18)
                                     .frame(height: 48)
-                            } else {
-                                HStack(spacing: 6) {
-                                    Text("Next")
-                                        .font(.appFont(size: 28))
-                                    Image(systemName: "chevron.right")
-                                        .font(.system(size: 20, weight: .bold))
-                                }
-                                .foregroundStyle(.white)
+                                    .background(
+                                        Capsule()
+                                            .fill(.white)
+                                            .stroke(.red, lineWidth: 3)
+                                    )
                             }
+                            .buttonStyle(.plain)
+                        } else {
+                            Button {
+                                SoundManager.shared.play(.buttonTap)
+                                onNext?()
+                            } label: {
+                                if AssetFallbackHelper.hasAsset(named: "next_button") {
+                                    Image(.nextButtonResult)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 48)
+                                } else {
+                                    HStack(spacing: 6) {
+                                        Text("Next")
+                                            .font(.appFont(size: 28))
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 20, weight: .bold))
+                                    }
+                                    .foregroundStyle(.white)
+                                }
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
                     .padding(.horizontal, 72)
 
@@ -89,10 +110,18 @@ struct ChapterResultView: View {
                                         .font(.appFont(size: 32))
                                         .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1))
 
-                                    Text("\(result.characterName) is \(result.stars > 0 ? "satisfied" : "tired")")
-                                        .font(.appFont(size: 22))
-                                        .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
-                                        .multilineTextAlignment(.center)
+                                    if let resultMessage = statusMessage ?? result.completionSummary {
+                                        Text(resultMessage)
+                                            .font(.appFont(size: 18))
+                                            .foregroundStyle(
+                                                statusMessage == nil
+                                                    ? Color(red: 0.15, green: 0.15, blue: 0.15)
+                                                    : .red
+                                            )
+                                            .multilineTextAlignment(.center)
+                                            .lineSpacing(4)
+                                            .padding(.horizontal, 8)
+                                    }
 
 
                                     HStack(alignment: .center, spacing: 16) {
@@ -138,12 +167,14 @@ struct ChapterResultView: View {
                                         .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1))
 
 
-                                    Text(result.completionTip ?? "Before asking a hesitant child to join an activity, sit with them first. Let them feel your presence before you invite them in.")
-                                        .font(.appFont(size: 20))
-                                        .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
-                                        .multilineTextAlignment(.center)
-                                        .lineSpacing(6)
-                                        .padding(.horizontal, 12)
+                                    if let completionTip = result.completionTip {
+                                        Text(completionTip)
+                                            .font(.appFont(size: 20))
+                                            .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
+                                            .multilineTextAlignment(.center)
+                                            .lineSpacing(6)
+                                            .padding(.horizontal, 12)
+                                    }
 
                                     Spacer(minLength: 0)
                                 }

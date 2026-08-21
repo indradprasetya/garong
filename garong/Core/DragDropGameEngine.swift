@@ -69,8 +69,8 @@ final class DragDropGameEngine {
 
     /// Whether the current evaluated outcome is ideal/correct.
     var isCurrentOutcomeIdeal: Bool {
-        guard let outcome = currentOutcome else { return true }
-        return outcome.isIdeal
+        guard chapter.storyDefinition != nil else { return true }
+        return currentOutcome?.isIdeal == true
     }
     
     /// Total objects available in tray.
@@ -80,10 +80,6 @@ final class DragDropGameEngine {
 
     var placementLimitMessage: String {
         chapter.storyDefinition?.placementLimitMessage.en ?? "The characters need a break."
-    }
-
-    var isCurrentOutcomeSuccessful: Bool {
-        currentOutcome?.category == "success"
     }
 
     var placementFeedbackState: PlacementFeedbackState {
@@ -118,10 +114,11 @@ final class DragDropGameEngine {
         placementCount += 1
         reevaluateAllReactions()
 
-        if isAllScenesFilled && isCurrentOutcomeSuccessful {
+        if isAllScenesFilled && isCurrentOutcomeIdeal {
             completeStoryRun()
         } else if let maximumPlacements, placementCount >= maximumPlacements {
-            completeStoryRun()
+            phase = .needsBreak
+            saveProgress(status: .needsBreak)
         } else {
             saveProgress()
         }
@@ -174,6 +171,7 @@ final class DragDropGameEngine {
     
     /// Explicitly finishes the chapter and transitions to the completion result overlay.
     func finishChapter() {
+        guard chapter.storyDefinition == nil || (isAllScenesFilled && isCurrentOutcomeIdeal) else { return }
         completeStoryRun()
     }
     
@@ -391,9 +389,7 @@ final class DragDropGameEngine {
             return
         }
         let stars: Int
-        if placementCount >= story.maximumPlacements {
-            stars = 0
-        } else if placementCount <= story.starThresholds.threeStars {
+        if placementCount <= story.starThresholds.threeStars {
             stars = 3
         } else if placementCount <= story.starThresholds.twoStars {
             stars = 2

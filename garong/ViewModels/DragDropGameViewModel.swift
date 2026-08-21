@@ -29,7 +29,7 @@ final class DragDropGameViewModel: ObservableObject {
         self.scenes = engine.scenes
         self.availableObjects = engine.availableObjects
         self.phase = engine.phase
-        self.chapterResult = nil
+        self.chapterResult = engine.phase == .needsBreak ? engine.buildResult() : nil
         self.chapterName = chapter.name
         self.hintText = chapter.storyDefinition?.hints?.compactMap { $0.en }.joined(separator: "\n\n") ?? (chapter.storyDefinition?.description.en ?? chapter.description)
         self.wrongAttempts = engine.wrongAttempts
@@ -52,23 +52,12 @@ final class DragDropGameViewModel: ObservableObject {
 
     var meterImageName: String {
         let character = meterCharacterName
-        let stars: Int
-        switch wrongAttempts {
-        case 0: stars = 3
-        case 1: stars = 2
-        case 2: stars = 1
-        default: stars = 0
-        }
+        let stars = engine.placementFeedbackState.meterStars
         return "\(character)_\(stars)_star"
     }
     
     var hasNextChapter: Bool {
         !storyChapters.isEmpty && currentChapterIndex + 1 < storyChapters.count
-    }
-    
-    /// Navigates to next chapter automatically or displays completed dialog if final chapter in story.
-    func goToNextChapterOrFinish() {
-        finishChapter()
     }
     
     /// Loads the next chapter in sequence.
@@ -148,8 +137,6 @@ final class DragDropGameViewModel: ObservableObject {
                 } else {
                     SoundManager.shared.play(.itemPickup)
                 }
-            } else {
-                SoundManager.shared.play(.itemPickup)
             }
         } else {
             hasPlayedCompletionSFX = false
@@ -185,16 +172,12 @@ final class DragDropGameViewModel: ObservableObject {
         syncWithEngine()
     }
     
-    /// User explicitly taps the Finish button to complete the chapter.
-    func finishChapter() {
-        engine.finishChapter()
-        syncWithEngine()
-    }
-    
     /// Restart the chapter.
-    func restart() {
+    func restart(playSound: Bool = true) {
         hasPlayedCompletionSFX = false
-        SoundManager.shared.play(.buttonTap)
+        if playSound {
+            SoundManager.shared.play(.buttonTap)
+        }
         engine.restart()
         chapterResult = nil
         syncWithEngine()
@@ -222,6 +205,8 @@ final class DragDropGameViewModel: ObservableObject {
                     SoundManager.shared.play(.itemPickup)
                 }
             }
+        } else if engine.phase == .needsBreak {
+            self.chapterResult = engine.buildResult()
         } else {
             self.chapterResult = nil
         }
