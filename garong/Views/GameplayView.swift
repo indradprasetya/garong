@@ -472,19 +472,3 @@ struct GameplayView: View {
         )
     }
 }
-
-struct GameplayView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            GameplayView(viewModel: DragDropGameViewModel(chapter: StoryCatalog.allChapters[0], showTutorialHintForPreview: true))
-                .previewDisplayName("Chapter 1 Tutorial Overlay")
-
-            GameplayView(viewModel: DragDropGameViewModel(chapter: StoryCatalog.allChapters[0], showPeekHintForPreview: true))
-                .previewDisplayName("Mistake Peek Hint Overlay")
-
-            GameplayView(chapter: StoryCatalog.allChapters[0])
-                .previewDisplayName("Standard Gameplay")
-        }
-        .previewInterfaceOrientation(.landscapeLeft)
-    }
-}
