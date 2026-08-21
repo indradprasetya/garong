@@ -1,5 +1,5 @@
 {
-  "settings.title": { "en": "SETTING", "id": "PENGATURAN" },
+  "settings.title": { "en": "SETTINGS", "id": "PENGATURAN" },
   "settings.sfxVolume": { "en": "SFX VOL", "id": "VOLUME EFEK" },
   "settings.bgm": { "en": "BGM", "id": "MUSIK" },
   "settings.language": { "en": "LANGUAGE", "id": "BAHASA" },
@@ -14,7 +14,7 @@
   "settings.ok": { "en": "OK", "id": "OK" },
   "settings.resetSuccessMessage": { "en": "Your game progress has been reset.", "id": "Seluruh progres permainan telah diatur ulang." },
 
-  "guidebook.title": { "en": "Guidebook", "id": "Panduan" },
+  "guidebook.title": { "en": "GUIDEBOOK", "id": "PANDUAN" },
   "guidebook.item1.title": { "en": "#1 Connect and redirect", "id": "#1 Tenangkan, lalu arahkan" },
   "guidebook.item1.paragraph1": { "en": "When a child is upset, meet them emotionally first through touch and reflecting back what you're hearing.", "id": "Saat anak sedang kesal, tenangkan emosinya terlebih dahulu. Berikan sentuhan yang menenangkan dan tunjukkan bahwa kamu memahami apa yang ia rasakan." },
   "guidebook.item1.paragraph2": { "en": "Once they've calmed down, you can shift to logic, problem-solving.", "id": "Setelah anak lebih tenang, barulah ajak ia berpikir logis dan mencari solusi." },

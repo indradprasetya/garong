@@ -91,7 +91,8 @@ struct ChapterSelectionView: View {
                             )
 
                         Text(localization.localized(currentStory.name).uppercased())
-                            .font(.appFont(size: max(34, width * 0.045)))
+                            .font(.appFont(size: max(50, width * 0.045)))
+                            .bold()
                             .foregroundStyle(.black)
                             .multilineTextAlignment(.center)
                             .lineLimit(1)
@@ -202,7 +203,7 @@ struct ChapterSelectionView: View {
                 selectedStoryIndex = destination
             }
         } label: {
-            Image("NextArrow")
+            Image("chevron_right")
                 .resizable()
                 .scaledToFit()
                 .frame(width: width * 0.070)

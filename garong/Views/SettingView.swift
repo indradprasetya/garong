@@ -31,9 +31,10 @@ struct SettingView: View {
                 VStack(spacing: 8) {
                     // Title
                     Text(localization.text("settings.title"))
-                        .font(.appFont(size: 36))
+                        .font(.appFont(size: 50))
                         .foregroundStyle(.red)
-                        .padding(.top, 28)
+                        .padding(.top, 30)
+                        .bold()
 
                     // Blue Settings Panel
                     ZStack {
