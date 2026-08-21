@@ -519,79 +519,68 @@ struct ChapterSelectionView: View {
                 )
 
 
-            // =================================================
-            // CURRENT / NEXT CHAPTER
-            //
-            // YELLOW + ARROW
-            // =================================================
+                // =================================================
+                // CURRENT / NEXT CHAPTER
+                //
+                // YELLOW + ARROW
+                // Klik langsung masuk GAMEPLAY
+                // =================================================
 
-            case .current:
+                case .current:
 
-                NavigationLink {
+                    NavigationLink {
 
-                    ChapterIntroView(
-                        chapter:
-                            currentChapters[index]
-                    )
-
-                } label: {
-
-                    ZStack {
-
-                        Image(
-                            "DoChapter"
-                        )
-                        .resizable()
-                        .scaledToFit()
-                        .frame(
-                            width:
-                                buttonWidth
+                        GameplayView(
+                            chapter: currentChapters[index]
                         )
 
+                    } label: {
 
-                        chapterTextAsset(
-                            index: index
-                        )
-                        .frame(
-                            width:
-                                textWidth,
-                            height:
-                                textHeight
-                        )
+                        ZStack {
 
-
-                        Image(
-                            systemName:
-                                "chevron.right"
-                        )
-                        .font(
-                            .system(
-                                size: max(
-                                    14,
-                                    width * 0.017
-                                ),
-                                weight:
-                                    .black
+                            Image(
+                                "DoChapter"
                             )
-                        )
-                        .foregroundStyle(
-                            .black
-                        )
-                        .offset(
-                            x:
-                                width * 0.070,
-                            y:
-                                -6
+                            .resizable()
+                            .scaledToFit()
+                            .frame(
+                                width: buttonWidth
+                            )
+
+                            chapterTextAsset(
+                                index: index
+                            )
+                            .frame(
+                                width: textWidth,
+                                height: textHeight
+                            )
+
+                            Image(
+                                systemName: "chevron.right"
+                            )
+                            .font(
+                                .system(
+                                    size: max(
+                                        14,
+                                        width * 0.017
+                                    ),
+                                    weight: .black
+                                )
+                            )
+                            .foregroundStyle(
+                                .black
+                            )
+                            .offset(
+                                x: width * 0.070,
+                                y: -6
+                            )
+                        }
+                        .frame(
+                            width: buttonContainerWidth,
+                            height: buttonContainerHeight
                         )
                     }
-                    .frame(
-                        width:
-                            buttonContainerWidth,
-                        height:
-                            buttonContainerHeight
-                    )
-                }
-                .buttonStyle(.plain)
+                    .buttonStyle(.plain)
 
 
             // =================================================
