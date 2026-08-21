@@ -3,6 +3,7 @@ import SwiftUI
 struct ChapterCompleteView: View {
 
     let result: ChapterResult
+    @ObservedObject private var localization = AppLocalization.shared
 
     let onDismiss: () -> Void
     let onRestart: () -> Void
@@ -26,7 +27,7 @@ struct ChapterCompleteView: View {
 
             VStack(spacing: 8) {
 
-                Text("Chapter Complete!")
+                Text(localization.text("chapter.complete"))
                     .font(
                         .system(
                             .largeTitle,
@@ -39,7 +40,7 @@ struct ChapterCompleteView: View {
                     )
 
                 Text(
-                    "Great job placing all objects!"
+                    localization.text("chapter.completeMessage")
                 )
                 .font(.title3)
                 .foregroundColor(.secondary)
@@ -52,7 +53,7 @@ struct ChapterCompleteView: View {
                     onRestart()
                 } label: {
 
-                    Text("Play Again")
+                    Text(localization.text("chapter.playAgain"))
                         .font(.headline)
                         .foregroundColor(
                             GarongTheme.teal
@@ -81,7 +82,7 @@ struct ChapterCompleteView: View {
                 Button(
                     action: onDismiss
                 ) {
-                    Text("Back to Chapters")
+                    Text(localization.text("chapter.back"))
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(

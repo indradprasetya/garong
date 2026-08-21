@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "stories": [
+    {
+      "id": "school",
+      "number": 1,
+      "name": {
+        "en": "School",
+        "id": "Sekolah"
+      },
+      "chapters": [
+        {
+          "id": "rhodey_wants_to_draw",
+          "number": 1,
+          "resource": "story1_chapter1"
+        },
+        {
+          "id": "jojo_settles_down_to_draw",
+          "number": 2,
+          "resource": "story1_chapter2"
+        },
+        {
+          "id": "rhodey_torn_paper",
+          "number": 3,
+          "resource": "story1_chapter3"
+        }
+      ]
+    },
+    {
+      "id": "playground",
+      "number": 2,
+      "name": {
+        "en": "Playground",
+        "id": "Taman Bermain"
+      },
+      "chapters": [
+        {
+          "id": "validate_jojo_feelings",
+          "number": 1,
+          "resource": "story2_chapter1"
+        },
+        {
+          "id": "share_the_slide",
+          "number": 2,
+          "resource": "story2_chapter2"
+        },
+        {
+          "id": "listen_before_helping_rhodey",
+          "number": 3,
+          "resource": "story2_chapter3"
+        }
+      ]
+    }
+  ]
+}

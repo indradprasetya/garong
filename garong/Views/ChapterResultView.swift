@@ -13,6 +13,7 @@ struct ChapterResultView: View {
     var onNext: (() -> Void)? = nil
     var onTryAgain: (() -> Void)? = nil
     var statusMessage: String? = nil
+    @ObservedObject private var localization = AppLocalization.shared
 
     var body: some View {
         GeometryReader { geo in
@@ -54,7 +55,7 @@ struct ChapterResultView: View {
                                 SoundManager.shared.play(.buttonTap)
                                 onTryAgain()
                             } label: {
-                                Text("Try Again")
+                                Text(localization.text("result.tryAgain"))
                                     .font(.appFont(size: 28))
                                     .foregroundStyle(.red)
                                     .padding(.horizontal, 18)
@@ -78,7 +79,7 @@ struct ChapterResultView: View {
                                         .frame(height: 48)
                                 } else {
                                     HStack(spacing: 6) {
-                                        Text("Next")
+                                        Text(localization.text("result.next"))
                                             .font(.appFont(size: 28))
                                         Image(systemName: "chevron.right")
                                             .font(.system(size: 20, weight: .bold))
@@ -106,7 +107,7 @@ struct ChapterResultView: View {
                             HStack(spacing: 0) {
                                 // LEFT PAGE: RESULT
                                 VStack(alignment: .center) {
-                                    Text("RESULT")
+                                    Text(localization.text("result.title"))
                                         .font(.appFont(size: 32))
                                         .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1))
 
@@ -162,7 +163,7 @@ struct ChapterResultView: View {
 
                                 // RIGHT PAGE: TIPS
                                 VStack(alignment: .center) {
-                                    Text("TIPS")
+                                    Text(localization.text("result.tips"))
                                         .font(.appFont(size: 32))
                                         .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1))
 

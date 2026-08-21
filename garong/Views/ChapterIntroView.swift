@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ChapterIntroView: View {
     let chapter: Chapter
+    @ObservedObject private var localization = AppLocalization.shared
 
     var body: some View {
         ZStack {
@@ -11,7 +12,7 @@ struct ChapterIntroView: View {
                 scenePreview
 
                 VStack(alignment: .leading, spacing: 18) {
-                    Text("LEVEL \(chapter.number)")
+                    Text(localization.text("chapter.level", chapter.number))
                         .font(.caption.weight(.heavy))
                         .tracking(1.5)
                         .foregroundStyle(GarongTheme.coral)
@@ -26,14 +27,14 @@ struct ChapterIntroView: View {
                         .frame(maxWidth: 480, alignment: .leading)
 
                     HStack(spacing: 12) {
-                        stat("\(chapter.scenes.count)", "Frames", "rectangle.stack.fill")
-                        stat("\(chapter.objects.count)", "Objects", "shippingbox.fill")
+                        stat("\(chapter.scenes.count)", localization.text("chapter.frames"), "rectangle.stack.fill")
+                        stat("\(chapter.objects.count)", localization.text("chapter.objects"), "shippingbox.fill")
                     }
 
                     NavigationLink {
                         GameplayView(chapter: chapter)
                     } label: {
-                        Label("Enter the Scene", systemImage: "arrow.right")
+                        Label(localization.text("chapter.enter"), systemImage: "arrow.right")
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(GarongPrimaryButtonStyle())
@@ -65,7 +66,7 @@ struct ChapterIntroView: View {
             }
         }
         .frame(maxWidth: 430, maxHeight: 400)
-        .accessibilityLabel("Chapter illustration placeholder")
+        .accessibilityLabel(localization.text("chapter.illustration"))
     }
 
     private var characterAssets: [String] {

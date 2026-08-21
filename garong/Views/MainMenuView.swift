@@ -184,7 +184,7 @@ struct MainMenuView: View {
                 isPresented: $showChapterSelection
             ) {
                 ChapterSelectionView(
-                    stories: StoryCatalog.gameStories
+                    stories: StoryCatalog.stories
                 )
             }
         }

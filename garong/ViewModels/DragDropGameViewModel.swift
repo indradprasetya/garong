@@ -20,7 +20,8 @@ final class DragDropGameViewModel: ObservableObject {
     
     private var engine: DragDropGameEngine
     private var currentChapterIndex: Int = 0
-    private var storyChapters: [StoryChapterItem] = []
+    private var storyChapters: [StoryChapterReference] = []
+    private var storyNumber = 1
     private var hasPlayedCompletionSFX: Bool = false
     
     init(chapter: Chapter) {
@@ -31,20 +32,23 @@ final class DragDropGameViewModel: ObservableObject {
         self.phase = engine.phase
         self.chapterResult = engine.phase == .needsBreak ? engine.buildResult() : nil
         self.chapterName = chapter.name
-        self.hintText = chapter.storyDefinition?.hints?.compactMap { $0.en }.joined(separator: "\n\n") ?? (chapter.storyDefinition?.description.en ?? chapter.description)
+        self.hintText = Self.localizedHint(for: chapter)
         self.wrongAttempts = engine.wrongAttempts
         
         if let storyDef = chapter.storyDefinition,
-           let group = StoryCatalog.stories.first(where: { g in g.chapters.contains { $0.id == storyDef.id || $0.fileName.contains(storyDef.id) } }) {
+           let group = StoryCatalog.stories.first(where: { group in
+               group.chapters.contains { $0.id == storyDef.id }
+           }) {
             self.storyChapters = group.chapters
-            self.currentChapterIndex = group.chapters.firstIndex(where: { $0.id == storyDef.id || $0.fileName.contains(storyDef.id) }) ?? 0
+            self.storyNumber = group.number
+            self.currentChapterIndex = group.chapters.firstIndex(where: { $0.id == storyDef.id }) ?? 0
         }
     }
     
     var meterCharacterName: String {
         guard let story = engine.chapter.storyDefinition else { return "rhodey" }
         let id = story.id.lowercased()
-        if id.contains("jojo") || storyChapters.first?.storyNumber == 2 {
+        if id.contains("jojo") || storyNumber == 2 {
             return "jojo"
         }
         return "rhodey"
@@ -64,12 +68,17 @@ final class DragDropGameViewModel: ObservableObject {
     func loadNextChapter() {
         hasPlayedCompletionSFX = false
         if hasNextChapter {
-            currentChapterIndex += 1
-            let nextItem = storyChapters[currentChapterIndex]
-            let nextChapter = Chapter(storyItem: nextItem)
+            let nextIndex = currentChapterIndex + 1
+            let nextReference = storyChapters[nextIndex]
+            guard let nextChapter = StoryCatalog.chapter(
+                for: nextReference,
+                storyNumber: storyNumber,
+                language: engine.chapter.language
+            ) else { return }
+            currentChapterIndex = nextIndex
             self.engine = DragDropGameEngine(chapter: nextChapter)
             self.chapterName = nextChapter.name
-            self.hintText = nextChapter.storyDefinition?.hints?.compactMap { $0.en }.joined(separator: "\n\n") ?? (nextChapter.storyDefinition?.description.en ?? nextChapter.description)
+            self.hintText = Self.localizedHint(for: nextChapter)
             self.chapterResult = nil
             syncWithEngine()
         }
@@ -92,7 +101,12 @@ final class DragDropGameViewModel: ObservableObject {
     
     /// Progress indicator text e.g. "2 / 3 Scenes Filled"
     var progressText: String {
-        "\(placedObjectCount) / \(totalSceneCount) Scenes Filled"
+        AppLocalization.shared.text(
+            "gameplay.scenesFilled",
+            language: engine.chapter.language,
+            placedObjectCount,
+            totalSceneCount
+        )
     }
 
     var placementFace: String {
@@ -115,14 +129,21 @@ final class DragDropGameViewModel: ObservableObject {
 
     var placementStateLabel: String {
         switch engine.placementFeedbackState {
-        case .green: return "Green: 3-star range"
-        case .yellow: return "Yellow: 2-star range"
-        case .orange: return "Orange: 1-star range"
-        case .red: return "Red: chapter lost"
+        case .green: return AppLocalization.shared.text("gameplay.greenRange", language: engine.chapter.language)
+        case .yellow: return AppLocalization.shared.text("gameplay.yellowRange", language: engine.chapter.language)
+        case .orange: return AppLocalization.shared.text("gameplay.orangeRange", language: engine.chapter.language)
+        case .red: return AppLocalization.shared.text("gameplay.lost", language: engine.chapter.language)
         }
     }
 
     var placementLimitMessage: String { engine.placementLimitMessage }
+
+    private static func localizedHint(for chapter: Chapter) -> String {
+        if let hints = chapter.storyDefinition?.hints, !hints.isEmpty {
+            return hints.map { $0.localized(language: chapter.language) }.joined(separator: "\n\n")
+        }
+        return chapter.storyDefinition?.description.localized(language: chapter.language) ?? chapter.description
+    }
     
     /// Drop or replace an object in a target scene slot.
     func dropObject(_ object: GameObject, intoSlot slotID: String? = nil, intoScene sceneID: UUID) {

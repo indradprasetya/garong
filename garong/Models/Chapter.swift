@@ -21,6 +21,7 @@ struct Chapter: Identifiable, Equatable {
     let scenes: [GameScene]
     let objects: [GameObject]
     let completionRule: CompletionRule
+    let language: String
     var isUnlocked: Bool
     var storyDefinition: StoryDefinition?
 
@@ -32,6 +33,7 @@ struct Chapter: Identifiable, Equatable {
         scenes: [GameScene],
         objects: [GameObject],
         completionRule: CompletionRule = .allObjectsPlaced,
+        language: String = AppLocalization.shared.languageCode,
         isUnlocked: Bool = false,
         storyDefinition: StoryDefinition? = nil
     ) {
@@ -42,15 +44,18 @@ struct Chapter: Identifiable, Equatable {
         self.scenes = scenes
         self.objects = objects
         self.completionRule = completionRule
+        self.language = language
         self.isUnlocked = isUnlocked
         self.storyDefinition = storyDefinition
     }
 
-    init(storyItem: StoryChapterItem) {
+    init(storyItem: StoryChapterItem, language: String = AppLocalization.shared.languageCode) {
         self.id = UUID()
         self.number = storyItem.chapterNumber
-        self.name = storyItem.title
-        self.description = storyItem.description
+        self.name = storyItem.storyDefinition?.title.localized(language: language)
+            ?? AppLocalization.shared.text("story.chapterFallback", language: language, storyItem.chapterNumber)
+        self.description = storyItem.storyDefinition?.description.localized(language: language) ?? ""
+        self.language = language
         self.isUnlocked = storyItem.isUnlocked
         self.completionRule = .allObjectsPlaced
         self.storyDefinition = storyItem.storyDefinition
@@ -68,7 +73,9 @@ struct Chapter: Identifiable, Equatable {
                     ? initialImageNames
                     : story.characters.map { AssetFallbackHelper.imageName(for: $0.id) }
 
-                let initialSpeechBubble = (index == 0) ? initialState?.textBubble?.text.en : nil
+                let initialSpeechBubble = (index == 0)
+                    ? initialState?.textBubble?.text.localized(language: language)
+                    : nil
                 let dropSlots: [GameDropSlot]
                 let isOutcomeGrid: Bool
                 if let jsonSlots = grid.dropSlots, !jsonSlots.isEmpty {
@@ -77,9 +84,9 @@ struct Chapter: Identifiable, Equatable {
                         let label: String
                         if let targetCharID = slot.targetCharacterID {
                             let charName = story.characters.first(where: { $0.id == targetCharID })?.displayName ?? targetCharID.capitalized
-                            label = "For \(charName)"
+                            label = AppLocalization.shared.text("scene.forCharacter", language: language, charName)
                         } else {
-                            label = "Scene"
+                            label = AppLocalization.shared.text("scene.scene", language: language)
                         }
                         return GameDropSlot(
                             id: slot.id,
@@ -94,8 +101,12 @@ struct Chapter: Identifiable, Equatable {
                 }
                 
                 return GameScene(
-                    name: isOutcomeGrid ? "Outcome" : "Grid \(grid.order)",
-                    description: isOutcomeGrid ? "Final Result" : "Scene \(grid.order)",
+                    name: isOutcomeGrid
+                        ? AppLocalization.shared.text("scene.outcome", language: language)
+                        : AppLocalization.shared.text("scene.grid", language: language, grid.order),
+                    description: isOutcomeGrid
+                        ? AppLocalization.shared.text("scene.finalResult", language: language)
+                        : AppLocalization.shared.text("scene.number", language: language, grid.order),
                     dropSlots: dropSlots,
                     speechBubbleText: initialSpeechBubble,
                     characterImageNames: charNames.isEmpty ? ["fallback_globe"] : charNames,
@@ -105,7 +116,7 @@ struct Chapter: Identifiable, Equatable {
             }
             self.objects = story.actions.map { action in
                 GameObject(
-                    name: action.name.en,
+                    name: action.name.localized(language: language),
                     symbol: AssetFallbackHelper.actionImageName(for: action.id),
                     sfSymbol: AssetFallbackHelper.sfSymbol(for: action.id)
                 )

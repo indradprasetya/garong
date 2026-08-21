@@ -7,28 +7,28 @@ import Foundation
 
 struct GuidebookItem: Identifiable {
     let id: Int
-    let title: String
+    let titleKey: String
     let leftChar: String?
     let rightChar: String
-    let paragraph1: String
-    let paragraph2: String?
+    let paragraph1Key: String
+    let paragraph2Key: String?
     let isBookReference: Bool
 
     init(
         id: Int,
-        title: String = "",
+        titleKey: String = "",
         leftChar: String? = nil,
         rightChar: String = "",
-        paragraph1: String,
-        paragraph2: String? = nil,
+        paragraph1Key: String,
+        paragraph2Key: String? = nil,
         isBookReference: Bool = false
     ) {
         self.id = id
-        self.title = title
+        self.titleKey = titleKey
         self.leftChar = leftChar
         self.rightChar = rightChar
-        self.paragraph1 = paragraph1
-        self.paragraph2 = paragraph2
+        self.paragraph1Key = paragraph1Key
+        self.paragraph2Key = paragraph2Key
         self.isBookReference = isBookReference
     }
 }
@@ -37,40 +37,36 @@ enum GuidebookData {
     static let items: [GuidebookItem] = [
         GuidebookItem(
             id: 1,
-            title: "#1 Connect and redirect",
+            titleKey: "guidebook.item1.title",
             leftChar: "rhodey_crying",
             rightChar: "rhodey_calm",
-            paragraph1: "When a child is upset, meet them emotionally first through touch and reflecting back what you're hearing.",
-            paragraph2: "Once they've calmed down, you can shift to logic, problem-solving."
+            paragraph1Key: "guidebook.item1.paragraph1",
+            paragraph2Key: "guidebook.item1.paragraph2"
         ),
         GuidebookItem(
             id: 2,
-            title: "#2 Name it to Tame it",
+            titleKey: "guidebook.item2.title",
             leftChar: "jojo_sad",
             rightChar: "jojo_calm",
-            paragraph1: "When emotions are overwhelming, help the child narrate what happened. Putting the experience into words engages the left brain and helps them regain a sense of control.",
-            paragraph2: nil
+            paragraph1Key: "guidebook.item2.paragraph1"
         ),
         GuidebookItem(
             id: 3,
-            title: "#3 Engage, dont Enrage",
+            titleKey: "guidebook.item3.title",
             leftChar: "rhodey_injured_sitting",
             rightChar: "rhodey_bandaged",
-            paragraph1: "In tense moments, invite the child to think and choose rather than just react. Reframe commands as questions that involve their reasoning, then praise them for coming up with alternatives.",
-            paragraph2: nil
+            paragraph1Key: "guidebook.item3.paragraph1"
         ),
         GuidebookItem(
             id: 4,
-            title: "#4 Connect through Conflict",
+            titleKey: "guidebook.item4.title",
             leftChar: nil,
             rightChar: "jojo_rhodey_handshake",
-            paragraph1: "Treat conflict (with siblings, peers, or you) as a teaching opportunity rather than something to avoid. Giving/asking forgiveness help them understand what respectful relationships look like even during disagreements.",
-            paragraph2: nil
+            paragraph1Key: "guidebook.item4.paragraph1"
         ),
         GuidebookItem(
             id: 5,
-            title: "",
-            paragraph1: "Read more in ‘The Whole-Brain Child’ book by Daniel J. Siegel, M.D. and Tina Payne Bryson, Ph.D.",
+            paragraph1Key: "guidebook.item5.paragraph1",
             isBookReference: true
         )
     ]
