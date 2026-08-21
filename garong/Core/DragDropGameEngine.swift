@@ -121,8 +121,7 @@ final class DragDropGameEngine {
         if isAllScenesFilled && isCurrentOutcomeSuccessful {
             completeStoryRun()
         } else if let maximumPlacements, placementCount >= maximumPlacements {
-            phase = .needsBreak
-            saveProgress(status: .needsBreak)
+            completeStoryRun()
         } else {
             saveProgress()
         }
@@ -175,11 +174,7 @@ final class DragDropGameEngine {
     
     /// Explicitly finishes the chapter and transitions to the completion result overlay.
     func finishChapter() {
-        if chapter.storyDefinition == nil {
-            phase = .completed
-        } else if isAllScenesFilled && isCurrentOutcomeSuccessful {
-            completeStoryRun()
-        }
+        completeStoryRun()
     }
     
     /// Recalculates character emotions and speech text for scenes based on current global combinations.
@@ -291,14 +286,33 @@ final class DragDropGameEngine {
         }
     }
     
+    var meterCharacterName: String {
+        guard let story = chapter.storyDefinition else { return "rhodey" }
+        let id = story.id.lowercased()
+        if id.contains("jojo") {
+            return "jojo"
+        }
+        return "rhodey"
+    }
+
+    var meterImageName: String {
+        let character = meterCharacterName
+        let stars = starsEarned ?? 0
+        return "\(character)_\(stars)_star"
+    }
+
     /// Build summary result for chapter completion.
     func buildResult() -> ChapterResult {
-        ChapterResult(
+        let charName = meterCharacterName
+        let stars = starsEarned ?? 0
+        let image = "\(charName)_\(stars)_star"
+
+        return ChapterResult(
             chapterName: chapter.name,
             totalObjects: totalSceneCount,
             placedObjects: placedObjectCount,
             placementCount: placementCount,
-            stars: starsEarned ?? 0,
+            stars: stars,
             completionSummary: chapter.storyDefinition?.completionSummary.en,
             completionTip: chapter.storyDefinition?.completionTip.en,
             sceneStates: scenes.map { scene in
@@ -307,7 +321,9 @@ final class DragDropGameEngine {
                     objectNames: scene.dropSlots.compactMap { $0.currentObject?.name },
                     emotionName: scene.characterEmotion.displayName
                 )
-            }
+            },
+            characterName: charName.capitalized,
+            meterImageName: image
         )
     }
     
@@ -374,9 +390,16 @@ final class DragDropGameEngine {
             phase = .completed
             return
         }
-        let stars = placementCount <= story.starThresholds.threeStars
-            ? 3
-            : placementCount <= story.starThresholds.twoStars ? 2 : 1
+        let stars: Int
+        if placementCount >= story.maximumPlacements {
+            stars = 0
+        } else if placementCount <= story.starThresholds.threeStars {
+            stars = 3
+        } else if placementCount <= story.starThresholds.twoStars {
+            stars = 2
+        } else {
+            stars = 1
+        }
         starsEarned = stars
         bestStars = max(bestStars ?? 0, stars)
         phase = .completed
