@@ -110,7 +110,7 @@ final class DragDropGameViewModel: ObservableObject {
                 language: engine.chapter.language
             ) else { return }
             currentChapterIndex = nextIndex
-            self.engine = DragDropGameEngine(chapter: nextChapter)
+            self.engine = DragDropGameEngine(chapter: nextChapter, resumeProgress: false)
             self.chapterName = nextChapter.name
             self.hintText = Self.localizedHint(for: nextChapter)
             self.chapterResult = nil

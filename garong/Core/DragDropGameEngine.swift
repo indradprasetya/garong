@@ -27,7 +27,8 @@ final class DragDropGameEngine {
         chapter: Chapter,
         reactionEvaluator: ReactionEvaluating = DefaultReactionEvaluator(),
         completionEvaluator: CompletionEvaluator = CompletionEvaluator(),
-        progressStore: StoryProgressStore = StoryProgressStore()
+        progressStore: StoryProgressStore = StoryProgressStore(),
+        resumeProgress: Bool = true
     ) {
         self.chapter = chapter
         self.scenes = chapter.scenes
@@ -38,6 +39,9 @@ final class DragDropGameEngine {
         
         if let story = chapter.storyDefinition {
             self.storyRunner = try? StoryRunner(story: story)
+            if !resumeProgress {
+                try? progressStore.clearActiveRun(storyID: story.id)
+            }
             restoreProgress(for: story)
         }
         
