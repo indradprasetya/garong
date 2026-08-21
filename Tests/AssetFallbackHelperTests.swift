@@ -38,6 +38,9 @@ struct AssetFallbackHelperTests {
         precondition(AssetFallbackHelper.hasAsset(named: "green_selector_full"))
         precondition(AssetFallbackHelper.hasAsset(named: "green_selector_half"))
         precondition(AssetFallbackHelper.hasAsset(named: "bubble_respond"))
+        precondition(AssetFallbackHelper.hasAsset(named: "next_button"))
+        precondition(AssetFallbackHelper.hasAsset(named: "next_button_result"))
+        precondition(AssetFallbackHelper.hasAsset(named: "try_again_button"))
         precondition(!AssetFallbackHelper.hasAsset(named: "non_existent_asset"))
 
         print("AssetFallbackHelperTests passed")
