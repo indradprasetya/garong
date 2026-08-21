@@ -12,16 +12,28 @@
         {
           "id": "rhodey_wants_to_draw",
           "number": 1,
+          "shortTitle": {
+            "en": "Let's Draw!",
+            "id": "Ayo Menggambar!"
+          },
           "resource": "story1_chapter1"
         },
         {
           "id": "jojo_settles_down_to_draw",
           "number": 2,
+          "shortTitle": {
+            "en": "Too Loud to Draw",
+            "id": "Terlalu Berisik untuk Menggambar"
+          },
           "resource": "story1_chapter2"
         },
         {
           "id": "rhodey_torn_paper",
           "number": 3,
+          "shortTitle": {
+            "en": "My Drawing Tore",
+            "id": "Gambarku Robek"
+          },
           "resource": "story1_chapter3"
         }
       ]
@@ -37,16 +49,28 @@
         {
           "id": "validate_jojo_feelings",
           "number": 1,
+          "shortTitle": {
+            "en": "That Hurt My Feelings",
+            "id": "Itu Menyakiti Perasaanku"
+          },
           "resource": "story2_chapter1"
         },
         {
           "id": "share_the_slide",
           "number": 2,
+          "shortTitle": {
+            "en": "The Slide Is Mine",
+            "id": "Perosotan Ini Milikku"
+          },
           "resource": "story2_chapter2"
         },
         {
           "id": "listen_before_helping_rhodey",
           "number": 3,
+          "shortTitle": {
+            "en": "Jojo Pushed Me!",
+            "id": "Jojo Mendorongku!"
+          },
           "resource": "story2_chapter3"
         }
       ]

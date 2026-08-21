@@ -15,6 +15,7 @@ struct StoryListStory: Decodable, Identifiable {
 struct StoryChapterReference: Decodable, Identifiable {
     let id: String
     let number: Int
+    let shortTitle: LocalizedStoryText
     let resource: String
 }
 
@@ -48,6 +49,8 @@ enum StoryListLoader {
             for chapter in story.chapters {
                 guard !chapter.id.isEmpty,
                       !chapter.resource.isEmpty,
+                      !chapter.shortTitle.en.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                      !chapter.shortTitle.id.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                       chapterIDs.insert(chapter.id).inserted,
                       chapterNumbers.insert(chapter.number).inserted,
                       resources.insert(chapter.resource).inserted,

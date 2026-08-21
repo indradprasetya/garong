@@ -16,6 +16,7 @@ enum StoryListTests {
 
         precondition(stories.map(\.id) == ["school", "playground"])
         precondition(stories.map { $0.name.localized(language: "id") } == ["Sekolah", "Taman Bermain"])
+        precondition(stories[0].chapters.map { $0.shortTitle.localized(language: "en") } == ["Let's Draw!", "Too Loud to Draw", "My Drawing Tore"])
         precondition(stories[0].chapters.map(\.resource) == ["story1_chapter1", "story1_chapter2", "story1_chapter3"])
         precondition(stories[1].chapters.map(\.id) == ["validate_jojo_feelings", "share_the_slide", "listen_before_helping_rhodey"])
         precondition(stories[0].chapters[1].id == "jojo_settles_down_to_draw")
@@ -51,6 +52,13 @@ enum StoryListTests {
         try expectFailure(data, resources: resources) { root in
             var stories = root["stories"] as! [[String: Any]]
             stories[0]["name"] = ["en": "", "id": "Sekolah"]
+            root["stories"] = stories
+        }
+        try expectFailure(data, resources: resources) { root in
+            var stories = root["stories"] as! [[String: Any]]
+            var chapters = stories[0]["chapters"] as! [[String: Any]]
+            chapters[0]["shortTitle"] = ["en": "", "id": "Ayo Menggambar!"]
+            stories[0]["chapters"] = chapters
             root["stories"] = stories
         }
         try expectFailure(data, resources: resources) { root in
