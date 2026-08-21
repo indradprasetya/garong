@@ -12,6 +12,10 @@ struct GameStory: Identifiable, Equatable {
     let isUnlocked: Bool
 
     var progressText: String {
-        "\(chapters.filter(\.isUnlocked).count) of \(chapters.count) chapters available"
+        AppLocalization.shared.text(
+            "story.progress",
+            chapters.filter(\.isUnlocked).count,
+            chapters.count
+        )
     }
 }

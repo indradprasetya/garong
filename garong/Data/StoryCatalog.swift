@@ -14,80 +14,58 @@ struct StoryChapterItem: Identifiable {
     let isUnlocked: Bool
     
     var title: String {
-        storyDefinition?.title.en ?? "Chapter \(chapterNumber)"
-    }
-    
-    var titleID: String {
-        storyDefinition?.title.id ?? "Bab \(chapterNumber)"
+        storyDefinition.map { AppLocalization.shared.localized($0.title) }
+            ?? AppLocalization.shared.text("story.chapterFallback", chapterNumber)
     }
     
     var description: String {
-        storyDefinition?.description.en ?? ""
+        storyDefinition.map { AppLocalization.shared.localized($0.description) } ?? ""
     }
-}
-
-struct StoryGroup: Identifiable {
-    let id: Int
-    let title: String
-    let description: String
-    let chapters: [StoryChapterItem]
 }
 
 enum StoryCatalog {
-    static var stories: [StoryGroup] {
-        [
-            StoryGroup(
-                id: 1,
-                title: "Story 1: Classroom & Drawing Time",
-                description: "Help Rhodey and Jojo feel safe, calm, and ready to participate in drawing activities.",
-                chapters: [
-                    loadChapter(storyNumber: 1, chapterNumber: 1, fileName: "story1_chapter1", isUnlocked: true),
-                    loadChapter(storyNumber: 1, chapterNumber: 2, fileName: "story1_chapter2", isUnlocked: true),
-                    loadChapter(storyNumber: 1, chapterNumber: 3, fileName: "story1_chapter3", isUnlocked: true)
-                ]
-            ),
-            StoryGroup(
-                id: 2,
-                title: "Story 2: Playground Conflicts",
-                description: "Guide Rhodey and Jojo through playground interactions, shared toys, and resolving hurt feelings.",
-                chapters: [
-                    loadChapter(storyNumber: 2, chapterNumber: 1, fileName: "story2_chapter1", isUnlocked: true),
-                    loadChapter(storyNumber: 2, chapterNumber: 2, fileName: "story2_chapter2", isUnlocked: true),
-                    loadChapter(storyNumber: 2, chapterNumber: 3, fileName: "story2_chapter3", isUnlocked: true)
-                ]
-            )
-        ]
-    }
-
-    /// Presentation-ready stories backed by the JSON chapter catalog.
-    @MainActor static var gameStories: [GameStory] {
-        stories.map { group in
-            GameStory(
-                id: "story-\(group.id)",
-                number: group.id,
-                title: group.title,
-                subtitle: "\(group.chapters.count) chapters",
-                synopsis: group.description,
-                symbol: group.id == 1 ? "paintpalette.fill" : "figure.play",
-                chapters: group.chapters.map(Chapter.init(storyItem:)),
-                isUnlocked: group.chapters.contains(where: \.isUnlocked)
-            )
+    static var stories: [StoryListStory] {
+        do {
+            return try StoryListLoader.load()
+        } catch {
+            debugPrint("StoryCatalog: \(error)")
+            return []
         }
     }
 
-    @MainActor static var allChapters: [Chapter] {
-        stories.flatMap(\.chapters).map(Chapter.init(storyItem:))
+    @MainActor
+    static func chapters(
+        for story: StoryListStory,
+        language: String
+    ) -> [Chapter] {
+        let chapters = story.chapters.compactMap {
+            chapter(for: $0, storyNumber: story.number, language: language)
+        }
+        return chapters.count == story.chapters.count ? chapters : []
     }
 
-    private static func loadChapter(storyNumber: Int, chapterNumber: Int, fileName: String, isUnlocked: Bool) -> StoryChapterItem {
-        let definition = try? StoryLoader.load(named: fileName)
-        return StoryChapterItem(
-            id: definition?.id ?? fileName,
-            storyNumber: storyNumber,
-            chapterNumber: chapterNumber,
-            fileName: fileName,
-            storyDefinition: definition,
-            isUnlocked: isUnlocked
+    @MainActor
+    static func chapter(
+        for reference: StoryChapterReference,
+        storyNumber: Int,
+        language: String
+    ) -> Chapter? {
+        guard let definition = try? StoryLoader.load(named: reference.resource),
+              definition.id == reference.id else { return nil }
+        return Chapter(
+            storyItem: StoryChapterItem(
+                id: reference.id,
+                storyNumber: storyNumber,
+                chapterNumber: reference.number,
+                fileName: reference.resource,
+                storyDefinition: definition,
+                isUnlocked: true
+            ),
+            language: language
         )
+    }
+
+    @MainActor static var allChapters: [Chapter] {
+        stories.flatMap { chapters(for: $0, language: AppLocalization.shared.languageCode) }
     }
 }

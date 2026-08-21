@@ -28,6 +28,42 @@ struct StoryProgressEngineTests {
             isUnlocked: true
         )
         let chapter = Chapter(storyItem: item)
+        let indonesianChapter = Chapter(storyItem: item, language: "id")
+        precondition(indonesianChapter.name == story.title.id, "Chapter title must follow the selected language")
+        precondition(
+            indonesianChapter.objects.map(\.name) == story.actions.map(\.name.id),
+            "Gameplay action names must follow the selected language"
+        )
+        let indonesianSuite = "StoryProgressIndonesianTests.\(UUID().uuidString)"
+        let indonesianDefaults = UserDefaults(suiteName: indonesianSuite)!
+        defer { indonesianDefaults.removePersistentDomain(forName: indonesianSuite) }
+        let indonesianEngine = DragDropGameEngine(
+            chapter: indonesianChapter,
+            progressStore: StoryProgressStore(defaults: indonesianDefaults)
+        )
+        let localizedApproachName = try require(
+            story.actions.first(where: { $0.id == "action_approach" })?.name.id,
+            "localized approach name"
+        )
+        let localizedCrayonName = try require(
+            story.actions.first(where: { $0.id == "action_crayon" })?.name.id,
+            "localized crayon name"
+        )
+        let localizedApproach = try require(
+            indonesianChapter.objects.first(where: { $0.name == localizedApproachName }),
+            "localized approach action"
+        )
+        let localizedCrayon = try require(
+            indonesianChapter.objects.first(where: { $0.name == localizedCrayonName }),
+            "localized crayon action"
+        )
+        precondition(indonesianEngine.placeObject(localizedApproach, inScene: indonesianEngine.scenes[0].id))
+        precondition(indonesianEngine.placeObject(localizedCrayon, inScene: indonesianEngine.scenes[1].id))
+        precondition(indonesianEngine.phase == .completed, "Localized actions must still complete the chapter")
+        precondition(
+            indonesianEngine.buildResult().completionSummary == story.completionSummary.id,
+            "Chapter result must use the selected story language"
+        )
         let suiteName = "StoryProgressEngineTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
         defer { defaults.removePersistentDomain(forName: suiteName) }
@@ -37,6 +73,11 @@ struct StoryProgressEngineTests {
         precondition(engine.placementFeedbackState == .green, "A new run must start green")
         let approach = try require(chapter.objects.first { $0.name == "Approach" }, "Approach action")
         precondition(engine.placeObject(approach, inScene: engine.scenes[0].id), "Placement must succeed")
+        precondition(engine.scenes[1].isUnlocked, "Completing Grid 1 must reveal Grid 2")
+        precondition(
+            engine.scenes[1].speechBubbleText == "You're staying with me?",
+            "A newly revealed grid must show its reaction bubble before receiving another item"
+        )
 
         let saved = try store.state(for: story.id).activeRun
         precondition(saved == StoryActiveRun(steps: [
@@ -86,9 +127,10 @@ struct StoryProgressEngineTests {
         precondition(nonIdealEngine.placeObject(asking, inScene: nonIdealEngine.scenes[0].id))
         precondition(nonIdealEngine.placeObject(story2Approach, inScene: nonIdealEngine.scenes[1].id))
         precondition(nonIdealEngine.currentOutcome?.category == "success" && !nonIdealEngine.isCurrentOutcomeIdeal)
-        precondition(nonIdealEngine.phase == .playing, "A non-ideal success must remain playable")
+        precondition(nonIdealEngine.phase == .completed, "Every success outcome must complete the chapter")
+        precondition(nonIdealEngine.wrongAttempts == 0, "A safe non-ideal success must not count as a wrong attempt")
         let nonIdealState = try nonIdealStore.state(for: story2.id)
-        precondition(nonIdealState.completion == nil, "A non-ideal success must not unlock progress")
+        precondition(nonIdealState.completion == StoryCompletion(bestStars: 3, bestPlacementCount: 2), "A safe non-ideal success must save progress")
 
         let exhausted = DragDropGameEngine(chapter: chapter, progressStore: store)
         let toy = try require(chapter.objects.first { $0.name == "Toy" }, "Toy action")

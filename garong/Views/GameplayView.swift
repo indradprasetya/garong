@@ -8,6 +8,7 @@ import SwiftUI
 /// Main gameplay screen — landscape layout with 3 scenes, centered object tray, and explicit Finish button.
 struct GameplayView: View {
     @StateObject private var viewModel: DragDropGameViewModel
+    @ObservedObject private var localization = AppLocalization.shared
     @Environment(\.dismiss) private var dismiss
     @State private var showHintOverlay: Bool = false
     @State private var showResultOverlay: Bool = false
@@ -265,7 +266,7 @@ struct GameplayView: View {
             }
             
             VStack(spacing: 8) {
-                Text("HINT")
+                Text(localization.text("gameplay.hint"))
                     .font(.appFont(size: 50))
                     .foregroundColor(.blue)
                 
@@ -277,7 +278,7 @@ struct GameplayView: View {
                         .lineSpacing(4)
                         .padding(.horizontal, 36)
                 } else {
-                    Text("Pay attention to how each action affects the characters' feelings.")
+                    Text(localization.text("gameplay.hintFallback"))
                         .font(.appFont(size: 18))
                         .foregroundColor(Color(red: 0.15, green: 0.15, blue: 0.2))
                         .multilineTextAlignment(.center)
