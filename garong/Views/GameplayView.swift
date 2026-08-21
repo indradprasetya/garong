@@ -180,8 +180,7 @@ struct GameplayView: View {
                         ForEach(viewModel.availableObjects, id: \.id) { object in
                             DraggableObjectView(
                                 object: object,
-                                onDragStarted: { viewModel.setDraggingActive(true) },
-                                onDragEnded: { viewModel.setDraggingActive(false) }
+                                onDragStarted: { viewModel.setDraggingActive(true) }
                             )
                         }
                     }

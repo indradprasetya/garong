@@ -187,6 +187,7 @@ struct SceneDropZoneView: View {
                             Color.clear
                                 .contentShape(Rectangle())
                                 .dropDestination(for: GameObject.self) { _, _ in
+                                    onDragEnded?()
                                     return false
                                 }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -203,7 +204,6 @@ struct SceneDropZoneView: View {
                                         badgeSize: badgeSize,
                                         onTargetChanged: { targeted in isHoveringDrag = targeted },
                                         onDragStarted: onDragStarted,
-                                        onDragEnded: onDragEnded,
                                         onDrop: { obj in onDrop(obj, firstSlot.id) },
                                         onRemove: { obj in onRemoveObject(obj, firstSlot.id) }
                                     )
@@ -218,7 +218,6 @@ struct SceneDropZoneView: View {
                                         badgeSize: badgeSize,
                                         onTargetChanged: { targeted in isHoveringDrag = targeted },
                                         onDragStarted: onDragStarted,
-                                        onDragEnded: onDragEnded,
                                         onDrop: { obj in onDrop(obj, scene.dropSlots[1].id) },
                                         onRemove: { obj in onRemoveObject(obj, scene.dropSlots[1].id) }
                                     )
@@ -284,6 +283,7 @@ struct SceneDropZoneView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .contentShape(Rectangle())
                     .dropDestination(for: GameObject.self) { _, _ in
+                        onDragEnded?()
                         return false
                     }
                 }
@@ -451,7 +451,6 @@ struct CornerDropSlotBadge: View {
     var badgeSize: CGFloat = 42
     var onTargetChanged: ((Bool) -> Void)? = nil
     var onDragStarted: (() -> Void)? = nil
-    var onDragEnded: (() -> Void)? = nil
     let onDrop: (GameObject) -> Void
     let onRemove: (GameObject) -> Void
 
@@ -488,8 +487,7 @@ struct CornerDropSlotBadge: View {
         .scaleEffect(isTargeted ? 1.1 : 1.0)
         .instantDraggable(
             placedObject,
-            onDragStarted: onDragStarted,
-            onDragEnded: onDragEnded
+            onDragStarted: onDragStarted
         ) {
             if hasAsset {
                 Image(placedObject.symbol)

@@ -12,7 +12,6 @@ import UniformTypeIdentifiers
 struct DraggableObjectView: View {
     let object: GameObject
     var onDragStarted: (() -> Void)? = nil
-    var onDragEnded: (() -> Void)? = nil
     
     private var hasValidAsset: Bool {
         !object.symbol.isEmpty && AssetFallbackHelper.hasAsset(named: object.symbol)
@@ -42,8 +41,7 @@ struct DraggableObjectView: View {
         .padding(.vertical, 6)
         .instantDraggable(
             object,
-            onDragStarted: onDragStarted,
-            onDragEnded: onDragEnded
+            onDragStarted: onDragStarted
         ) {
             // Drag preview
             if hasValidAsset {
