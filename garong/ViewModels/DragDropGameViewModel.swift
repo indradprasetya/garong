@@ -26,19 +26,17 @@ final class DragDropGameViewModel: ObservableObject {
     private var storyChapters: [StoryChapterReference] = []
     private var storyNumber = 1
     private var hasPlayedCompletionSFX: Bool = false
-    private static let peekHintEverKey = "hasShownPeekHintEver"
+    private var tutorialHintSession = TutorialHintSession()
 
-    var hasShownPeekHintEver: Bool {
-        get { UserDefaults.standard.bool(forKey: Self.peekHintEverKey) }
-        set { UserDefaults.standard.set(newValue, forKey: Self.peekHintEverKey) }
-    }
-
-    var isChapter1: Bool {
-        engine.chapter.number == 1 || (currentChapterIndex == 0 && storyNumber == 1)
+    private var isStory1Chapter1: Bool {
+        TutorialHintSession.showsOnboarding(
+            storyNumber: storyNumber,
+            chapterNumber: engine.chapter.number
+        )
     }
 
     var showChapter1TutorialHint: Bool {
-        isChapter1 && !hasDroppedFirstItemInChapter1 && phase == .playing
+        isStory1Chapter1 && !hasDroppedFirstItemInChapter1 && phase == .playing
     }
 
     func dismissPeekHint() {
@@ -118,6 +116,7 @@ final class DragDropGameViewModel: ObservableObject {
             self.chapterResult = nil
             self.hasDroppedFirstItemInChapter1 = false
             self.showPeekHint = false
+            self.tutorialHintSession.reset()
             syncWithEngine()
         }
     }
@@ -189,7 +188,7 @@ final class DragDropGameViewModel: ObservableObject {
         let success = engine.placeObject(object, inSlot: slotID, inScene: sceneID)
         guard success else { return }
 
-        if isChapter1 {
+        if isStory1Chapter1 {
             withAnimation {
                 hasDroppedFirstItemInChapter1 = true
             }
@@ -248,6 +247,7 @@ final class DragDropGameViewModel: ObservableObject {
         chapterResult = nil
         hasDroppedFirstItemInChapter1 = false
         showPeekHint = false
+        tutorialHintSession.reset()
         syncWithEngine()
     }
     
@@ -262,10 +262,9 @@ final class DragDropGameViewModel: ObservableObject {
         
         if self.wrongAttempts > oldWrongAttempts {
             SoundManager.shared.play(.chapterRetry)
-            if !hasShownPeekHintEver {
+            if tutorialHintSession.shouldShowPeekHint() {
                 withAnimation {
                     showPeekHint = true
-                    hasShownPeekHintEver = true
                 }
             }
         }

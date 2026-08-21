@@ -98,6 +98,7 @@ struct GameplayView: View {
                             if viewModel.showPeekHint {
                                 peekHintView
                                     .fixedSize()
+                                    .tutorialWiggle()
                                     .offset(x: 28, y: 16)
                                     .allowsHitTesting(false)
                                     .transition(.scale.combined(with: .opacity))
@@ -250,10 +251,12 @@ struct GameplayView: View {
 
                 if viewModel.showChapter1TutorialHint {
                     redArrowHintView
+                        .tutorialWiggle()
                         .position(x: w * 0.2, y: h * 0.18)
                         .transition(.opacity)
 
                     dropHereHintView
+                        .tutorialWiggle()
                         .position(x: w * 0.32, y: h * 0.82)
                         .transition(.opacity)
                 }
@@ -469,5 +472,25 @@ struct GameplayView: View {
                 viewModel.setDraggingActive(false)
             }
         )
+    }
+}
+
+private struct TutorialWiggleModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func body(content: Content) -> some View {
+        content.phaseAnimator(reduceMotion ? [CGFloat.zero] : [-1, 1]) { view, phase in
+            view
+                .rotationEffect(.degrees(phase * 3))
+                .offset(y: phase * 2)
+        } animation: { _ in
+            .easeInOut(duration: 0.45)
+        }
+    }
+}
+
+private extension View {
+    func tutorialWiggle() -> some View {
+        modifier(TutorialWiggleModifier())
     }
 }
