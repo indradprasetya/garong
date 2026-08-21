@@ -13,6 +13,8 @@ struct SceneDropZoneView: View {
     let scene: GameScene
     let isAnimating: Bool
     let isDraggingAnyItem: Bool
+    var celebratesWin: Bool = false
+    var celebrationDelay: TimeInterval = 0
     let onDrop: (GameObject, String?) -> Void
     let onRemoveObject: (GameObject, String?) -> Void
     var onDragStarted: (() -> Void)? = nil
@@ -20,6 +22,7 @@ struct SceneDropZoneView: View {
 
     @State private var isHoveringDrag = false
     @State private var targetedCharIndex: Int? = nil
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         GeometryReader { geo in
@@ -199,6 +202,8 @@ struct SceneDropZoneView: View {
                                         placedObject: placedObj,
                                         badgeSize: badgeSize,
                                         onTargetChanged: { targeted in isHoveringDrag = targeted },
+                                        onDragStarted: onDragStarted,
+                                        onDragEnded: onDragEnded,
                                         onDrop: { obj in onDrop(obj, firstSlot.id) },
                                         onRemove: { obj in onRemoveObject(obj, firstSlot.id) }
                                     )
@@ -212,6 +217,8 @@ struct SceneDropZoneView: View {
                                         placedObject: secondPlacedObj,
                                         badgeSize: badgeSize,
                                         onTargetChanged: { targeted in isHoveringDrag = targeted },
+                                        onDragStarted: onDragStarted,
+                                        onDragEnded: onDragEnded,
                                         onDrop: { obj in onDrop(obj, scene.dropSlots[1].id) },
                                         onRemove: { obj in onRemoveObject(obj, scene.dropSlots[1].id) }
                                     )
@@ -283,8 +290,63 @@ struct SceneDropZoneView: View {
             }
         }
         .aspectRatio(212.0 / 147.0, contentMode: .fit)
-        .scaleEffect(isAnimating ? 1.02 : 1.0)
+        .keyframeAnimator(
+            initialValue: WinCelebrationValues(),
+            trigger: celebratesWin && !reduceMotion
+        ) { content, value in
+            content
+                .scaleEffect((isAnimating ? 1.02 : 1.0) * value.scale)
+                .shadow(color: .yellow.opacity(value.glow), radius: 12 * value.glow)
+                .overlay {
+                    GeometryReader { shineGeo in
+                        LinearGradient(
+                            colors: [
+                                .clear,
+                                .yellow.opacity(0.4),
+                                .white.opacity(0.9),
+                                .orange.opacity(0.4),
+                                .clear
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                        .frame(
+                            width: shineGeo.size.width * 0.38,
+                            height: shineGeo.size.height * 1.5
+                        )
+                        .rotationEffect(.degrees(-14))
+                        .offset(
+                            x: shineGeo.size.width * value.shineOffset,
+                            y: -shineGeo.size.height * 0.25
+                        )
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .opacity(celebratesWin && !reduceMotion ? 1 : 0)
+                    .allowsHitTesting(false)
+                }
+        } keyframes: { _ in
+            KeyframeTrack(\.scale) {
+                LinearKeyframe(1, duration: max(0.001, celebrationDelay))
+                SpringKeyframe(1.07, duration: 0.25, spring: .smooth)
+                SpringKeyframe(1, duration: 0.3, spring: .smooth)
+            }
+            KeyframeTrack(\.shineOffset) {
+                LinearKeyframe(1.3, duration: celebrationDelay + 0.1)
+                CubicKeyframe(-1.3, duration: 0.55)
+            }
+            KeyframeTrack(\.glow) {
+                LinearKeyframe(0, duration: max(0.001, celebrationDelay))
+                SpringKeyframe(0.9, duration: 0.2, spring: .smooth)
+                CubicKeyframe(0, duration: 0.4)
+            }
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private struct WinCelebrationValues {
+        var scale: CGFloat = 1
+        var shineOffset: CGFloat = 1.3
+        var glow: CGFloat = 0
     }
 
     private enum CharacterIdentity {
@@ -388,6 +450,8 @@ struct CornerDropSlotBadge: View {
     let placedObject: GameObject
     var badgeSize: CGFloat = 42
     var onTargetChanged: ((Bool) -> Void)? = nil
+    var onDragStarted: (() -> Void)? = nil
+    var onDragEnded: (() -> Void)? = nil
     let onDrop: (GameObject) -> Void
     let onRemove: (GameObject) -> Void
 
@@ -422,7 +486,11 @@ struct CornerDropSlotBadge: View {
         }
         .frame(width: badgeSize, height: badgeSize)
         .scaleEffect(isTargeted ? 1.1 : 1.0)
-        .instantDraggable(placedObject) {
+        .instantDraggable(
+            placedObject,
+            onDragStarted: onDragStarted,
+            onDragEnded: onDragEnded
+        ) {
             if hasAsset {
                 Image(placedObject.symbol)
                     .resizable()

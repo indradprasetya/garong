@@ -123,6 +123,7 @@ final class DragDropGameViewModel: ObservableObject {
     }
     
     func setDraggingActive(_ active: Bool) {
+        guard isDraggingItem != active else { return }
         if active {
             SoundManager.shared.play(.itemPickup)
         }
