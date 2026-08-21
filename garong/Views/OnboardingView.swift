@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 struct OnboardingView: View {
     let onFinish: () -> Void
@@ -6,8 +7,9 @@ struct OnboardingView: View {
     @State private var contentOpacity: Double = 0
     @State private var contentScale: CGFloat = 1.025
     @State private var contentOffset: CGFloat = 8
-
+    @State private var timer = Timer.publish(every: 0.4, on: .main, in: .common).autoconnect()
     @State private var didFinish = false
+    @State private var useFrame1: Bool = true
 
     var body: some View {
         GeometryReader { geometry in
@@ -15,50 +17,73 @@ struct OnboardingView: View {
             let height = geometry.size.height
 
             ZStack {
-
-                // BACKGROUND
-                Image("IDCardBackground")
+                
+                Image("gameplay_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(
-                        width: width,
-                        height: height
-                    )
-                    .clipped()
+
+                // BACKGROUND
+                ZStack {
+                    Image(useFrame1 ? "id_card_frame1" : "id_card_frame2")
+                        .resizable()
+                        .scaledToFit()
+                        .animation(.easeInOut(duration: 0.01), value: useFrame1)
+                    
+                    VStack {
+                        HStack {
+                            Image(.loadingStar1)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 150, height: 150)
+                            Spacer()
+                        }
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Spacer()
+                        Image(.loadingStar2)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 150, height: 150)
+                    }
+                }
+                .frame(width: 565)
 
                 // DECORATION
-                Image("RhodeyDecoration")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(
-                        width: width,
-                        height: height
-                    )
+//                Image("RhodeyDecoration")
+//                    .resizable()
+//                    .scaledToFit()
+//                    .frame(
+//                        width: width,
+//                        height: height
+//                    )
 
                 // RHODEY NAME + DETAILS
-                VStack(
-                    alignment: .leading,
-                    spacing: 8
-                ) {
-
-                    Image("RhodeyOnboardingName")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(
-                            width: width * 0.30
-                        )
-
-                    Image("RhodeyOnboardingDetails")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(
-                            width: width * 0.38
-                        )
-                }
-                .position(
-                    x: width * 0.67,
-                    y: height * 0.47
-                )
+//                VStack(
+//                    alignment: .leading,
+//                    spacing: 8
+//                ) {
+//
+//                    Image("RhodeyOnboardingName")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(
+//                            width: width * 0.30
+//                        )
+//
+//                    Image("RhodeyOnboardingDetails")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(
+//                            width: width * 0.38
+//                        )
+//                }
+//                .position(
+//                    x: width * 0.67,
+//                    y: height * 0.47
+//                )
             }
             .frame(
                 width: width,
@@ -72,6 +97,11 @@ struct OnboardingView: View {
         .background(Color.white)
         .onAppear {
             startAnimation()
+        }
+        .onReceive(timer) { _ in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                useFrame1.toggle()
+            }
         }
     }
 
