@@ -20,6 +20,14 @@ final class BackgroundMusicManager {
 
     private init() {}
 
+    func duckForSFXPreview(duration: TimeInterval = 0.2) {
+        player?.setVolume(0, fadeDuration: duration)
+    }
+
+    func restoreAfterSFXPreview(duration: TimeInterval = 0.3) {
+        player?.setVolume(volume, fadeDuration: duration)
+    }
+
     func play() {
         guard player?.isPlaying != true else { return }
 
