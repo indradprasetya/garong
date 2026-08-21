@@ -8,7 +8,6 @@ struct ChapterSelectionView: View {
     private var dismiss
 
     @State private var progressByStoryID: [String: StoryProgressState] = [:]
-    @State private var chaptersByStoryID: [String: [Chapter]] = [:]
     @State private var selectedStoryIndex = 0
     @State private var selectedChapter: Chapter?
     @State private var isLoadingGameplay = false
@@ -30,8 +29,8 @@ struct ChapterSelectionView: View {
         stories.indices.contains(selectedStoryIndex) ? stories[selectedStoryIndex] : nil
     }
 
-    private var chapters: [Chapter] {
-        currentStory.flatMap { chaptersByStoryID[$0.id] } ?? []
+    private var chapters: [StoryChapterReference] {
+        currentStory?.chapters ?? []
     }
 
 
@@ -152,7 +151,6 @@ struct ChapterSelectionView: View {
         .toolbar(.hidden, for: .navigationBar)
         .onAppear {
             loadProgress()
-            loadStory(at: selectedStoryIndex)
         }
         .navigationDestination(isPresented: $showGameplay) {
             if let selectedChapter {
@@ -174,7 +172,6 @@ struct ChapterSelectionView: View {
             withAnimation(.easeInOut(duration: 0.25)) {
                 selectedStoryIndex = destination
             }
-            loadStory(at: destination)
         } label: {
             Image("NextArrow")
                 .resizable()
@@ -234,10 +231,15 @@ struct ChapterSelectionView: View {
         height: CGFloat
     ) -> some View {
         Button {
+            guard let story = currentStory, story.chapters.indices.contains(index) else { return }
             SoundManager.shared.play(.buttonTap)
-            selectedChapter = chapters[index]
+            selectedChapter = StoryCatalog.chapter(
+                for: story.chapters[index],
+                storyNumber: story.number,
+                language: localization.languageCode
+            )
             withAnimation(.easeInOut(duration: 0.3)) {
-                isLoadingGameplay = true
+                isLoadingGameplay = selectedChapter != nil
             }
         } label: {
             chapterButtonLabel(index: index, status: status, width: width, height: height)
@@ -350,8 +352,7 @@ struct ChapterSelectionView: View {
     }
 
     private func chapterDisplayName(index: Int) -> String {
-        chapters[index].storyDefinition.map { localization.localized($0.shortTitle) }
-            ?? chapters[index].name
+        localization.localized(chapters[index].shortTitle)
     }
 
 
@@ -374,16 +375,6 @@ struct ChapterSelectionView: View {
             at: index,
             completions: completions,
             previousStoriesComplete: previousStoriesComplete
-        )
-    }
-
-    private func loadStory(at index: Int) {
-        guard stories.indices.contains(index) else { return }
-        let story = stories[index]
-        guard chaptersByStoryID[story.id] == nil else { return }
-        chaptersByStoryID[story.id] = StoryCatalog.chapters(
-            for: story,
-            language: localization.languageCode
         )
     }
 

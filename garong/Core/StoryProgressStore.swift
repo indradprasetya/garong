@@ -15,12 +15,17 @@ struct StoryProgressStore {
     }
 
     func state(for storyID: String) throws -> StoryProgressState {
-        try allStates()[storyID] ?? StoryProgressState()
+        var state = try allStates()[storyID] ?? StoryProgressState()
+        if state.completion != nil {
+            state.activeRun = nil
+        }
+        return state
     }
 
     func saveActiveRun(_ activeRun: StoryActiveRun, for storyID: String) throws {
         var stored = try allStates()
         var state = stored[storyID] ?? StoryProgressState()
+        guard state.completion == nil else { return }
         state.activeRun = activeRun
         stored[storyID] = state
         defaults.set(try JSONEncoder().encode(stored), forKey: Self.storageKey)
