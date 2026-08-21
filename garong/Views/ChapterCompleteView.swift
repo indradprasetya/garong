@@ -47,9 +47,10 @@ struct ChapterCompleteView: View {
 
             HStack(spacing: 20) {
 
-                Button(
-                    action: onRestart
-                ) {
+                Button {
+                    SoundManager.shared.play(.buttonTap)
+                    onRestart()
+                } label: {
 
                     Text("Play Again")
                         .font(.headline)
@@ -77,11 +78,9 @@ struct ChapterCompleteView: View {
                             )
                         }
                 }
-
                 Button(
                     action: onDismiss
                 ) {
-
                     Text("Back to Chapters")
                         .font(.headline)
                         .foregroundColor(.white)

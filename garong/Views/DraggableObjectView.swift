@@ -24,7 +24,7 @@ struct DraggableObjectView: View {
                 Image(object.symbol)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 44, height: 44)
+                    .frame(width: 54, height: 54)
             } else {
                 Image(systemName: object.sfSymbol)
                     .font(.system(size: 32))
@@ -33,7 +33,7 @@ struct DraggableObjectView: View {
             }
             
             Text(object.name)
-                .font(.appFont(size: 12, relativeTo: .caption2))
+                .font(.appFont(size: 16, relativeTo: .caption2))
                 .foregroundColor(.primary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
@@ -47,7 +47,6 @@ struct DraggableObjectView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 56, height: 56)
-                    .shadow(color: Color.accentColor, radius: 2)
             } else {
                 Image(systemName: object.sfSymbol)
                     .font(.system(size: 48))
