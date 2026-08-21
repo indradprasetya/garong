@@ -48,27 +48,7 @@ struct SceneDropZoneView: View {
                                 .scaledToFill()
                                 .clipped()
                         }
-
-                        let displayImages = resolvedDisplayImages
-                        let isMultiChar = displayImages.count > 1
-                        let charMaxH = isMultiChar ? cardH * 0.82 : cardH * 0.92
-
-                        // Character(s) Anchored to Bottom (Scaled up & cropped at bottom)
-                        HStack(spacing: isMultiChar ? -cardW * 0.02 : 0) {
-                            ForEach(Array(displayImages.enumerated()), id: \.offset) { index, charImage in
-                                let isWiggling = (targetedCharIndex == index)
-                                CharacterView(
-                                    imageName: charImage,
-                                    emotion: scene.characterEmotion,
-                                    isReacting: isAnimating,
-                                    isWiggling: isWiggling
-                                )
-                                .frame(maxHeight: charMaxH)
-                                .offset(y: cardH * 0.14)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-
+                        
                         // Top Speech Bubble Banner
                         if let bubble = scene.speechBubbleText, !bubble.isEmpty {
                             let bubbleH = cardH * 0.38
@@ -111,6 +91,28 @@ struct SceneDropZoneView: View {
                                 Spacer(minLength: 0)
                             }
                         }
+
+                        let displayImages = resolvedDisplayImages
+                        let isMultiChar = displayImages.count > 1
+                        let charMaxH = isMultiChar ? cardH * 0.82 : cardH * 0.92
+
+                        // Character(s) Anchored to Bottom (Scaled up & cropped at bottom)
+                        HStack(spacing: isMultiChar ? -cardW * 0.02 : 0) {
+                            ForEach(Array(displayImages.enumerated()), id: \.offset) { index, charImage in
+                                let isWiggling = (targetedCharIndex == index)
+                                CharacterView(
+                                    imageName: charImage,
+                                    emotion: scene.characterEmotion,
+                                    isReacting: isAnimating,
+                                    isWiggling: isWiggling
+                                )
+                                .frame(maxHeight: charMaxH)
+                                .offset(y: cardH * 0.14)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+
+                        
 
                         // Drop Target Overlays (Split left/right when multiple slots exist)
                         if scene.dropSlots.count > 1 {

@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "try_again_icon.png",
+      "filename" : "drop_here_hint.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

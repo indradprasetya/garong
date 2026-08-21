@@ -13,9 +13,14 @@ struct GameplayView: View {
     @State private var showHintOverlay: Bool = false
     @State private var showResultOverlay: Bool = false
     @State private var isMeterWiggling: Bool = false
+    @State private var showCenterMeter: Bool = false
     
     init(chapter: Chapter) {
         _viewModel = StateObject(wrappedValue: DragDropGameViewModel(chapter: chapter))
+    }
+    
+    init(viewModel: DragDropGameViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
@@ -53,14 +58,14 @@ struct GameplayView: View {
                             Image("back_button")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 48)
+                                .frame(height: 64)
                         } else {
                             Image(systemName: "arrowshape.backward.fill")
                                 .font(.title2)
                                 .foregroundColor(.secondary)
                         }
                     }
-                    .padding(.top, -32)
+                    .padding(.top, -12)
                     
                     HStack {
                         
@@ -71,6 +76,7 @@ struct GameplayView: View {
                         
                         Button {
                             SoundManager.shared.play(.buttonTap)
+                            viewModel.dismissPeekHint()
                             withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
                                 showHintOverlay = true
                             }
@@ -85,6 +91,15 @@ struct GameplayView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(height: 48)
+                            }
+                        }
+                        .overlay(alignment: .leading) {
+                            if viewModel.showPeekHint {
+                                peekHintView
+                                    .fixedSize()
+                                    .offset(x: 28, y: 16)
+                                    .allowsHitTesting(false)
+                                    .transition(.scale.combined(with: .opacity))
                             }
                         }
                         
@@ -215,6 +230,39 @@ struct GameplayView: View {
                     .zIndex(10)
             }
             
+            // Standalone Absolute Overlay Layer for Tutorial Hints (drop_here_hint & red_arrow_hint)
+            GeometryReader { geo in
+                let w = geo.size.width
+                let h = geo.size.height
+
+                if viewModel.showChapter1TutorialHint {
+                    redArrowHintView
+                        .position(x: w * 0.2, y: h * 0.18)
+                        .transition(.opacity)
+
+                    dropHereHintView
+                        .position(x: w * 0.32, y: h * 0.82)
+                        .transition(.opacity)
+                }
+            }
+            .allowsHitTesting(false)
+
+            // Center Mistake Feedback Meter Overlay
+            if showCenterMeter {
+                ZStack {
+                    Color.black.opacity(0.45)
+                        .ignoresSafeArea()
+                        .transition(.opacity)
+
+                    meterView
+                        .scaleEffect(4.2)
+                        .shadow(color: .black.opacity(0.35), radius: 12, x: 0, y: 6)
+                        .transition(.scale(scale: 0.3).combined(with: .opacity))
+                }
+                .zIndex(9)
+                .allowsHitTesting(false)
+            }
+
             // Paper Hint Overlay
             if showHintOverlay {
                 Color.black.opacity(0.45)
@@ -248,6 +296,70 @@ struct GameplayView: View {
                         isMeterWiggling = false
                     }
                 }
+            }
+        }
+        .onChange(of: viewModel.currentStars) { newStars in
+            if newStars < 3 {
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.65)) {
+                    showCenterMeter = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showCenterMeter = false
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var peekHintView: some View {
+        if AssetFallbackHelper.hasAsset(named: "peek_hint") {
+            Image("peek_hint")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 70)
+        } else {
+            HStack(spacing: 4) {
+                Image(systemName: "arrow.left")
+                    .font(.title2)
+                    .foregroundColor(.orange)
+                Text("peek a hint")
+                    .font(.appFont(size: 16))
+                    .foregroundColor(.orange)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var redArrowHintView: some View {
+        if AssetFallbackHelper.hasAsset(named: "red_arrow_hint") {
+            Image("red_arrow_hint")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 44, height: 44)
+        } else {
+            Image(systemName: "arrow.down.fill")
+                .font(.title)
+                .foregroundColor(.red)
+        }
+    }
+
+    @ViewBuilder
+    private var dropHereHintView: some View {
+        if AssetFallbackHelper.hasAsset(named: "drop_here_hint") {
+            Image("drop_here_hint")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 120, height: 80)
+        } else {
+            HStack(spacing: 4) {
+                Text("drop here")
+                    .font(.appFont(size: 16))
+                    .foregroundColor(.orange)
+                Image(systemName: "arrow.up.left")
+                    .font(.title2)
+                    .foregroundColor(.orange)
             }
         }
     }
@@ -342,7 +454,17 @@ struct GameplayView: View {
 
 struct GameplayView_Previews: PreviewProvider {
     static var previews: some View {
-        GameplayView(chapter: StoryCatalog.allChapters[0])
-            .previewInterfaceOrientation(.landscapeLeft)
+        Group {
+            GameplayView(viewModel: DragDropGameViewModel(chapter: StoryCatalog.allChapters[0], showTutorialHintForPreview: true))
+                .previewDisplayName("Chapter 1 Tutorial Overlay")
+
+            GameplayView(viewModel: DragDropGameViewModel(chapter: StoryCatalog.allChapters[0], showPeekHintForPreview: true))
+                .previewDisplayName("Mistake Peek Hint Overlay")
+
+            GameplayView(chapter: StoryCatalog.allChapters[0])
+                .previewDisplayName("Standard Gameplay")
+        }
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }
+

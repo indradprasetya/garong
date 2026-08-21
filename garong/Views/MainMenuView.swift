@@ -90,7 +90,7 @@ struct MainMenuView: View {
                                 Image("guide_button")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 56, height: 56)
+                                    .frame(width: 64, height: 64)
                             }
                             .buttonStyle(.plain)
 
@@ -104,7 +104,7 @@ struct MainMenuView: View {
                                 Image("setting_button")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 56, height: 56)
+                                    .frame(width: 64, height: 64)
                             }
                             .buttonStyle(.plain)
                         }

@@ -131,7 +131,7 @@ struct ChapterSelectionView: View {
                     Image("back_ribbon")
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 48)
+                        .frame(height: 64)
                 }
                 .buttonStyle(.plain)
                 .position(
