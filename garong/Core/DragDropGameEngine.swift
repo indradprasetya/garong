@@ -199,7 +199,7 @@ final class DragDropGameEngine {
                 self.currentOutcome = activeOutcome
                 if placedActionIDs != lastEvaluatedActionSequence {
                     lastEvaluatedActionSequence = placedActionIDs
-                    if activeOutcome?.category == "retry" {
+                    if let activeOutcome, activeOutcome.category != "success" {
                         wrongAttempts += 1
                     }
                 }
