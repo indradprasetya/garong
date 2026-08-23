@@ -24,7 +24,7 @@ struct OnboardingView: View {
 
                 // BACKGROUND
                 ZStack {
-                    Image(useFrame1 ? "id_card_frame1" : "id_card_frame2")
+                    Image(useFrame1 ? "rhodey_id_card_frame1" : "rhodey_id_card_frame2")
                         .resizable()
                         .scaledToFit()
                         .animation(.easeInOut(duration: 0.01), value: useFrame1)

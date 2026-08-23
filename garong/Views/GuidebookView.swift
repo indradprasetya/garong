@@ -5,6 +5,7 @@ struct GuidebookView: View {
 
     @ObservedObject private var localization = AppLocalization.shared
     @State private var currentPage = 0
+    @State private var dragOffset: CGFloat = 0
 
     let items: [GuidebookItem] = GuidebookData.items
 
@@ -18,8 +19,6 @@ struct GuidebookView: View {
                 Image("StoriesGreenGrid")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: width, height: height)
-                    .clipped()
 
                 VStack(spacing: 0) {
                     // Top Navigation Header
@@ -31,10 +30,10 @@ struct GuidebookView: View {
                             Image("guidebook_back_button")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 48)
+                                .frame(height: 64)
                         }
                         .buttonStyle(.plain)
-                        .padding(.top, -32)
+                        .padding(.top, -12)
 
                         Spacer()
 
@@ -54,13 +53,13 @@ struct GuidebookView: View {
 
                     Spacer(minLength: 8)
 
-                    // Notebook Page Content with Prev/Next Navigation
-                    HStack(spacing: 12) {
+                    // Notebook Page Content Layer with Navigation Arrows in HStack
+                    HStack {
                         // Previous Page Button
                         Button {
                             if currentPage > 0 {
                                 SoundManager.shared.play(.buttonTap)
-                                withAnimation(.easeInOut(duration: 0.3)) {
+                                withAnimation(.easeInOut(duration: 0.25)) {
                                     currentPage -= 1
                                 }
                             }
@@ -75,117 +74,179 @@ struct GuidebookView: View {
                         .disabled(currentPage == 0)
                         .buttonStyle(.plain)
 
-                        // Content Container
+                        // Content Container (Carousel ZStack)
                         ZStack {
-                            let item = items[currentPage]
+                            GeometryReader { containerGeo in
+                                let containerWidth = containerGeo.size.width
+                                let containerHeight = containerGeo.size.height
+                                let pageSpacing: CGFloat = 124
 
-                            if !item.isBookReference {
-                                Image("guidebook_placeholder")
-                                    .resizable()
-                                    .scaledToFit()
-                            }
+                                HStack(spacing: pageSpacing) {
+                                    ForEach(0..<items.count, id: \.self) { index in
+                                        let item = items[index]
 
-                            GeometryReader { notebookGeo in
-                                let bookWidth = notebookGeo.size.width
-                                let bookHeight = notebookGeo.size.height
+                                        ZStack {
+                                            if !item.isBookReference {
+                                                Image("guidebook_placeholder")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                            }
 
-                                HStack(spacing: 0) {
-                                    if item.isBookReference {
-                                        // LEFT SIDE: Book Reference Image
-                                        VStack {
-                                            Spacer()
-                                            Image("book_reference")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(maxHeight: bookHeight * 0.75)
-                                            Spacer()
-                                        }
-                                        .padding(.leading, bookWidth * 0.04)
-                                        .padding(.trailing, bookWidth * 0.04)
-                                        .frame(width: bookWidth * 0.48, height: bookHeight)
+                                            GeometryReader { notebookGeo in
+                                                let bookWidth = notebookGeo.size.width
+                                                let bookHeight = notebookGeo.size.height
 
-                                        // RIGHT SIDE: Reference Text
-                                        VStack(alignment: .leading) {
-                                            Spacer()
-                                            Text(localization.text(item.paragraph1Key))
-                                                .font(.appFont(size: 32))
-                                                .foregroundStyle(.white)
-                                                .lineSpacing(6)
-                                                .multilineTextAlignment(.center)
-                                            Spacer()
-                                        }
-                                        .padding(.horizontal, 16)
-                                        .frame(width: bookWidth * 0.52, height: bookHeight, alignment: .leading)
-                                    } else {
-                                        // LEFT PAGE CONTENT
-                                        VStack(alignment: .center) {
-                                            Text(localization.text(item.titleKey))
-                                                .font(.appFont(size: 22))
-                                                .foregroundStyle(.black)
+                                                HStack(spacing: 0) {
+                                                    if item.isBookReference {
+                                                        // LEFT SIDE: Book Reference Image
+                                                        VStack {
+                                                            Spacer()
+                                                            Image("book_reference")
+                                                                .resizable()
+                                                                .scaledToFit()
+                                                                .frame(maxHeight: bookHeight * 0.75)
+                                                            Spacer()
+                                                        }
+                                                        .padding(.leading, bookWidth * 0.04)
+                                                        .padding(.trailing, bookWidth * 0.04)
+                                                        .frame(width: bookWidth * 0.48, height: bookHeight)
 
-                                            HStack(spacing: 10) {
-                                                if let leftChar = item.leftChar {
-                                                    Image(leftChar)
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(maxHeight: bookHeight * 0.42)
+                                                        // RIGHT SIDE: Reference Text
+                                                        VStack(alignment: .leading) {
+                                                            Spacer()
+                                                            Text(localization.text(item.paragraph1Key))
+                                                                .font(.appFont(size: 32))
+                                                                .foregroundStyle(.white)
+                                                                .lineSpacing(6)
+                                                                .multilineTextAlignment(.center)
+                                                            Spacer()
+                                                        }
+                                                        .padding(.horizontal, 16)
+                                                        .frame(width: bookWidth * 0.52, height: bookHeight, alignment: .leading)
+                                                    } else {
+                                                        // LEFT PAGE CONTENT
+                                                        VStack(alignment: .center) {
+                                                            let titleText = localization.text(item.titleKey)
+                                                            let charMaxHeight: CGFloat = {
+                                                                let count = titleText.count
+                                                                if count > 35 {
+                                                                    return bookHeight * 0.30
+                                                                } else if count > 25 {
+                                                                    return bookHeight * 0.34
+                                                                } else if count > 18 {
+                                                                    return bookHeight * 0.38
+                                                                } else {
+                                                                    return bookHeight * 0.42
+                                                                }
+                                                            }()
 
-                                                    Image(systemName: "arrow.right")
-                                                        .font(.system(size: 24, weight: .bold))
-                                                        .foregroundStyle(Color(red: 0.9, green: 0.25, blue: 0.1))
+                                                            Text(titleText)
+                                                                .font(.appFont(size: 22))
+                                                                .foregroundStyle(.black)
+                                                                .multilineTextAlignment(.center)
+                                                                .minimumScaleFactor(0.85)
 
-                                                    Image(item.rightChar)
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(maxHeight: bookHeight * 0.42)
-                                                } else {
-                                                    Spacer()
-                                                    Image(item.rightChar)
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(maxHeight: bookHeight * 0.42)
-                                                    Spacer()
+                                                            HStack(spacing: 10) {
+                                                                if let leftChar = item.leftChar {
+                                                                    Image(leftChar)
+                                                                        .resizable()
+                                                                        .scaledToFit()
+                                                                        .frame(maxHeight: charMaxHeight)
+
+                                                                    Image(systemName: "arrow.right")
+                                                                        .font(.system(size: 24, weight: .bold))
+                                                                        .foregroundStyle(Color(red: 0.9, green: 0.25, blue: 0.1))
+
+                                                                    Image(item.rightChar)
+                                                                        .resizable()
+                                                                        .scaledToFit()
+                                                                        .frame(maxHeight: charMaxHeight)
+                                                                } else {
+                                                                    Spacer()
+                                                                    Image(item.rightChar)
+                                                                        .resizable()
+                                                                        .scaledToFit()
+                                                                        .frame(maxHeight: charMaxHeight)
+                                                                    Spacer()
+                                                                }
+                                                            }
+                                                            .frame(maxWidth: .infinity)
+                                                        }
+                                                        .padding(.leading, bookWidth * 0.08)
+                                                        .padding(.trailing, bookWidth * 0.04)
+                                                        .padding(.top, bookHeight * 0.26)
+                                                        .padding(.bottom, bookHeight * 0.12)
+                                                        .frame(width: bookWidth * 0.49, height: bookHeight, alignment: .topLeading)
+
+                                                        // RIGHT PAGE CONTENT
+                                                        VStack(alignment: .leading, spacing: 16) {
+                                                            Text(localization.text(item.paragraph1Key))
+                                                                .font(.appFont(size: 16))
+                                                                .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
+                                                                .lineSpacing(4)
+
+                                                            if let paragraph2Key = item.paragraph2Key {
+                                                                Text(localization.text(paragraph2Key))
+                                                                    .font(.appFont(size: 16))
+                                                                    .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
+                                                                    .lineSpacing(4)
+                                                            }
+                                                            Spacer(minLength: 0)
+                                                        }
+                                                        .padding(.leading, bookWidth * 0.05)
+                                                        .padding(.trailing, bookWidth * 0.08)
+                                                        .padding(.top, bookHeight * 0.28)
+                                                        .padding(.bottom, bookHeight * 0.12)
+                                                        .frame(width: bookWidth * 0.49, height: bookHeight, alignment: .topLeading)
+                                                    }
                                                 }
                                             }
-                                            .frame(maxWidth: .infinity)
                                         }
-                                        .padding(.leading, bookWidth * 0.08)
-                                        .padding(.trailing, bookWidth * 0.04)
-                                        .padding(.top, bookHeight * 0.26)
-                                        .padding(.bottom, bookHeight * 0.12)
-                                        .frame(width: bookWidth * 0.49, height: bookHeight, alignment: .topLeading)
-
-                                        // RIGHT PAGE CONTENT
-                                        VStack(alignment: .leading, spacing: 16) {
-                                            Text(localization.text(item.paragraph1Key))
-                                                .font(.appFont(size: 16))
-                                                .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
-                                                .lineSpacing(4)
-
-                                            if let paragraph2Key = item.paragraph2Key {
-                                                Text(localization.text(paragraph2Key))
-                                                    .font(.appFont(size: 16))
-                                                    .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
-                                                    .lineSpacing(4)
-                                            }
-                                            Spacer(minLength: 0)
-                                        }
-                                        .padding(.leading, bookWidth * 0.05)
-                                        .padding(.trailing, bookWidth * 0.08)
-                                        .padding(.top, bookHeight * 0.28)
-                                        .padding(.bottom, bookHeight * 0.12)
-                                        .frame(width: bookWidth * 0.49, height: bookHeight, alignment: .topLeading)
+                                        .frame(width: containerWidth, height: containerHeight)
                                     }
                                 }
+                                .offset(x: -CGFloat(currentPage) * (containerWidth + pageSpacing) + dragOffset)
                             }
+                            .frame(maxWidth: min(width * 0.78, 780), maxHeight: height * 0.75)
+                            .contentShape(Rectangle())
+                            .gesture(
+                                DragGesture(minimumDistance: 20, coordinateSpace: .local)
+                                    .onChanged { value in
+                                        let translation = value.translation.width
+                                        if (translation < 0 && currentPage == items.count - 1) ||
+                                            (translation > 0 && currentPage == 0) {
+                                            dragOffset = translation * 0.2
+                                        } else {
+                                            dragOffset = translation
+                                        }
+                                    }
+                                    .onEnded { value in
+                                        let translation = value.translation.width
+                                        let threshold: CGFloat = 50
+                                        if translation < -threshold && currentPage < items.count - 1 {
+                                            SoundManager.shared.play(.buttonTap)
+                                            withAnimation(.easeInOut(duration: 0.25)) {
+                                                currentPage += 1
+                                            }
+                                        } else if translation > threshold && currentPage > 0 {
+                                            SoundManager.shared.play(.buttonTap)
+                                            withAnimation(.easeInOut(duration: 0.25)) {
+                                                currentPage -= 1
+                                            }
+                                        }
+                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                            dragOffset = 0
+                                        }
+                                    }
+                            )
+                            .zIndex(2)
                         }
-                        .frame(maxWidth: min(width * 0.82, 780), maxHeight: height * 0.75)
 
                         // Next Page Button
                         Button {
                             if currentPage < items.count - 1 {
                                 SoundManager.shared.play(.buttonTap)
-                                withAnimation(.easeInOut(duration: 0.3)) {
+                                withAnimation(.easeInOut(duration: 0.25)) {
                                     currentPage += 1
                                 }
                             }

@@ -128,6 +128,7 @@ struct SettingView: View {
                                 Spacer()
 
                                 Button {
+                                    SoundManager.shared.play(.buttonTap)
                                     showResetConfirmation = true
                                 } label: {
                                     Text(localization.text("settings.resetProgress"))
@@ -149,6 +150,7 @@ struct SettingView: View {
 
                 // Close Button Top-Right
                 Button {
+                    SoundManager.shared.play(.backTap)
                     onClose?()
                 } label: {
                     Image("close_button")

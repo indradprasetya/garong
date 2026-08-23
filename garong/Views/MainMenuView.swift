@@ -1,11 +1,16 @@
 import SwiftUI
+import Combine
 
 struct MainMenuView: View {
 
+    @ObservedObject private var localization = AppLocalization.shared
     @State private var showChapterSelection = false
     @State private var showSettings = false
     @State private var showGuidebook = false
     @State private var isLoading = false
+    @State private var useFrame1: Bool = true
+    @State private var timer = Timer.publish(every: 0.4, on: .main, in: .common).autoconnect()
+    
 
     var body: some View {
 
@@ -25,24 +30,28 @@ struct MainMenuView: View {
                     Image("StoriesGreenGrid")
                         .resizable()
                         .scaledToFill()
-                        .frame(
-                            width: width,
-                            height: height
-                        )
-                        .clipped()
 
 
                     // ==========================================
                     // START HOMEPAGE ASSET
                     // ==========================================
 
-                    Image("Starthomepage")
+                    Image(.mainmenuBg)
                         .resizable()
                         .scaledToFit()
                         .frame(
                             width: width * 0.999
                         )
                         .zIndex(1)
+                    
+                    Image(.kinarioTitle)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 450)
+                        .position(
+                            x: width * 0.72,
+                            y: height * 0.38
+                        )
 
 
                     // ==========================================
@@ -56,18 +65,17 @@ struct MainMenuView: View {
                         }
                     } label: {
 
-                        Rectangle()
-                            .fill(Color.clear)
-                            .frame(
-                                width: width * 0.35,
-                                height: height * 0.20
-                            )
-                            .contentShape(Rectangle())
+                        let buttonPrefix = localization.language == .indonesian ? "mulai_button" : "start_button"
+                        Image(useFrame1 ? "\(buttonPrefix)_1" : "\(buttonPrefix)_2")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 130)
+                            .animation(.easeInOut(duration: 0.01), value: useFrame1)
                     }
                     .buttonStyle(.plain)
                     .position(
-                        x: width * 0.65,
-                        y: height * 0.56
+                        x: width * 0.72,
+                        y: height * 0.6
                     )
                     .zIndex(2)
 
@@ -186,6 +194,11 @@ struct MainMenuView: View {
                 ChapterSelectionView(
                     stories: StoryCatalog.stories
                 )
+            }
+            .onReceive(timer) { _ in
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    useFrame1.toggle()
+                }
             }
         }
     }

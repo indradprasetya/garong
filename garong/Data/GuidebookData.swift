@@ -41,7 +41,6 @@ enum GuidebookData {
             leftChar: "rhodey_crying",
             rightChar: "rhodey_calm",
             paragraph1Key: "guidebook.item1.paragraph1",
-            paragraph2Key: "guidebook.item1.paragraph2"
         ),
         GuidebookItem(
             id: 2,
