@@ -3,7 +3,13 @@ import AVFoundation
 final class BackgroundMusicManager {
     static let shared = BackgroundMusicManager()
 
+    enum Track: String {
+        case menu = "background_music"
+        case gameplay = "gameplay_music"
+    }
+
     private var player: AVAudioPlayer?
+    private var currentTrack: Track?
 
     var volume: Float {
         get {
@@ -28,14 +34,16 @@ final class BackgroundMusicManager {
         player?.setVolume(volume, fadeDuration: duration)
     }
 
-    func play() {
-        guard player?.isPlaying != true else { return }
+    func play(_ track: Track = .menu) {
+        if currentTrack == track, player?.isPlaying == true {
+            return
+        }
 
         guard let url = Bundle.main.url(
-            forResource: "background_music",
+            forResource: track.rawValue,
             withExtension: "mp3"
         ) else {
-            print("Background music file is missing from the app bundle.")
+            print("Background music file '\(track.rawValue).mp3' is missing from the app bundle.")
             return
         }
 
@@ -53,6 +61,7 @@ final class BackgroundMusicManager {
                 return
             }
             player = audioPlayer
+            currentTrack = track
         } catch {
             print("Unable to play background music: \(error.localizedDescription)")
         }

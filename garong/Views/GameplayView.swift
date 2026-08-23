@@ -315,6 +315,12 @@ struct GameplayView: View {
         .animation(.default, value: viewModel.phase)
         .animation(.easeInOut(duration: 0.2), value: viewModel.tutorialStep)
         .environment(\.font, .custom("Virels-Regular", size: 14))
+        .onAppear {
+            BackgroundMusicManager.shared.play(.gameplay)
+        }
+        .onDisappear {
+            BackgroundMusicManager.shared.play(.menu)
+        }
         .onChange(of: viewModel.phase) { newPhase in
             if newPhase == .playing {
                 showResultOverlay = false
