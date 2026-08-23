@@ -244,6 +244,10 @@ final class DragDropGameViewModel: ObservableObject {
         
         syncWithEngine()
         
+        if let scene = scenes.first(where: { $0.id == sceneID }) {
+            SoundManager.shared.playVoiceOver(for: scene.characterImageNames, emotion: scene.characterEmotion)
+        }
+        
         Task {
             try? await Task.sleep(nanoseconds: 400_000_000)
             self.animatingSceneID = nil

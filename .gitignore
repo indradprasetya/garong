@@ -10,3 +10,7 @@ xcuserdata/
 .build/
 .swiftpm/
 
+# Agent scratch directory
+scratch/
+
+

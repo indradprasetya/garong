@@ -99,10 +99,75 @@ final class SoundManager: ObservableObject {
         }
     }
     
+    enum VoiceOver: String, CaseIterable {
+        case angry = "vo_angry"
+        case annoyed = "vo_annoyed"
+        case calm = "vo_calm"
+        case cry = "vo_cry"
+        case happy = "vo_happy"
+        case humming = "vo_humming"
+        case questioning = "vo_questioning"
+        case sad = "vo_sad"
+        case sniffing = "vo_sniffing"
+    }
+
+    /// Play a voice over sound effect by enum type.
+    func playVoiceOver(_ vo: VoiceOver) {
+        play(named: vo.rawValue)
+    }
+
+    /// Play voice over sound effect based on array of character image names or emotion fallback.
+    func playVoiceOver(for imageNames: [String], emotion: CharacterEmotion) {
+        for name in imageNames {
+            if let vo = voiceOver(for: name, emotion: emotion) {
+                playVoiceOver(vo)
+                return
+            }
+        }
+        if let vo = voiceOver(for: nil, emotion: emotion) {
+            playVoiceOver(vo)
+        }
+    }
+
+    /// Play voice over sound effect based on character image name or emotion fallback.
+    func playVoiceOver(for imageName: String?, emotion: CharacterEmotion) {
+        if let vo = voiceOver(for: imageName, emotion: emotion) {
+            playVoiceOver(vo)
+        }
+    }
+
+    /// Resolves the appropriate VoiceOver enum case for a character image name and emotion.
+    func voiceOver(for imageName: String?, emotion: CharacterEmotion) -> VoiceOver? {
+        if let name = imageName?.lowercased() {
+            if name.contains("crying") { return .cry }
+            if name.contains("drawing") { return .humming }
+            if name.contains("frustrated") || name.contains("defensive") { return .annoyed }
+            if name.contains("angry") { return .angry }
+            if name.contains("injured") { return .sniffing }
+            if name.contains("questioning") { return .questioning }
+            if name.contains("happy") || name.contains("handshake") || name.contains("holding_new_paper") { return .happy }
+            if name.contains("sad") { return .sad }
+            if name.contains("calm") || name.contains("relieved") || name.contains("bandaged") { return .calm }
+        }
+        
+        switch emotion {
+        case .happy: return .happy
+        case .sad: return .sad
+        case .angry: return .angry
+        case .confused, .curious: return .questioning
+        case .excited: return .humming
+        case .calm, .neutral: return .calm
+        }
+    }
+    
     /// Helper resolving the URL for audio files across bundle locations and subdirectories.
     private func findAudioURL(for name: String) -> URL? {
         let extensions = ["wav", "mp3", "m4a", "caf", "aac"]
-        let subdirectories = ["SFX", "Resources/SFX", "Resources", "garong/Resources/SFX", ""]
+        let subdirectories = [
+            "SFX", "Resources/SFX", "Resources", "garong/Resources/SFX",
+            "Voice Over", "Resources/Voice Over", "garong/Resources/Voice Over",
+            ""
+        ]
         
         for ext in extensions {
             for sub in subdirectories {
@@ -122,7 +187,10 @@ final class SoundManager: ObservableObject {
             let relativePaths = [
                 "garong/Resources/SFX/\(name).\(ext)",
                 "Resources/SFX/\(name).\(ext)",
-                "SFX/\(name).\(ext)"
+                "SFX/\(name).\(ext)",
+                "garong/Resources/Voice Over/\(name).\(ext)",
+                "Resources/Voice Over/\(name).\(ext)",
+                "Voice Over/\(name).\(ext)"
             ]
             for relPath in relativePaths {
                 if let resourcePath = Bundle.main.resourcePath {
