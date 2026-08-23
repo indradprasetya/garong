@@ -131,3 +131,16 @@ struct Chapter: Identifiable, Equatable {
         lhs.id == rhs.id && lhs.number == rhs.number && lhs.name == rhs.name && lhs.isUnlocked == rhs.isUnlocked
     }
 }
+
+extension Chapter {
+    var primaryCharacterName: String {
+        if let defId = storyDefinition?.id.lowercased(), defId.contains("jojo") {
+            return "jojo"
+        }
+        if name.lowercased().contains("jojo") {
+            return "jojo"
+        }
+        return "rhodey"
+    }
+}
+

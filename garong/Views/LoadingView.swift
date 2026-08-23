@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 
 struct LoadingView: View {
+    /// Character name prefix for the ID card ("rhodey", "jojo", etc.). Defaults to "rhodey".
+    var characterName: String = "rhodey"
     /// Duration of the simulated loading sequence in seconds
     var duration: Double = 2.5
     /// Optional completion handler called when loading completes
@@ -17,6 +19,36 @@ struct LoadingView: View {
     @State private var progress: CGFloat = 0.0
     @State private var useFrame1: Bool = true
     @State private var timer = Timer.publish(every: 0.4, on: .main, in: .common).autoconnect()
+
+    init(
+        characterName: String = "rhodey",
+        duration: Double = 2.5,
+        onComplete: (() -> Void)? = nil
+    ) {
+        self.characterName = characterName
+        self.duration = duration
+        self.onComplete = onComplete
+    }
+
+    init(
+        chapter: Chapter?,
+        duration: Double = 2.5,
+        onComplete: (() -> Void)? = nil
+    ) {
+        self.characterName = chapter?.primaryCharacterName ?? "rhodey"
+        self.duration = duration
+        self.onComplete = onComplete
+    }
+
+    init(
+        storyReference: StoryChapterReference?,
+        duration: Double = 2.5,
+        onComplete: (() -> Void)? = nil
+    ) {
+        self.characterName = storyReference?.primaryCharacterName ?? "rhodey"
+        self.duration = duration
+        self.onComplete = onComplete
+    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -32,7 +64,7 @@ struct LoadingView: View {
                 VStack(spacing: 24) {
                     // ID Card Character Animation (Alternating frames)
                     ZStack {
-                        Image(useFrame1 ? "id_card_frame1" : "id_card_frame2")
+                        Image(useFrame1 ? "\(characterName)_id_card_frame1" : "\(characterName)_id_card_frame2")
                             .resizable()
                             .scaledToFit()
                             .animation(.easeInOut(duration: 0.01), value: useFrame1)

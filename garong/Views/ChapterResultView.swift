@@ -14,6 +14,7 @@ struct ChapterResultView: View {
     var onTryAgain: (() -> Void)? = nil
     var statusMessage: String? = nil
     @ObservedObject private var localization = AppLocalization.shared
+    @State private var showSummary: Bool = false
 
     var body: some View {
         GeometryReader { geo in
@@ -39,7 +40,7 @@ struct ChapterResultView: View {
                                 Image("guidebook_back_button")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 48)
+                                    .frame(height: 64)
                             } else {
                                 Image(systemName: "arrow.backward.square.fill")
                                     .font(.title)
@@ -52,14 +53,18 @@ struct ChapterResultView: View {
 
                         if let onTryAgain {
                             Button {
-                                SoundManager.shared.play(.buttonTap)
                                 onTryAgain()
                             } label: {
                                 if AssetFallbackHelper.hasAsset(named: "try_again_button") {
-                                    Image("try_again_button")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 48)
+                                    HStack {
+                                        Text(localization.text("result.tryAgain"))
+                                            .font(.appFont(size: 28))
+                                            .foregroundStyle(.white)
+                                        Image(.tryAgainButton)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 48)
+                                    }
                                 } else {
                                     Text("Try Again")
                                         .font(.appFont(size: 28))
@@ -80,15 +85,15 @@ struct ChapterResultView: View {
                                 onNext?()
                             } label: {
                                 if AssetFallbackHelper.hasAsset(named: "next_button_result") {
-                                    Image("next_button_result")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 48)
-                                } else if AssetFallbackHelper.hasAsset(named: "next_button") {
-                                    Image("next_button")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 48)
+                                    HStack {
+                                        Text(localization.text("result.next"))
+                                            .font(.appFont(size: 28))
+                                            .foregroundStyle(.white)
+                                        Image(.chevronRight)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 48)
+                                    }
                                 } else {
                                     HStack(spacing: 6) {
                                         Text(localization.text("result.next"))
@@ -117,56 +122,78 @@ struct ChapterResultView: View {
                             let bookHeight = notebookGeo.size.height
 
                             HStack(spacing: 0) {
-                                // LEFT PAGE: RESULT
+                                // LEFT PAGE: RESULT / SUMMARY
                                 VStack(alignment: .center) {
-                                    Text(localization.text("result.title"))
-                                        .font(.appFont(size: 32))
-                                        .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1))
-
-                                    if let resultMessage = statusMessage ?? result.completionSummary {
-                                        Text(resultMessage)
-                                            .font(.appFont(size: 18))
-                                            .foregroundStyle(
-                                                statusMessage == nil
-                                                    ? Color(red: 0.15, green: 0.15, blue: 0.15)
-                                                    : .red
-                                            )
-                                            .multilineTextAlignment(.center)
-                                            .lineSpacing(4)
-                                            .padding(.horizontal, 8)
-                                        
-                                    }
-
-
-                                    HStack(alignment: .center, spacing: 16) {
-                                        // Meter head icon
-                                        if AssetFallbackHelper.hasAsset(named: result.meterImageName) {
-                                            Image(result.meterImageName)
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(maxHeight: bookHeight * 0.35)
-                                        } else {
-                                            Image(systemName: "star.fill")
-                                                .font(.system(size: 60))
-                                                .foregroundStyle(.yellow)
+                                    // Tappable Title Button
+                                    Button {
+                                        SoundManager.shared.play(.buttonTap)
+                                        withAnimation(.easeInOut) {
+                                            showSummary.toggle()
                                         }
+                                    } label: {
+                                        HStack(spacing: 6) {
+                                            Text(showSummary ? localization.text("result.summary") : localization.text("result.title"))
+                                                .font(.appFont(size: 32))
+                                                .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1))
 
-                                        // Yellow stars earned
-                                        if result.stars > 0 {
-                                            HStack(spacing: 8) {
-                                                ForEach(0..<result.stars, id: \.self) { index in
-                                                    let yOffset: CGFloat = (result.stars == 3 && index == 1) ? -8 : 4
-                                                    Image("StarIcon")
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(width: 38, height: 38)
-                                                        .offset(y: yOffset)
+                                            Image(systemName: "arrow.triangle.2.circlepath")
+                                                .font(.system(size: 16, weight: .bold))
+                                                .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1).opacity(0.7))
+                                        }
+                                    }
+                                    .buttonStyle(.plain)
+
+
+                                    if showSummary {
+                                        // Summary View
+                                        if let resultMessage = statusMessage ?? result.completionSummary {
+                                            ScrollView {
+                                                Text(resultMessage)
+                                                    .font(.appFont(size: 18))
+                                                    .foregroundStyle(
+                                                        statusMessage == nil
+                                                            ? Color(red: 0.15, green: 0.15, blue: 0.15)
+                                                            : .red
+                                                    )
+                                                    .multilineTextAlignment(.center)
+                                                    .lineSpacing(4)
+                                                    .padding(.horizontal, 8)
+                                            }
+                                            .frame(maxHeight: .infinity)
+                                        }
+                                    } else {
+                                        // Meter and Stars View (Default)
+                                        HStack(alignment: .center, spacing: 16) {
+                                            // Meter head icon
+                                            if AssetFallbackHelper.hasAsset(named: result.meterImageName) {
+                                                Image(result.meterImageName)
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(maxHeight: bookHeight * 0.35)
+                                            } else {
+                                                Image(systemName: "star.fill")
+                                                    .font(.system(size: 60))
+                                                    .foregroundStyle(.yellow)
+                                            }
+
+                                            // Yellow stars earned
+                                            if result.stars > 0 {
+                                                HStack(spacing: 8) {
+                                                    ForEach(0..<result.stars, id: \.self) { index in
+                                                        let yOffset: CGFloat = (result.stars == 3 && index == 1) ? -8 : 4
+                                                        Image("StarIcon")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 38, height: 38)
+                                                            .offset(y: yOffset)
+                                                    }
                                                 }
                                             }
                                         }
+                                        
                                     }
-                                    .padding(.bottom, 16)
 
+                                    Spacer(minLength: 0)
                                 }
                                 .padding(.leading, bookWidth * 0.08)
                                 .padding(.trailing, bookWidth * 0.04)
@@ -213,7 +240,7 @@ struct ChapterResultView: View {
     }
 }
 
-#Preview {
+#Preview("Win Condition") {
     ChapterResultView(
         result: ChapterResult(
             chapterName: "Make Rhodey Want to Draw",
@@ -227,5 +254,24 @@ struct ChapterResultView: View {
             characterName: "Rhodey",
             meterImageName: "rhodey_3_star"
         )
+    )
+}
+
+#Preview("Lose Condition") {
+    ChapterResultView(
+        result: ChapterResult(
+            chapterName: "Make Rhodey Want to Draw",
+            totalObjects: 2,
+            placedObjects: 0,
+            placementCount: 8,
+            stars: 0,
+            completionSummary: "Rhodey needed to feel noticed before he could join in.",
+            completionTip: "Before asking a hesitant child to join an activity, sit with them first. Let them feel your presence before you invite them in.",
+            sceneStates: [],
+            characterName: "Rhodey",
+            meterImageName: "rhodey_0_star"
+        ),
+        onTryAgain: {},
+        statusMessage: "Rhodey is tired. You took too long."
     )
 }

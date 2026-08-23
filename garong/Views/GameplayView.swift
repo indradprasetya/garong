@@ -53,6 +53,7 @@ struct GameplayView: View {
                 // Top Bar
                 HStack(spacing: 16) {
                     Button {
+                        SoundManager.shared.play(.backTap)
                         dismiss()
                     } label: {
                         if AssetFallbackHelper.hasAsset(named: "back_button") {

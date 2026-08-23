@@ -83,3 +83,13 @@ enum StoryListLoader {
         }
     }
 }
+
+extension StoryChapterReference {
+    var primaryCharacterName: String {
+        if id.lowercased().contains("jojo") {
+            return "jojo"
+        }
+        return "rhodey"
+    }
+}
+
