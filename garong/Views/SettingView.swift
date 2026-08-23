@@ -4,10 +4,12 @@ struct SettingView: View {
     var onClose: (() -> Void)? = nil
     var onResetProgress: (() -> Void)? = nil
 
+    @ObservedObject private var localization = AppLocalization.shared
     @State private var sfxVolume: Float = SoundManager.shared.volume
     @State private var bgmVolume: Float = BackgroundMusicManager.shared.volume
+    @State private var sfxPreviewThrottle = SFXPreviewThrottle(minimumInterval: 0.15)
     @State private var showResetConfirmation: Bool = false
-    @State private var isEnglish: Bool = true
+    @State private var showResetSuccess: Bool = false
 
     var body: some View {
         ZStack {
@@ -28,10 +30,11 @@ struct SettingView: View {
 
                 VStack(spacing: 8) {
                     // Title
-                    Text("SETTING")
-                        .font(.appFont(size: 36))
+                    Text(localization.text("settings.title"))
+                        .font(.appFont(size: 50))
                         .foregroundStyle(.red)
-                        .padding(.top, 28)
+                        .padding(.top, 30)
+                        .bold()
 
                     // Blue Settings Panel
                     ZStack {
@@ -43,7 +46,7 @@ struct SettingView: View {
                         VStack(spacing: 18) {
                             // SFX Volume Row
                             HStack {
-                                Text("SFX VOL")
+                                Text(localization.text("settings.sfxVolume"))
                                     .font(.appFont(size: 16))
                                     .foregroundStyle(.white)
 
@@ -52,13 +55,20 @@ struct SettingView: View {
                                 CustomVolumeSlider(
                                     value: $sfxVolume,
                                     trackImage: "sfx_volume_box",
-                                    valueImage: "sfx_volume_value"
+                                    valueImage: "sfx_volume_value",
+                                    onEditingChanged: { isEditing in
+                                        if isEditing {
+                                            BackgroundMusicManager.shared.duckForSFXPreview()
+                                        } else {
+                                            BackgroundMusicManager.shared.restoreAfterSFXPreview()
+                                        }
+                                    }
                                 )
                             }
 
                             // BGM Volume Row
                             HStack {
-                                Text("BGM")
+                                Text(localization.text("settings.bgm"))
                                     .font(.appFont(size: 16))
                                     .foregroundStyle(.white)
 
@@ -73,7 +83,7 @@ struct SettingView: View {
 
                             // Language Row
                             HStack {
-                                Text("LANGUAGE")
+                                Text(localization.text("settings.language"))
                                     .font(.appFont(size: 16))
                                     .foregroundStyle(.white)
 
@@ -82,7 +92,7 @@ struct SettingView: View {
                                 Button {
                                     SoundManager.shared.play(.buttonTap)
                                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                        isEnglish.toggle()
+                                        localization.toggleLanguage()
                                     }
                                 } label: {
                                     HStack(spacing: 8) {
@@ -93,7 +103,11 @@ struct SettingView: View {
                                             .rotationEffect(.degrees(180))
 
                                         // Centered Language Option Text
-                                        Text(isEnglish ? "ENGLISH" : "BAHASA INDONESIA")
+                                        Text(localization.text(
+                                            localization.language == .english
+                                                ? "settings.english"
+                                                : "settings.indonesian"
+                                        ))
                                             .font(.appFont(size: 13))
                                             .foregroundStyle(Color(red: 1.0, green: 0.65, blue: 0.0))
                                             .frame(minWidth: 135, alignment: .center)
@@ -116,7 +130,7 @@ struct SettingView: View {
                                 Button {
                                     showResetConfirmation = true
                                 } label: {
-                                    Text("reset progress")
+                                    Text(localization.text("settings.resetProgress"))
                                         .font(.appFont(size: 16))
                                         .foregroundStyle(Color(red: 1.0, green: 0.55, blue: 0.65))
                                         .underline()
@@ -149,18 +163,33 @@ struct SettingView: View {
         }
         .onChange(of: sfxVolume) { newValue in
             SoundManager.shared.volume = newValue
+            if sfxPreviewThrottle.shouldPlay(at: ProcessInfo.processInfo.systemUptime) {
+                SoundManager.shared.play(named: SoundManager.SoundEffect.itemPickup.rawValue)
+            }
         }
         .onChange(of: bgmVolume) { newValue in
             BackgroundMusicManager.shared.volume = newValue
         }
-        .alert("Reset Progress?", isPresented: $showResetConfirmation) {
-            Button("Cancel", role: .cancel) {}
-            Button("Reset", role: .destructive) {
+        .onDisappear {
+            BackgroundMusicManager.shared.restoreAfterSFXPreview()
+        }
+        .alert(localization.text("settings.resetTitle"), isPresented: $showResetConfirmation) {
+            Button(localization.text("settings.cancel"), role: .cancel) {}
+            Button(localization.text("settings.reset"), role: .destructive) {
                 StoryProgressStore().resetAll()
+                ChapterTutorialSession.resetCompletion()
                 onResetProgress?()
+                DispatchQueue.main.async {
+                    showResetSuccess = true
+                }
             }
         } message: {
-            Text("Are you sure you want to reset all game progress? This action cannot be undone.")
+            Text(localization.text("settings.resetMessage"))
+        }
+        .alert(localization.text("settings.resetSuccessTitle"), isPresented: $showResetSuccess) {
+            Button(localization.text("settings.ok"), role: .cancel) {}
+        } message: {
+            Text(localization.text("settings.resetSuccessMessage"))
         }
     }
 }
@@ -171,6 +200,10 @@ private struct CustomVolumeSlider: View {
     let trackImage: String
     let valueImage: String
     let thumbImage: String = "volume_slider"
+    var onEditingChanged: (Bool) -> Void = { _ in }
+
+    @State private var isEditing = false
+    @State private var hapticTracker = SliderHapticStepTracker(stepCount: 20)
 
     var body: some View {
         GeometryReader { geo in
@@ -213,9 +246,25 @@ private struct CustomVolumeSlider: View {
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { gesture in
+                        if !isEditing {
+                            isEditing = true
+                            hapticTracker.reset()
+                            onEditingChanged(true)
+                        }
+
                         let locationX = gesture.location.x
                         let newValue = max(0.0, min(1.0, Float(locationX / width)))
                         value = newValue
+
+                        if hapticTracker.shouldTrigger(for: newValue) {
+                            HapticManager.shared.selection()
+                        }
+                    }
+                    .onEnded { _ in
+                        guard isEditing else { return }
+                        isEditing = false
+                        hapticTracker.reset()
+                        onEditingChanged(false)
                     }
             )
         }
@@ -226,4 +275,3 @@ private struct CustomVolumeSlider: View {
 #Preview {
     SettingView()
 }
-

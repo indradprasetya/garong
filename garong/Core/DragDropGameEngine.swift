@@ -27,7 +27,8 @@ final class DragDropGameEngine {
         chapter: Chapter,
         reactionEvaluator: ReactionEvaluating = DefaultReactionEvaluator(),
         completionEvaluator: CompletionEvaluator = CompletionEvaluator(),
-        progressStore: StoryProgressStore = StoryProgressStore()
+        progressStore: StoryProgressStore = StoryProgressStore(),
+        resumeProgress: Bool = true
     ) {
         self.chapter = chapter
         self.scenes = chapter.scenes
@@ -38,6 +39,9 @@ final class DragDropGameEngine {
         
         if let story = chapter.storyDefinition {
             self.storyRunner = try? StoryRunner(story: story)
+            if !resumeProgress {
+                try? progressStore.clearActiveRun(storyID: story.id)
+            }
             restoreProgress(for: story)
         }
         
@@ -72,6 +76,11 @@ final class DragDropGameEngine {
         guard chapter.storyDefinition != nil else { return true }
         return currentOutcome?.isIdeal == true
     }
+
+    var isCurrentOutcomeSuccessful: Bool {
+        guard chapter.storyDefinition != nil else { return true }
+        return currentOutcome?.category == "success"
+    }
     
     /// Total objects available in tray.
     var totalObjectCount: Int { chapter.objects.count }
@@ -79,7 +88,8 @@ final class DragDropGameEngine {
     var maximumPlacements: Int? { chapter.storyDefinition?.maximumPlacements }
 
     var placementLimitMessage: String {
-        chapter.storyDefinition?.placementLimitMessage.en ?? "The characters need a break."
+        chapter.storyDefinition?.placementLimitMessage.localized(language: chapter.language)
+            ?? AppLocalization.shared.text("gameplay.breakFallback", language: chapter.language)
     }
 
     var placementFeedbackState: PlacementFeedbackState {
@@ -114,7 +124,7 @@ final class DragDropGameEngine {
         placementCount += 1
         reevaluateAllReactions()
 
-        if isAllScenesFilled && isCurrentOutcomeIdeal {
+        if isAllScenesFilled && isCurrentOutcomeSuccessful {
             completeStoryRun()
         } else if let maximumPlacements, placementCount >= maximumPlacements {
             phase = .needsBreak
@@ -171,7 +181,7 @@ final class DragDropGameEngine {
     
     /// Explicitly finishes the chapter and transitions to the completion result overlay.
     func finishChapter() {
-        guard chapter.storyDefinition == nil || (isAllScenesFilled && isCurrentOutcomeIdeal) else { return }
+        guard chapter.storyDefinition == nil || (isAllScenesFilled && isCurrentOutcomeSuccessful) else { return }
         completeStoryRun()
     }
     
@@ -182,7 +192,7 @@ final class DragDropGameEngine {
             let placedActionIDs = scenes.flatMap { scene in
                 scene.dropSlots.compactMap { slot -> String? in
                     guard let obj = slot.currentObject else { return nil }
-                    return story.actions.first(where: { $0.name.en == obj.name })?.id
+                    return actionID(for: obj.name, in: story)
                 }
             }
             
@@ -193,7 +203,7 @@ final class DragDropGameEngine {
                 self.currentOutcome = activeOutcome
                 if placedActionIDs != lastEvaluatedActionSequence {
                     lastEvaluatedActionSequence = placedActionIDs
-                    if activeOutcome?.isIdeal == false {
+                    if let activeOutcome, activeOutcome.category != "success" {
                         wrongAttempts += 1
                     }
                 }
@@ -223,11 +233,7 @@ final class DragDropGameEngine {
                                 scenes[index].characterImageNames = imageNames
                             }
                             
-                            if isFirstGrid || (index < placedActionIDs.count) || (isOutcomeGrid && isComplete) {
-                                scenes[index].speechBubbleText = state.textBubble?.text.en
-                            } else {
-                                scenes[index].speechBubbleText = nil
-                            }
+                            scenes[index].speechBubbleText = state.textBubble?.text.localized(language: chapter.language)
                             
                             if isComplete {
                                 if outcome.isIdeal {
@@ -311,8 +317,8 @@ final class DragDropGameEngine {
             placedObjects: placedObjectCount,
             placementCount: placementCount,
             stars: stars,
-            completionSummary: chapter.storyDefinition?.completionSummary.en,
-            completionTip: chapter.storyDefinition?.completionTip.en,
+            completionSummary: chapter.storyDefinition?.completionSummary.localized(language: chapter.language),
+            completionTip: chapter.storyDefinition?.completionTip.localized(language: chapter.language),
             sceneStates: scenes.map { scene in
                 ChapterResult.SceneResultEntry(
                     sceneName: scene.name,
@@ -369,10 +375,9 @@ final class DragDropGameEngine {
 
     private func saveProgress(status: StoryRunStatus = .playing) {
         guard let story = chapter.storyDefinition else { return }
-        let actionIDsByName = Dictionary(uniqueKeysWithValues: story.actions.map { ($0.name.en, $0.id) })
         let progress = zip(story.grids, scenes).compactMap { grid, scene -> StoryProgressStep? in
             let placements = scene.dropSlots.compactMap { slot -> StoryProgressPlacement? in
-                guard let name = slot.currentObject?.name, let actionID = actionIDsByName[name] else { return nil }
+                guard let name = slot.currentObject?.name, let actionID = actionID(for: name, in: story) else { return nil }
                 return StoryProgressPlacement(slotID: slot.id, actionID: actionID)
             }
             return placements.isEmpty ? nil : StoryProgressStep(sourceGridID: grid.id, placements: placements)
@@ -381,6 +386,12 @@ final class DragDropGameEngine {
             StoryActiveRun(steps: progress, placementCount: placementCount, status: status),
             for: story.id
         )
+    }
+
+    private func actionID(for objectName: String, in story: StoryDefinition) -> String? {
+        story.actions.first {
+            $0.name.en == objectName || $0.name.id == objectName
+        }?.id
     }
 
     private func completeStoryRun() {

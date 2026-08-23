@@ -80,6 +80,9 @@ struct StoryProgressStoreTests {
         precondition(completed.completion == StoryCompletion(bestStars: 2, bestPlacementCount: 7), "Completion must save stars and placements")
 
         try store.saveActiveRun(activeRun, for: "listen_before_helping_rhodey")
+        completed = try store.state(for: "listen_before_helping_rhodey")
+        precondition(completed.activeRun == nil, "Replaying a completed chapter must not save resumable progress")
+
         try store.complete(storyID: "listen_before_helping_rhodey", stars: 1, placementCount: 9)
         completed = try store.state(for: "listen_before_helping_rhodey")
         precondition(completed.completion == StoryCompletion(bestStars: 2, bestPlacementCount: 7), "A worse replay must preserve the best result")
@@ -93,6 +96,18 @@ struct StoryProgressStoreTests {
         store.resetAll()
         let emptyState = try store.state(for: "listen_before_helping_rhodey")
         precondition(emptyState == StoryProgressState(), "Full reset must clear every story")
+
+        let staleReplay = StoryProgressState(
+            activeRun: activeRun,
+            completion: StoryCompletion(bestStars: 2, bestPlacementCount: 7)
+        )
+        defaults.set(
+            try JSONEncoder().encode(["completed_replay": staleReplay]),
+            forKey: "storyStateByStoryID"
+        )
+        let cleanedReplay = try store.state(for: "completed_replay")
+        precondition(cleanedReplay.activeRun == nil, "A completed chapter must ignore stale replay progress")
+        precondition(cleanedReplay.completion == staleReplay.completion, "Ignoring a stale replay must preserve completion")
 
         print("StoryProgressStoreTests passed")
     }

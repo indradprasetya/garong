@@ -107,11 +107,9 @@ struct GameScene: Identifiable, Equatable {
     var hasObjects: Bool {
         dropSlots.contains { $0.currentObject != nil }
     }
-    
+
     /// Number of objects placed in this scene.
     var objectCount: Int {
         dropSlots.reduce(0) { $0 + ($1.currentObject != nil ? 1 : 0) }
     }
 }
-
-

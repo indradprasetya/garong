@@ -13,6 +13,13 @@ struct SceneDropZoneView: View {
     let scene: GameScene
     let isAnimating: Bool
     let isDraggingAnyItem: Bool
+    var celebratesWin: Bool = false
+    var celebrationDelay: TimeInterval = 0
+    var isTutorialTarget: Bool = false
+    var highlightedPlacedActionID: String? = nil
+    var tutorialAccessibilityHint: String = ""
+    var isDropEnabled: Bool = true
+    var canDragPlacedObject: (GameObject) -> Bool = { _ in true }
     let onDrop: (GameObject, String?) -> Void
     let onRemoveObject: (GameObject, String?) -> Void
     var onDragStarted: (() -> Void)? = nil
@@ -20,6 +27,7 @@ struct SceneDropZoneView: View {
 
     @State private var isHoveringDrag = false
     @State private var targetedCharIndex: Int? = nil
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         GeometryReader { geo in
@@ -48,27 +56,7 @@ struct SceneDropZoneView: View {
                                 .scaledToFill()
                                 .clipped()
                         }
-
-                        let displayImages = resolvedDisplayImages
-                        let isMultiChar = displayImages.count > 1
-                        let charMaxH = isMultiChar ? cardH * 0.82 : cardH * 0.92
-
-                        // Character(s) Anchored to Bottom (Scaled up & cropped at bottom)
-                        HStack(spacing: isMultiChar ? -cardW * 0.02 : 0) {
-                            ForEach(Array(displayImages.enumerated()), id: \.offset) { index, charImage in
-                                let isWiggling = (targetedCharIndex == index)
-                                CharacterView(
-                                    imageName: charImage,
-                                    emotion: scene.characterEmotion,
-                                    isReacting: isAnimating,
-                                    isWiggling: isWiggling
-                                )
-                                .frame(maxHeight: charMaxH)
-                                .offset(y: cardH * 0.14)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-
+                        
                         // Top Speech Bubble Banner
                         if let bubble = scene.speechBubbleText, !bubble.isEmpty {
                             let bubbleH = cardH * 0.38
@@ -112,13 +100,35 @@ struct SceneDropZoneView: View {
                             }
                         }
 
+                        let displayImages = resolvedDisplayImages
+                        let isMultiChar = displayImages.count > 1
+                        let charMaxH = isMultiChar ? cardH * 0.82 : cardH * 0.92
+
+                        // Character(s) Anchored to Bottom (Scaled up & cropped at bottom)
+                        HStack(spacing: isMultiChar ? -cardW * 0.02 : 0) {
+                            ForEach(Array(displayImages.enumerated()), id: \.offset) { index, charImage in
+                                let isWiggling = (targetedCharIndex == index)
+                                CharacterView(
+                                    imageName: charImage,
+                                    emotion: scene.characterEmotion,
+                                    isReacting: isAnimating,
+                                    isWiggling: isWiggling
+                                )
+                                .frame(maxHeight: charMaxH)
+                                .offset(y: cardH * 0.14)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+
+                        
+
                         // Drop Target Overlays (Split left/right when multiple slots exist)
                         if scene.dropSlots.count > 1 {
                             HStack(spacing: 0) {
                                 Color.clear
                                     .contentShape(Rectangle())
                                     .dropDestination(for: GameObject.self) { items, _ in
-                                        guard let firstItem = items.first else { return false }
+                                        guard isDropEnabled, let firstItem = items.first else { return false }
                                         withAnimation(.spring()) {
                                             targetedCharIndex = nil
                                             isHoveringDrag = false
@@ -126,6 +136,7 @@ struct SceneDropZoneView: View {
                                         }
                                         return true
                                     } isTargeted: { targeted in
+                                        guard isDropEnabled else { return }
                                         withAnimation(.easeInOut(duration: 0.2)) {
                                             if targeted && targetedCharIndex != 0 {
                                                 HapticManager.shared.selection()
@@ -138,7 +149,7 @@ struct SceneDropZoneView: View {
                                 Color.clear
                                     .contentShape(Rectangle())
                                     .dropDestination(for: GameObject.self) { items, _ in
-                                        guard let firstItem = items.first else { return false }
+                                        guard isDropEnabled, let firstItem = items.first else { return false }
                                         withAnimation(.spring()) {
                                             targetedCharIndex = nil
                                             isHoveringDrag = false
@@ -146,6 +157,7 @@ struct SceneDropZoneView: View {
                                         }
                                         return true
                                     } isTargeted: { targeted in
+                                        guard isDropEnabled else { return }
                                         withAnimation(.easeInOut(duration: 0.2)) {
                                             if targeted && targetedCharIndex != 1 {
                                                 HapticManager.shared.selection()
@@ -160,7 +172,7 @@ struct SceneDropZoneView: View {
                             Color.clear
                                 .contentShape(Rectangle())
                                 .dropDestination(for: GameObject.self) { items, _ in
-                                    guard let firstItem = items.first else { return false }
+                                    guard isDropEnabled, let firstItem = items.first else { return false }
                                     withAnimation(.spring()) {
                                         targetedCharIndex = nil
                                         isHoveringDrag = false
@@ -168,6 +180,7 @@ struct SceneDropZoneView: View {
                                     }
                                     return true
                                 } isTargeted: { targeted in
+                                    guard isDropEnabled else { return }
                                     withAnimation(.easeInOut(duration: 0.2)) {
                                         if targeted && targetedCharIndex != 0 {
                                             HapticManager.shared.selection()
@@ -182,6 +195,7 @@ struct SceneDropZoneView: View {
                             Color.clear
                                 .contentShape(Rectangle())
                                 .dropDestination(for: GameObject.self) { _, _ in
+                                    onDragEnded?()
                                     return false
                                 }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -196,7 +210,12 @@ struct SceneDropZoneView: View {
                                         slot: firstSlot,
                                         placedObject: placedObj,
                                         badgeSize: badgeSize,
+                                        isDragEnabled: canDragPlacedObject(placedObj),
+                                        isHighlighted: highlightedPlacedActionID == placedObj.symbol,
+                                        isDropEnabled: isDropEnabled,
+                                        tutorialAccessibilityHint: tutorialAccessibilityHint,
                                         onTargetChanged: { targeted in isHoveringDrag = targeted },
+                                        onDragStarted: onDragStarted,
                                         onDrop: { obj in onDrop(obj, firstSlot.id) },
                                         onRemove: { obj in onRemoveObject(obj, firstSlot.id) }
                                     )
@@ -209,7 +228,12 @@ struct SceneDropZoneView: View {
                                         slot: scene.dropSlots[1],
                                         placedObject: secondPlacedObj,
                                         badgeSize: badgeSize,
+                                        isDragEnabled: canDragPlacedObject(secondPlacedObj),
+                                        isHighlighted: highlightedPlacedActionID == secondPlacedObj.symbol,
+                                        isDropEnabled: isDropEnabled,
+                                        tutorialAccessibilityHint: tutorialAccessibilityHint,
                                         onTargetChanged: { targeted in isHoveringDrag = targeted },
+                                        onDragStarted: onDragStarted,
                                         onDrop: { obj in onDrop(obj, scene.dropSlots[1].id) },
                                         onRemove: { obj in onRemoveObject(obj, scene.dropSlots[1].id) }
                                     )
@@ -275,14 +299,71 @@ struct SceneDropZoneView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .contentShape(Rectangle())
                     .dropDestination(for: GameObject.self) { _, _ in
+                        onDragEnded?()
                         return false
                     }
                 }
             }
         }
         .aspectRatio(212.0 / 147.0, contentMode: .fit)
-        .scaleEffect(isAnimating ? 1.02 : 1.0)
+        .accessibilityHint(isTutorialTarget ? tutorialAccessibilityHint : "")
+        .keyframeAnimator(
+            initialValue: WinCelebrationValues(),
+            trigger: celebratesWin && !reduceMotion
+        ) { content, value in
+            content
+                .scaleEffect((isAnimating ? 1.02 : 1.0) * value.scale)
+                .shadow(color: .yellow.opacity(value.glow), radius: 12 * value.glow)
+                .overlay {
+                    GeometryReader { shineGeo in
+                        LinearGradient(
+                            colors: [
+                                .clear,
+                                .yellow.opacity(0.4),
+                                .white.opacity(0.9),
+                                .orange.opacity(0.4),
+                                .clear
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                        .frame(
+                            width: shineGeo.size.width * 0.38,
+                            height: shineGeo.size.height * 1.5
+                        )
+                        .rotationEffect(.degrees(-14))
+                        .offset(
+                            x: shineGeo.size.width * value.shineOffset,
+                            y: -shineGeo.size.height * 0.25
+                        )
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .opacity(celebratesWin && !reduceMotion ? 1 : 0)
+                    .allowsHitTesting(false)
+                }
+        } keyframes: { _ in
+            KeyframeTrack(\.scale) {
+                LinearKeyframe(1, duration: max(0.001, celebrationDelay))
+                SpringKeyframe(1.07, duration: 0.25, spring: .smooth)
+                SpringKeyframe(1, duration: 0.3, spring: .smooth)
+            }
+            KeyframeTrack(\.shineOffset) {
+                LinearKeyframe(1.3, duration: celebrationDelay + 0.1)
+                CubicKeyframe(-1.3, duration: 0.55)
+            }
+            KeyframeTrack(\.glow) {
+                LinearKeyframe(0, duration: max(0.001, celebrationDelay))
+                SpringKeyframe(0.9, duration: 0.2, spring: .smooth)
+                CubicKeyframe(0, duration: 0.4)
+            }
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private struct WinCelebrationValues {
+        var scale: CGFloat = 1
+        var shineOffset: CGFloat = 1.3
+        var glow: CGFloat = 0
     }
 
     private enum CharacterIdentity {
@@ -385,7 +466,12 @@ struct CornerDropSlotBadge: View {
     let slot: GameDropSlot
     let placedObject: GameObject
     var badgeSize: CGFloat = 42
+    var isDragEnabled: Bool = true
+    var isHighlighted: Bool = false
+    var isDropEnabled: Bool = true
+    var tutorialAccessibilityHint: String = ""
     var onTargetChanged: ((Bool) -> Void)? = nil
+    var onDragStarted: (() -> Void)? = nil
     let onDrop: (GameObject) -> Void
     let onRemove: (GameObject) -> Void
 
@@ -397,7 +483,7 @@ struct CornerDropSlotBadge: View {
         let iconFontSize = max(12, badgeSize * 0.48)
         let imagePadding = max(2, badgeSize * 0.095)
 
-        ZStack {
+        let badge = ZStack {
             RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(Color.white)
                 .shadow(color: Color.black.opacity(0.15), radius: 3, x: 0, y: 1)
@@ -420,26 +506,41 @@ struct CornerDropSlotBadge: View {
         }
         .frame(width: badgeSize, height: badgeSize)
         .scaleEffect(isTargeted ? 1.1 : 1.0)
-        .instantDraggable(placedObject) {
-            if hasAsset {
-                Image(placedObject.symbol)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: badgeSize * 1.14, height: badgeSize * 1.14)
-                    .shadow(radius: 6)
+
+        Group {
+            if isDragEnabled {
+                badge.instantDraggable(
+                    placedObject,
+                    onDragStarted: onDragStarted
+                ) {
+                    if hasAsset {
+                        Image(placedObject.symbol)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: badgeSize * 1.14, height: badgeSize * 1.14)
+                            .shadow(radius: 6)
+                    } else {
+                        Image(systemName: placedObject.sfSymbol)
+                            .font(.system(size: iconFontSize * 1.9))
+                            .shadow(radius: 6)
+                    }
+                }
             } else {
-                Image(systemName: placedObject.sfSymbol)
-                    .font(.system(size: iconFontSize * 1.9))
-                    .shadow(radius: 6)
+                badge
             }
         }
+        .opacity(isDragEnabled || isHighlighted ? 1 : 0.55)
+        .tutorialTarget(isHighlighted)
+        .accessibilityHint(isHighlighted ? tutorialAccessibilityHint : "")
+        .accessibilityRespondsToUserInteraction(isDragEnabled)
         .dropDestination(for: GameObject.self) { items, location in
-            guard let firstItem = items.first else { return false }
+            guard isDropEnabled, let firstItem = items.first else { return false }
             withAnimation(.spring()) {
                 onDrop(firstItem)
             }
             return true
         } isTargeted: { targeted in
+            guard isDropEnabled else { return }
             withAnimation(.easeInOut(duration: 0.2)) {
                 isTargeted = targeted
                 onTargetChanged?(targeted)

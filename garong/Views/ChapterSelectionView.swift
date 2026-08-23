@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct ChapterSelectionView: View {
-    let stories: [GameStory]
+    let stories: [StoryListStory]
+    @ObservedObject private var localization = AppLocalization.shared
 
     @Environment(\.dismiss)
     private var dismiss
@@ -16,16 +17,21 @@ struct ChapterSelectionView: View {
 
     // MARK: - INIT
 
-    init(story: GameStory) {
+    init(story: StoryListStory) {
         self.stories = [story]
     }
 
-    init(stories: [GameStory]) {
+    init(stories: [StoryListStory]) {
         self.stories = stories
     }
 
-    private var currentStory: GameStory { stories[selectedStoryIndex] }
-    private var chapters: [Chapter] { currentStory.chapters }
+    private var currentStory: StoryListStory? {
+        stories.indices.contains(selectedStoryIndex) ? stories[selectedStoryIndex] : nil
+    }
+
+    private var chapters: [StoryChapterReference] {
+        currentStory?.chapters ?? []
+    }
 
 
     // MARK: - BODY
@@ -36,8 +42,9 @@ struct ChapterSelectionView: View {
 
             let width = geometry.size.width
             let height = geometry.size.height
-            let storyBackgroundWidth = min(width * 0.79, height * 1.72)
-            let storyArrowOffset = storyBackgroundWidth / 2 + width * 0.015
+            let storyPaperWidth = min(width * 0.79, height * 1.72)
+            let storyPaperHeight = storyPaperWidth / 1.77
+            let storyArrowOffset = storyPaperWidth / 2 + width * 0.015
 
             ZStack {
 
@@ -60,26 +67,56 @@ struct ChapterSelectionView: View {
                 // STORY ARTWORK + TITLE
                 // =====================================================
 
-                Image("story\(currentStory.number)_background")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: storyBackgroundWidth)
-                    .position(
-                        x: width * 0.50,
-                        y: height * 0.49
-                    )
+                if let currentStory {
+                    ZStack {
+                        Image("paper_background")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: storyPaperWidth)
+                            .position(
+                                x: width * 0.50,
+                                y: height * 0.56
+                            )
 
+                        Image(currentStory.artworkAssetName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(
+                                width: storyPaperWidth * 0.43,
+                                height: storyPaperHeight * 0.78
+                            )
+                            .position(
+                                x: width * 0.35,
+                                y: height * 0.52
+                            )
 
-                ForEach(0..<min(chapters.count, 3), id: \.self) { index in
-                    chapterButton(
-                        index: index,
-                        width: width,
-                        height: height
-                    )
-                    .position(
-                        x: width * 0.675,
-                        y: height * (0.445 + CGFloat(index) * 0.14)
-                    )
+                        Text(localization.localized(currentStory.name).uppercased())
+                            .font(.appFont(size: max(50, width * 0.045)))
+                            .bold()
+                            .foregroundStyle(.black)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.65)
+                            .frame(width: storyPaperWidth * 0.34)
+                            .position(
+                                x: width * 0.675,
+                                y: height * 0.30
+                            )
+
+                        ForEach(0..<min(chapters.count, 3), id: \.self) { index in
+                            chapterButton(
+                                index: index,
+                                width: width,
+                                height: height
+                            )
+                            .position(
+                                x: width * 0.675,
+                                y: height * (0.445 + CGFloat(index) * 0.14)
+                            )
+                        }
+                    }
+                    .frame(width: width, height: height)
+                    .offset (y: -12)
                 }
 
 
@@ -94,7 +131,7 @@ struct ChapterSelectionView: View {
                     Image("back_ribbon")
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 48)
+                        .frame(height: 64)
                 }
                 .buttonStyle(.plain)
                 .position(
@@ -142,7 +179,9 @@ struct ChapterSelectionView: View {
         .ignoresSafeArea()
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .onAppear(perform: loadProgress)
+        .onAppear {
+            loadProgress()
+        }
         .navigationDestination(isPresented: $showGameplay) {
             if let selectedChapter {
                 GameplayView(chapter: selectedChapter)
@@ -155,22 +194,26 @@ struct ChapterSelectionView: View {
         width: CGFloat
     ) -> some View {
         Button {
+            let destination = ChapterPageNavigation.destinationIndex(
+                from: selectedStoryIndex,
+                direction: direction,
+                pageCount: stories.count
+            )
+            SoundManager.shared.play(.buttonTap)
             withAnimation(.easeInOut(duration: 0.25)) {
-                selectedStoryIndex = ChapterPageNavigation.destinationIndex(
-                    from: selectedStoryIndex,
-                    direction: direction,
-                    pageCount: stories.count
-                )
+                selectedStoryIndex = destination
             }
         } label: {
-            Image("NextArrow")
+            Image("chevron_right")
                 .resizable()
                 .scaledToFit()
                 .frame(width: width * 0.070)
                 .rotationEffect(.degrees(direction == .previous ? 180 : 0))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(direction == .previous ? "Previous chapter page" : "Next chapter page")
+        .accessibilityLabel(localization.text(
+            direction == .previous ? "selection.previousPage" : "selection.nextPage"
+        ))
     }
 
 
@@ -189,16 +232,26 @@ struct ChapterSelectionView: View {
         switch status {
         case .completed(let stars):
             chapterNavigationLink(index: index, status: status, width: width, height: height)
-                .accessibilityLabel("\(chapters[index].name), completed, \(stars) stars")
+                .accessibilityLabel(localization.text(
+                    "selection.completed",
+                    chapterDisplayName(index: index),
+                    stars
+                ))
 
         case .current:
             chapterNavigationLink(index: index, status: status, width: width, height: height)
-                .accessibilityLabel("\(chapters[index].name), current chapter")
+                .accessibilityLabel(localization.text(
+                    "selection.current",
+                    chapterDisplayName(index: index)
+                ))
 
         case .locked:
             chapterButtonLabel(index: index, status: status, width: width, height: height)
                 .allowsHitTesting(false)
-                .accessibilityLabel("\(chapters[index].name), locked")
+                .accessibilityLabel(localization.text(
+                    "selection.locked",
+                    chapterDisplayName(index: index)
+                ))
         }
     }
 
@@ -209,10 +262,15 @@ struct ChapterSelectionView: View {
         height: CGFloat
     ) -> some View {
         Button {
+            guard let story = currentStory, story.chapters.indices.contains(index) else { return }
             SoundManager.shared.play(.buttonTap)
-            selectedChapter = chapters[index]
+            selectedChapter = StoryCatalog.chapter(
+                for: story.chapters[index],
+                storyNumber: story.number,
+                language: localization.languageCode
+            )
             withAnimation(.easeInOut(duration: 0.3)) {
-                isLoadingGameplay = true
+                isLoadingGameplay = selectedChapter != nil
             }
         } label: {
             chapterButtonLabel(index: index, status: status, width: width, height: height)
@@ -316,12 +374,16 @@ struct ChapterSelectionView: View {
         index: Int,
         width: CGFloat
     ) -> some View {
-        Text(chapters[index].storyDefinition?.shortTitle.en ?? chapters[index].name)
+        Text(chapterDisplayName(index: index))
             .font(.appFont(size: max(20, width * 0.024)))
             .foregroundStyle(.black)
             .multilineTextAlignment(.center)
             .lineLimit(1)
             .minimumScaleFactor(0.65)
+    }
+
+    private func chapterDisplayName(index: Int) -> String {
+        localization.localized(chapters[index].shortTitle)
     }
 
 
@@ -334,14 +396,12 @@ struct ChapterSelectionView: View {
     ) -> ChapterProgressStatus {
         let previousStoriesComplete = stories.prefix(selectedStoryIndex)
             .flatMap(\.chapters)
-            .allSatisfy { chapter in
-                guard let storyID = chapter.storyDefinition?.id else { return false }
-                return progressByStoryID[storyID]?.completion != nil
+            .allSatisfy { reference in
+                progressByStoryID[reference.id]?.completion != nil
             }
-        let completions = chapters.map { chapter -> StoryCompletion? in
-            guard let storyID = chapter.storyDefinition?.id else { return nil }
-            return progressByStoryID[storyID]?.completion
-        }
+        let completions = currentStory?.chapters.map {
+            progressByStoryID[$0.id]?.completion
+        } ?? []
         return ChapterProgressStatus.resolve(
             at: index,
             completions: completions,
@@ -350,10 +410,9 @@ struct ChapterSelectionView: View {
     }
 
     private func loadProgress() {
-        progressByStoryID = stories.flatMap(\.chapters).reduce(into: [:]) { result, chapter in
-            guard let storyID = chapter.storyDefinition?.id,
-                  let state = try? progressStore.state(for: storyID) else { return }
-            result[storyID] = state
+        progressByStoryID = stories.flatMap(\.chapters).reduce(into: [:]) { result, reference in
+            guard let state = try? progressStore.state(for: reference.id) else { return }
+            result[reference.id] = state
         }
     }
 }
@@ -367,7 +426,7 @@ struct ChapterSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             ChapterSelectionView(
-                story: StoryCatalog.gameStories[0]
+                stories: StoryCatalog.stories
             )
         }
     }

@@ -3,6 +3,7 @@ import SwiftUI
 struct GuidebookView: View {
     var onBack: (() -> Void)? = nil
 
+    @ObservedObject private var localization = AppLocalization.shared
     @State private var currentPage = 0
 
     let items: [GuidebookItem] = GuidebookData.items
@@ -37,10 +38,11 @@ struct GuidebookView: View {
 
                         Spacer()
 
-                        Text("Guidebook")
-                            .font(.appFont(size: 48))
+                        Text(localization.text("guidebook.title"))
+                            .font(.appFont(size: 58))
                             .foregroundStyle(.white)
                             .padding(.top, 24)
+                            .bold()
 
                         Spacer()
 
@@ -63,11 +65,11 @@ struct GuidebookView: View {
                                 }
                             }
                         } label: {
-                            Image("guidebook_arrow")
+                            Image("chevron_right")
                                 .resizable()
                                 .scaledToFit()
                                 .rotationEffect(.degrees(180))
-                                .frame(width: 36, height: 36)
+                                .frame(width: width * 0.070)
                                 .opacity(currentPage > 0 ? 1.0 : 0.0)
                         }
                         .disabled(currentPage == 0)
@@ -105,7 +107,7 @@ struct GuidebookView: View {
                                         // RIGHT SIDE: Reference Text
                                         VStack(alignment: .leading) {
                                             Spacer()
-                                            Text(item.paragraph1)
+                                            Text(localization.text(item.paragraph1Key))
                                                 .font(.appFont(size: 32))
                                                 .foregroundStyle(.white)
                                                 .lineSpacing(6)
@@ -117,7 +119,7 @@ struct GuidebookView: View {
                                     } else {
                                         // LEFT PAGE CONTENT
                                         VStack(alignment: .center) {
-                                            Text(item.title)
+                                            Text(localization.text(item.titleKey))
                                                 .font(.appFont(size: 22))
                                                 .foregroundStyle(.black)
 
@@ -155,13 +157,13 @@ struct GuidebookView: View {
 
                                         // RIGHT PAGE CONTENT
                                         VStack(alignment: .leading, spacing: 16) {
-                                            Text(item.paragraph1)
+                                            Text(localization.text(item.paragraph1Key))
                                                 .font(.appFont(size: 16))
                                                 .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
                                                 .lineSpacing(4)
 
-                                            if let p2 = item.paragraph2 {
-                                                Text(p2)
+                                            if let paragraph2Key = item.paragraph2Key {
+                                                Text(localization.text(paragraph2Key))
                                                     .font(.appFont(size: 16))
                                                     .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
                                                     .lineSpacing(4)
@@ -188,10 +190,10 @@ struct GuidebookView: View {
                                 }
                             }
                         } label: {
-                            Image("guidebook_arrow")
+                            Image("chevron_right")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 36, height: 36)
+                                .frame(width: width * 0.070)
                                 .opacity(currentPage < items.count - 1 ? 1.0 : 0.0)
                         }
                         .disabled(currentPage == items.count - 1)
@@ -212,4 +214,3 @@ struct GuidebookView: View {
 #Preview {
     GuidebookView()
 }
-

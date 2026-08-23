@@ -8,11 +8,12 @@ import SwiftUI
 
 enum AppFont {
     private(set) static var fontName: String = "Virels-Regular"
+    private(set) static var boldFontName: String = "Virels-Bold"
 
     /// Dynamically registers custom fonts with CoreText on app startup.
     static func registerFonts() {
         #if canImport(CoreText)
-        let fontNames = ["Virels-Regular", "Virels"]
+        let fontNames = ["Virels-Regular", "Virels-Bold", "Virels"]
         var candidateURLs: [URL] = []
 
         for name in fontNames {
@@ -42,17 +43,11 @@ enum AppFont {
         }
 
         #if canImport(UIKit)
-        for family in UIFont.familyNames {
-            if family.localizedCaseInsensitiveContains("virels") {
-                let names = UIFont.fontNames(forFamilyName: family)
-                if let first = names.first {
-                    fontName = first
-                    print("AppFont: Using registered font '\(first)' in family '\(family)'")
-                    return
-                }
-                fontName = family
-                return
-            }
+        if UIFont(name: fontName, size: 12) != nil {
+            print("AppFont: Using registered font '\(fontName)'")
+        }
+        if UIFont(name: boldFontName, size: 12) != nil {
+            print("AppFont: Using registered bold font '\(boldFontName)'")
         }
         #endif
         #endif
@@ -64,6 +59,10 @@ enum AppFont {
 
     static func regular(size: CGFloat) -> Font {
         Font.custom(fontName, size: size)
+    }
+
+    static func bold(size: CGFloat, relativeTo textStyle: Font.TextStyle = .body) -> Font {
+        Font.custom(boldFontName, size: size, relativeTo: textStyle)
     }
     
     static func title(size: CGFloat = 28) -> Font {
@@ -86,5 +85,9 @@ enum AppFont {
 extension Font {
     static func appFont(size: CGFloat, relativeTo textStyle: Font.TextStyle = .body) -> Font {
         AppFont.custom(size, relativeTo: textStyle)
+    }
+
+    static func appFontBold(size: CGFloat, relativeTo textStyle: Font.TextStyle = .body) -> Font {
+        AppFont.bold(size: size, relativeTo: textStyle)
     }
 }

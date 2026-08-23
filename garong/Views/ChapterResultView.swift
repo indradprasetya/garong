@@ -13,6 +13,7 @@ struct ChapterResultView: View {
     var onNext: (() -> Void)? = nil
     var onTryAgain: (() -> Void)? = nil
     var statusMessage: String? = nil
+    @ObservedObject private var localization = AppLocalization.shared
 
     var body: some View {
         GeometryReader { geo in
@@ -54,16 +55,23 @@ struct ChapterResultView: View {
                                 SoundManager.shared.play(.buttonTap)
                                 onTryAgain()
                             } label: {
-                                Text("Try Again")
-                                    .font(.appFont(size: 28))
-                                    .foregroundStyle(.red)
-                                    .padding(.horizontal, 18)
-                                    .frame(height: 48)
-                                    .background(
-                                        Capsule()
-                                            .fill(.white)
-                                            .stroke(.red, lineWidth: 3)
-                                    )
+                                if AssetFallbackHelper.hasAsset(named: "try_again_button") {
+                                    Image("try_again_button")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 48)
+                                } else {
+                                    Text("Try Again")
+                                        .font(.appFont(size: 28))
+                                        .foregroundStyle(.red)
+                                        .padding(.horizontal, 18)
+                                        .frame(height: 48)
+                                        .background(
+                                            Capsule()
+                                                .fill(.white)
+                                                .stroke(.red, lineWidth: 3)
+                                        )
+                                }
                             }
                             .buttonStyle(.plain)
                         } else {
@@ -71,14 +79,19 @@ struct ChapterResultView: View {
                                 SoundManager.shared.play(.buttonTap)
                                 onNext?()
                             } label: {
-                                if AssetFallbackHelper.hasAsset(named: "next_button") {
-                                    Image(.nextButtonResult)
+                                if AssetFallbackHelper.hasAsset(named: "next_button_result") {
+                                    Image("next_button_result")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 48)
+                                } else if AssetFallbackHelper.hasAsset(named: "next_button") {
+                                    Image("next_button")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(height: 48)
                                 } else {
                                     HStack(spacing: 6) {
-                                        Text("Next")
+                                        Text(localization.text("result.next"))
                                             .font(.appFont(size: 28))
                                         Image(systemName: "chevron.right")
                                             .font(.system(size: 20, weight: .bold))
@@ -106,7 +119,7 @@ struct ChapterResultView: View {
                             HStack(spacing: 0) {
                                 // LEFT PAGE: RESULT
                                 VStack(alignment: .center) {
-                                    Text("RESULT")
+                                    Text(localization.text("result.title"))
                                         .font(.appFont(size: 32))
                                         .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1))
 
@@ -121,6 +134,7 @@ struct ChapterResultView: View {
                                             .multilineTextAlignment(.center)
                                             .lineSpacing(4)
                                             .padding(.horizontal, 8)
+                                        
                                     }
 
 
@@ -151,8 +165,8 @@ struct ChapterResultView: View {
                                             }
                                         }
                                     }
+                                    .padding(.bottom, 16)
 
-                                    Spacer(minLength: 0)
                                 }
                                 .padding(.leading, bookWidth * 0.08)
                                 .padding(.trailing, bookWidth * 0.04)
@@ -162,7 +176,7 @@ struct ChapterResultView: View {
 
                                 // RIGHT PAGE: TIPS
                                 VStack(alignment: .center) {
-                                    Text("TIPS")
+                                    Text(localization.text("result.tips"))
                                         .font(.appFont(size: 32))
                                         .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1))
 
