@@ -10,6 +10,9 @@ final class BackgroundMusicManager {
 
     private var player: AVAudioPlayer?
     private var currentTrack: Track?
+    
+    /// Base volume multiplier to reduce BGM by 80% so it doesn't drown out voice overs and SFX.
+    private let baseVolumeMultiplier: Float = 0.2
 
     var volume: Float {
         get {
@@ -20,7 +23,7 @@ final class BackgroundMusicManager {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: "bgmVolume")
-            player?.volume = newValue
+            player?.volume = newValue * baseVolumeMultiplier
         }
     }
 
@@ -31,7 +34,7 @@ final class BackgroundMusicManager {
     }
 
     func restoreAfterSFXPreview(duration: TimeInterval = 0.3) {
-        player?.setVolume(volume, fadeDuration: duration)
+        player?.setVolume(volume * baseVolumeMultiplier, fadeDuration: duration)
     }
 
     func play(_ track: Track = .menu) {
@@ -54,7 +57,7 @@ final class BackgroundMusicManager {
 
             let audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer.numberOfLoops = -1
-            audioPlayer.volume = volume
+            audioPlayer.volume = volume * baseVolumeMultiplier
             audioPlayer.prepareToPlay()
             guard audioPlayer.play() else {
                 print("Background music player could not start.")
