@@ -188,22 +188,30 @@ struct GameplayView: View {
                 
                 Spacer()
                 
-                // Bottom Tray (CENTERED Draggable Objects - also unattached when dropped here)
-                VStack(alignment: .center, spacing: 4) {
-                    HStack(spacing: 16) {
-                        ForEach(viewModel.availableObjects, id: \.id) { object in
-                            DraggableObjectView(
-                                object: object,
-                                isEnabled: viewModel.canDrag(object),
-                                isHighlighted: viewModel.isTutorialItem(object),
-                                onDragStarted: { viewModel.setDraggingActive(true) }
-                            )
-                            .accessibilityHint(
-                                viewModel.isTutorialItem(object) ? tutorialMessage : ""
-                            )
+                // Bottom Section: Item Tray or Narrator Container
+                ZStack {
+                    VStack(alignment: .center, spacing: 4) {
+                        HStack(spacing: 16) {
+                            ForEach(viewModel.availableObjects, id: \.id) { object in
+                                DraggableObjectView(
+                                    object: object,
+                                    isEnabled: viewModel.canDrag(object),
+                                    isHighlighted: viewModel.isTutorialItem(object),
+                                    onDragStarted: { viewModel.setDraggingActive(true) }
+                                )
+                                .accessibilityHint(
+                                    viewModel.isTutorialItem(object) ? tutorialMessage : ""
+                                )
+                            }
                         }
+                        .frame(maxWidth: .infinity, alignment: .center)
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
+                    .frame(height: 80)
+                    .opacity(viewModel.showNarratorBox ? 0 : 1)
+
+                    if viewModel.showNarratorBox, let narratorText = viewModel.currentNarratorLine {
+                        narratorBoxView(text: narratorText)
+                    }
                 }
                 .frame(height: 80)
                 .accessibilityHint(
@@ -297,6 +305,16 @@ struct GameplayView: View {
                     .transition(.scale(scale: 0.85).combined(with: .opacity))
                     .zIndex(9)
             }
+
+            // Narrator Box Tap-Anywhere Overlay
+            if viewModel.showNarratorBox {
+                Color.black.opacity(0.001)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.dismissNarratorBox()
+                    }
+                    .zIndex(4)
+            }
         }
         .overlayPreferenceValue(TutorialTargetPreferenceKey.self) { targets in
             GeometryReader { proxy in
@@ -353,6 +371,34 @@ struct GameplayView: View {
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func narratorBoxView(text: String) -> some View {
+        ZStack {
+            if AssetFallbackHelper.hasAsset(named: "narrator_container") {
+                Image("narrator_container")
+                    .resizable()
+            } else {
+                RoundedRectangle(cornerRadius: 18)
+                    .fill(Color(red: 0.2, green: 0.2, blue: 0.2))
+            }
+
+            Text(text)
+                .font(.appFont(size: 26))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.5)
+                .padding(.horizontal, 28)
+                .padding(.vertical, 10)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 80)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            viewModel.dismissNarratorBox()
+        }
+        .transition(.scale(scale: 0.95).combined(with: .opacity))
     }
 
     @ViewBuilder
