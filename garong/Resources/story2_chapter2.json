@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "share_the_slide",
   "shortTitle": {
     "en": "The Slide Is Mine",
@@ -45,6 +45,10 @@
       "name": {
         "en": "Ask",
         "id": "Tanya"
+      },
+      "caregiverLine": {
+        "en": "Tell me, what happened?",
+        "id": "Ceritakan, apa yang terjadi?"
       }
     },
     {
@@ -52,6 +56,10 @@
       "name": {
         "en": "Toy",
         "id": "Mainan"
+      },
+      "caregiverLine": {
+        "en": "You can play with this first.",
+        "id": "Kamu bisa bermain dengan ini dulu."
       }
     },
     {
@@ -59,6 +67,10 @@
       "name": {
         "en": "Approach",
         "id": "Dekati"
+      },
+      "caregiverLine": {
+        "en": "I'm here with you.",
+        "id": "Aku di sini menemanimu, ya."
       }
     },
     {
@@ -66,6 +78,10 @@
       "name": {
         "en": "Apologize",
         "id": "Minta Maaf"
+      },
+      "caregiverLine": {
+        "en": "Now, let's say sorry to each other.",
+        "id": "Sekarang, ayo saling meminta maaf."
       }
     }
   ],
@@ -191,8 +207,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -219,8 +235,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -247,8 +263,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -275,8 +291,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -339,8 +355,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -367,8 +383,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -395,8 +411,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -423,8 +439,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -487,8 +503,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -515,8 +531,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -543,8 +559,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -571,8 +587,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         }
@@ -635,8 +651,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -663,8 +679,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -691,8 +707,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -719,8 +735,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -783,8 +799,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -811,8 +827,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -839,8 +855,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -867,8 +883,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -931,8 +947,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -959,8 +975,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -987,8 +1003,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -1015,8 +1031,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -1079,8 +1095,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -1107,8 +1123,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -1135,8 +1151,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -1163,8 +1179,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -1227,8 +1243,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -1255,8 +1271,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -1283,8 +1299,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -1311,8 +1327,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -1375,8 +1391,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -1403,8 +1419,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -1431,8 +1447,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         },
@@ -1459,8 +1475,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         }
@@ -1523,8 +1539,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -1551,8 +1567,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -1579,8 +1595,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         },
@@ -1607,8 +1623,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -1671,8 +1687,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -1699,8 +1715,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -1727,8 +1743,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         },
@@ -1755,8 +1771,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         }
@@ -1819,8 +1835,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -1847,8 +1863,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -1875,8 +1891,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         },
@@ -1896,8 +1912,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We're both sorry. Let's share!",
-              "id": "Kami berdua minta maaf. Ayo berbagi!"
+              "en": "Sorry, Rhodey. Let's take turns!",
+              "id": "Maaf, Rhodey. Ayo bergantian!"
             }
           }
         }
@@ -1960,8 +1976,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -1988,8 +2004,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -2016,8 +2032,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -2044,8 +2060,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -2108,8 +2124,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -2136,8 +2152,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -2164,8 +2180,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -2192,8 +2208,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -2256,8 +2272,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -2284,8 +2300,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -2312,8 +2328,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -2340,8 +2356,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -2404,8 +2420,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -2432,8 +2448,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -2460,8 +2476,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -2488,8 +2504,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -2552,8 +2568,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -2580,8 +2596,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -2608,8 +2624,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -2636,8 +2652,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -2700,8 +2716,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -2728,8 +2744,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -2756,8 +2772,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -2784,8 +2800,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -2848,8 +2864,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -2876,8 +2892,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -2904,8 +2920,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -2932,8 +2948,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         }
@@ -2996,8 +3012,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -3024,8 +3040,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3052,8 +3068,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -3080,8 +3096,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -3144,8 +3160,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -3172,8 +3188,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3200,8 +3216,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3228,8 +3244,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -3292,8 +3308,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -3320,8 +3336,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3348,8 +3364,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3376,8 +3392,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -3440,8 +3456,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -3468,8 +3484,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3496,8 +3512,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3524,8 +3540,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -3588,8 +3604,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -3616,8 +3632,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3644,8 +3660,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3672,8 +3688,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -3736,8 +3752,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -3764,8 +3780,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3792,8 +3808,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -3820,8 +3836,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         }
@@ -3884,8 +3900,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -3912,8 +3928,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -3940,8 +3956,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -3968,8 +3984,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -4032,8 +4048,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -4060,8 +4076,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -4088,8 +4104,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -4116,8 +4132,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -4180,8 +4196,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -4208,8 +4224,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -4236,8 +4252,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -4264,8 +4280,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -4328,8 +4344,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -4356,8 +4372,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -4384,8 +4400,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -4412,8 +4428,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -4476,8 +4492,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -4504,8 +4520,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -4532,8 +4548,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -4560,8 +4576,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -4624,8 +4640,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -4652,8 +4668,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -4680,8 +4696,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -4708,8 +4724,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -4772,8 +4788,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -4800,8 +4816,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -4828,8 +4844,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -4856,8 +4872,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -4920,8 +4936,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -4948,8 +4964,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -4976,8 +4992,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         },
@@ -5004,8 +5020,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         }
@@ -5068,8 +5084,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -5096,8 +5112,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -5124,8 +5140,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         },
@@ -5152,8 +5168,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -5216,8 +5232,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -5244,8 +5260,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -5272,8 +5288,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         },
@@ -5300,8 +5316,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         }
@@ -5364,8 +5380,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -5392,8 +5408,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -5420,8 +5436,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         },
@@ -5441,8 +5457,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We're both sorry. Let's share!",
-              "id": "Kami berdua minta maaf. Ayo berbagi!"
+              "en": "Sorry, Rhodey. Let's take turns!",
+              "id": "Maaf, Rhodey. Ayo bergantian!"
             }
           }
         }
@@ -5505,8 +5521,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -5533,8 +5549,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -5561,8 +5577,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -5589,8 +5605,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -5653,8 +5669,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -5681,8 +5697,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -5709,8 +5725,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -5737,8 +5753,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -5801,8 +5817,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -5829,8 +5845,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -5857,8 +5873,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -5885,8 +5901,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -5949,8 +5965,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -5977,8 +5993,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6005,8 +6021,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -6033,8 +6049,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -6097,8 +6113,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -6125,8 +6141,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6153,8 +6169,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6181,8 +6197,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         }
@@ -6245,8 +6261,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -6273,8 +6289,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6301,8 +6317,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6329,8 +6345,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -6393,8 +6409,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -6421,8 +6437,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6449,8 +6465,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6477,8 +6493,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -6541,8 +6557,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -6569,8 +6585,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6597,8 +6613,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6625,8 +6641,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -6689,8 +6705,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -6717,8 +6733,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6745,8 +6761,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -6773,8 +6789,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -6837,8 +6853,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -6865,8 +6881,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -6893,8 +6909,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -6921,8 +6937,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -6985,8 +7001,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -7013,8 +7029,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -7041,8 +7057,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -7069,8 +7085,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -7133,8 +7149,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -7161,8 +7177,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -7189,8 +7205,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -7217,8 +7233,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -7281,8 +7297,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -7309,8 +7325,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -7337,8 +7353,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -7365,8 +7381,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -7429,8 +7445,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -7457,8 +7473,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -7485,8 +7501,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -7513,8 +7529,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -7577,8 +7593,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -7605,8 +7621,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -7633,8 +7649,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -7661,8 +7677,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         }
@@ -7725,8 +7741,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -7753,8 +7769,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -7781,8 +7797,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         },
@@ -7809,8 +7825,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -7873,8 +7889,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -7901,8 +7917,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -7929,8 +7945,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -7957,8 +7973,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -8021,8 +8037,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -8049,8 +8065,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -8077,8 +8093,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -8105,8 +8121,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -8169,8 +8185,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -8197,8 +8213,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -8225,8 +8241,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -8253,8 +8269,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -8317,8 +8333,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -8345,8 +8361,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -8373,8 +8389,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         },
@@ -8401,8 +8417,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -8465,8 +8481,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -8493,8 +8509,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -8521,8 +8537,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -8549,8 +8565,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I understand. We can take turns.",
-              "id": "Aku mengerti. Kami bisa bergantian."
+              "en": "We can take turns.",
+              "id": "Kita bisa bergantian."
             }
           }
         }
@@ -8613,8 +8629,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -8641,8 +8657,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -8669,8 +8685,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -8697,8 +8713,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -8761,8 +8777,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -8789,8 +8805,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -8817,8 +8833,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -8845,8 +8861,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -8909,8 +8925,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -8937,8 +8953,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -8965,8 +8981,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         },
@@ -8993,8 +9009,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }
@@ -9057,8 +9073,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -9085,8 +9101,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -9113,8 +9129,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -9141,8 +9157,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I was worried we would bump into each other.",
-              "id": "Aku khawatir kami akan bertabrakan."
+              "en": "I was scared we'd bump.",
+              "id": "Aku takut kami bertabrakan."
             }
           }
         }
@@ -9205,8 +9221,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -9233,8 +9249,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -9261,8 +9277,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -9289,8 +9305,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We forgot about the slide.",
-              "id": "Kami jadi melupakan perosotannya."
+              "en": "Can we play with this?",
+              "id": "Kita main ini, ya?"
             }
           }
         }
@@ -9353,8 +9369,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -9381,8 +9397,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -9409,8 +9425,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -9437,8 +9453,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "We can take turns safely.",
-              "id": "Kami bisa bergantian dengan aman."
+              "en": "Can I wait here?",
+              "id": "Aku tunggu di sini, ya?"
             }
           }
         }
@@ -9501,8 +9517,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want Jojo on the slide.",
-              "id": "Aku tidak mau Jojo bermain di perosotan."
+              "en": "I want the slide!",
+              "id": "Aku mau perosotannya!"
             }
           }
         },
@@ -9529,8 +9545,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -9557,8 +9573,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         },
@@ -9585,8 +9601,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "But you haven't listened yet.",
-              "id": "Tapi kamu belum mendengarkan."
+              "en": "Why do I have to say sorry?",
+              "id": "Kenapa aku harus minta maaf?"
             }
           }
         }

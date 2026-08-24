@@ -75,7 +75,8 @@ private extension StoryDefinition {
         let characterIDs = try uniqueIDs(characters.map(\.id))
         let gridIDs = try uniqueIDs(grids.map(\.id))
 
-        guard gridCount > 0, choiceCount > 0, !actions.isEmpty,
+        guard schemaVersion == 6,
+              gridCount > 0, choiceCount > 0, !actions.isEmpty,
               maximumPlacements > choiceCount,
               starThresholds.threeStars >= choiceCount,
               starThresholds.threeStars < starThresholds.twoStars,
@@ -92,7 +93,10 @@ private extension StoryDefinition {
             throw StoryValidationError.invalidGrid("story")
         }
 
-        guard actions.allSatisfy({ !$0.name.en.isEmpty && !$0.name.id.isEmpty }),
+        guard actions.allSatisfy({
+                  !$0.name.en.isEmpty && !$0.name.id.isEmpty &&
+                  !$0.caregiverLine.en.isEmpty && !$0.caregiverLine.id.isEmpty
+              }),
               characters.allSatisfy({
                   !$0.expressionIDs.isEmpty && Set($0.expressionIDs).count == $0.expressionIDs.count
               }) else {

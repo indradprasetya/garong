@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "validate_jojo_feelings",
   "shortTitle": {
     "en": "That Hurt My Feelings",
@@ -45,6 +45,10 @@
       "name": {
         "en": "Ask",
         "id": "Tanya"
+      },
+      "caregiverLine": {
+        "en": "Tell me, what happened?",
+        "id": "Ceritakan, apa yang terjadi?"
       }
     },
     {
@@ -52,6 +56,10 @@
       "name": {
         "en": "Blame",
         "id": "Menyalahkan"
+      },
+      "caregiverLine": {
+        "en": "This was your fault, wasn't it?",
+        "id": "Ini salahmu, kan?"
       }
     },
     {
@@ -59,6 +67,10 @@
       "name": {
         "en": "Approach",
         "id": "Dekati"
+      },
+      "caregiverLine": {
+        "en": "I'm here with you.",
+        "id": "Aku di sini menemanimu, ya."
       }
     }
   ],
@@ -191,8 +203,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "That made me feel small.",
-              "id": "Itu membuatku merasa direndahkan."
+              "en": "It made me sad.",
+              "id": "Aku jadi sedih."
             }
           }
         },
@@ -219,8 +231,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "That made me feel small.",
-              "id": "Itu membuatku merasa direndahkan."
+              "en": "It made me sad.",
+              "id": "Aku jadi sedih."
             }
           }
         }
@@ -302,8 +314,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "That made me feel small.",
-              "id": "Itu membuatku merasa direndahkan."
+              "en": "It made me sad.",
+              "id": "Aku jadi sedih."
             }
           }
         },
@@ -330,8 +342,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Why are you blaming me?",
-              "id": "Kenapa kamu menyalahkanku?"
+              "en": "It wasn't my fault!",
+              "id": "Bukan salahku!"
             }
           }
         }
@@ -413,8 +425,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "That made me feel small.",
-              "id": "Itu membuatku merasa direndahkan."
+              "en": "It made me sad.",
+              "id": "Aku jadi sedih."
             }
           }
         },
@@ -441,8 +453,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Thank you for listening to me.",
-              "id": "Terima kasih sudah mendengarkanku."
+              "en": "I feel better now.",
+              "id": "Aku sudah lebih tenang."
             }
           }
         }
@@ -524,8 +536,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Why are you blaming me?",
-              "id": "Kenapa kamu menyalahkanku?"
+              "en": "It wasn't my fault!",
+              "id": "Bukan salahku!"
             }
           }
         },
@@ -552,8 +564,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "That made me feel small.",
-              "id": "Itu membuatku merasa direndahkan."
+              "en": "It made me sad.",
+              "id": "Aku jadi sedih."
             }
           }
         }
@@ -635,8 +647,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Why are you blaming me?",
-              "id": "Kenapa kamu menyalahkanku?"
+              "en": "It wasn't my fault!",
+              "id": "Bukan salahku!"
             }
           }
         },
@@ -663,8 +675,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Why are you blaming me?",
-              "id": "Kenapa kamu menyalahkanku?"
+              "en": "It wasn't my fault!",
+              "id": "Bukan salahku!"
             }
           }
         }
@@ -746,8 +758,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Why are you blaming me?",
-              "id": "Kenapa kamu menyalahkanku?"
+              "en": "It wasn't my fault!",
+              "id": "Bukan salahku!"
             }
           }
         },
@@ -774,8 +786,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Can I tell you what happened?",
-              "id": "Boleh aku ceritakan yang terjadi?"
+              "en": "I want to tell you.",
+              "id": "Aku mau cerita."
             }
           }
         }
@@ -857,8 +869,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Can I tell you what happened?",
-              "id": "Boleh aku ceritakan yang terjadi?"
+              "en": "I want to tell you.",
+              "id": "Aku mau cerita."
             }
           }
         },
@@ -885,8 +897,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Thank you for listening to me.",
-              "id": "Terima kasih sudah mendengarkanku."
+              "en": "I feel better now.",
+              "id": "Aku sudah lebih tenang."
             }
           }
         }
@@ -968,8 +980,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Can I tell you what happened?",
-              "id": "Boleh aku ceritakan yang terjadi?"
+              "en": "I want to tell you.",
+              "id": "Aku mau cerita."
             }
           }
         },
@@ -996,8 +1008,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Why are you blaming me?",
-              "id": "Kenapa kamu menyalahkanku?"
+              "en": "It wasn't my fault!",
+              "id": "Bukan salahku!"
             }
           }
         }
@@ -1079,8 +1091,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Can I tell you what happened?",
-              "id": "Boleh aku ceritakan yang terjadi?"
+              "en": "I want to tell you.",
+              "id": "Aku mau cerita."
             }
           }
         },
@@ -1107,8 +1119,8 @@
           "textBubble": {
             "speakerID": "jojo",
             "text": {
-              "en": "Can I tell you what happened?",
-              "id": "Boleh aku ceritakan yang terjadi?"
+              "en": "I want to tell you.",
+              "id": "Aku mau cerita."
             }
           }
         }

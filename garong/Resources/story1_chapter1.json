@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "id": "rhodey_wants_to_draw",
   "shortTitle": {
     "en": "Let's Draw!",
@@ -45,6 +45,10 @@
       "name": {
         "en": "Approach",
         "id": "Dekati"
+      },
+      "caregiverLine": {
+        "en": "I'm here with you.",
+        "id": "Aku di sini menemanimu, ya."
       }
     },
     {
@@ -52,6 +56,10 @@
       "name": {
         "en": "Crayon",
         "id": "Krayon"
+      },
+      "caregiverLine": {
+        "en": "Would you like to draw with this crayon?",
+        "id": "Mau menggambar dengan krayon ini?"
       }
     },
     {
@@ -59,6 +67,10 @@
       "name": {
         "en": "Toy",
         "id": "Mainan"
+      },
+      "caregiverLine": {
+        "en": "You can play with this first.",
+        "id": "Kamu bisa bermain dengan ini dulu."
       }
     }
   ],
@@ -145,8 +157,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want to draw right now.",
-              "id": "Aku belum mau menggambar sekarang."
+              "en": "I don't want to draw.",
+              "id": "Aku nggak mau menggambar."
             }
           }
         },
@@ -165,8 +177,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "You're staying with me?",
-              "id": "Kamu menemaniku?"
+              "en": "Will you stay with me?",
+              "id": "Temani aku, ya?"
             }
           }
         },
@@ -226,8 +238,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want to draw right now.",
-              "id": "Aku belum mau menggambar sekarang."
+              "en": "I don't want to draw.",
+              "id": "Aku nggak mau menggambar."
             }
           }
         },
@@ -246,8 +258,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "You're staying with me?",
-              "id": "Kamu menemaniku?"
+              "en": "Will you stay with me?",
+              "id": "Temani aku, ya?"
             }
           }
         },
@@ -266,8 +278,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I want to draw now!",
-              "id": "Sekarang aku mau menggambar!"
+              "en": "Look! I'm drawing!",
+              "id": "Lihat! Aku menggambar!"
             }
           }
         }
@@ -313,8 +325,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want to draw right now.",
-              "id": "Aku belum mau menggambar sekarang."
+              "en": "I don't want to draw.",
+              "id": "Aku nggak mau menggambar."
             }
           }
         },
@@ -333,8 +345,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "You're staying with me?",
-              "id": "Kamu menemaniku?"
+              "en": "Will you stay with me?",
+              "id": "Temani aku, ya?"
             }
           }
         },
@@ -353,8 +365,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I want to play instead.",
-              "id": "Aku mau bermain saja."
+              "en": "I want to play!",
+              "id": "Aku mau main!"
             }
           }
         }
@@ -400,8 +412,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want to draw right now.",
-              "id": "Aku belum mau menggambar sekarang."
+              "en": "I don't want to draw.",
+              "id": "Aku nggak mau menggambar."
             }
           }
         },
@@ -420,8 +432,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want the crayon yet.",
-              "id": "Aku belum mau menerima krayonnya."
+              "en": "Not yet.",
+              "id": "Belum mau."
             }
           }
         },
@@ -440,8 +452,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "Thank you for staying with me.",
-              "id": "Terima kasih sudah menemaniku."
+              "en": "Stay here, please.",
+              "id": "Tetap di sini, ya."
             }
           }
         }
@@ -487,8 +499,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want to draw right now.",
-              "id": "Aku belum mau menggambar sekarang."
+              "en": "I don't want to draw.",
+              "id": "Aku nggak mau menggambar."
             }
           }
         },
@@ -507,8 +519,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want the crayon yet.",
-              "id": "Aku belum mau menerima krayonnya."
+              "en": "Not yet.",
+              "id": "Belum mau."
             }
           }
         },
@@ -527,8 +539,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I said I don't want to draw!",
-              "id": "Aku bilang aku belum mau menggambar!"
+              "en": "I don't want to!",
+              "id": "Aku nggak mau!"
             }
           }
         }
@@ -574,8 +586,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want to draw right now.",
-              "id": "Aku belum mau menggambar sekarang."
+              "en": "I don't want to draw.",
+              "id": "Aku nggak mau menggambar."
             }
           }
         },
@@ -594,8 +606,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want the crayon yet.",
-              "id": "Aku belum mau menerima krayonnya."
+              "en": "Not yet.",
+              "id": "Belum mau."
             }
           }
         },
@@ -614,8 +626,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I want to play instead.",
-              "id": "Aku mau bermain saja."
+              "en": "I want to play!",
+              "id": "Aku mau main!"
             }
           }
         }
@@ -661,8 +673,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want to draw right now.",
-              "id": "Aku belum mau menggambar sekarang."
+              "en": "I don't want to draw.",
+              "id": "Aku nggak mau menggambar."
             }
           }
         },
@@ -681,8 +693,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I want to play instead.",
-              "id": "Aku mau bermain saja."
+              "en": "I want to play!",
+              "id": "Aku mau main!"
             }
           }
         },
@@ -701,8 +713,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "You're staying with me?",
-              "id": "Kamu menemaniku?"
+              "en": "Will you stay with me?",
+              "id": "Temani aku, ya?"
             }
           }
         }
@@ -748,8 +760,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want to draw right now.",
-              "id": "Aku belum mau menggambar sekarang."
+              "en": "I don't want to draw.",
+              "id": "Aku nggak mau menggambar."
             }
           }
         },
@@ -768,8 +780,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I want to play instead.",
-              "id": "Aku mau bermain saja."
+              "en": "I want to play!",
+              "id": "Aku mau main!"
             }
           }
         },
@@ -788,8 +800,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "Can I try the crayon?",
-              "id": "Boleh aku mencoba krayonnya?"
+              "en": "Can I try?",
+              "id": "Aku boleh coba?"
             }
           }
         }
@@ -835,8 +847,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I don't want to draw right now.",
-              "id": "Aku belum mau menggambar sekarang."
+              "en": "I don't want to draw.",
+              "id": "Aku nggak mau menggambar."
             }
           }
         },
@@ -855,8 +867,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I want to play instead.",
-              "id": "Aku mau bermain saja."
+              "en": "I want to play!",
+              "id": "Aku mau main!"
             }
           }
         },
@@ -875,8 +887,8 @@
           "textBubble": {
             "speakerID": "rhodey",
             "text": {
-              "en": "I want to play instead.",
-              "id": "Aku mau bermain saja."
+              "en": "I want to play!",
+              "id": "Aku mau main!"
             }
           }
         }
