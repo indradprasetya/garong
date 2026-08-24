@@ -34,6 +34,7 @@ struct StoryStarThresholds: Codable, Equatable {
 struct StoryActionDefinition: Codable, Identifiable {
     let id: String
     let name: LocalizedStoryText
+    let caregiverLine: LocalizedStoryText
 }
 
 struct StoryCharacterDefinition: Codable, Identifiable {

@@ -112,6 +112,9 @@ final class DragDropGameTests {
                        story.gridCount == 3 &&
                        story.choiceCount == 2 &&
                        story.actions.count == 3 &&
+                       story.actions.allSatisfy {
+                           !$0.caregiverLine.en.isEmpty && !$0.caregiverLine.id.isEmpty
+                       } &&
                        story.characters.count == 1 &&
                        story.outcomes.count == 9
             } catch {
