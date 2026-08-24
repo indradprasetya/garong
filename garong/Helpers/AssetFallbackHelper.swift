@@ -35,6 +35,7 @@ enum AssetFallbackHelper {
         "container",
         "container_drag",
         "container_lock",
+        "narrator_container",
         "jojo_angry",
         "jojo_calm",
         "jojo_defensive",

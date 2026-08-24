@@ -18,6 +18,8 @@ final class DragDropGameViewModel: ObservableObject {
     @Published private(set) var currentStars: Int = 3
     @Published private(set) var showPeekHint: Bool = false
     @Published private(set) var tutorialStep: ChapterTutorialStep
+    @Published private(set) var currentNarratorLine: String? = nil
+    @Published private(set) var showNarratorBox: Bool = false
     @Published var isDraggingItem: Bool = false
     @Published var animatingSceneID: UUID?
     
@@ -28,11 +30,54 @@ final class DragDropGameViewModel: ObservableObject {
     private var hasPlayedCompletionSFX: Bool = false
     private var tutorialHintSession = TutorialHintSession()
     private var chapterTutorial: ChapterTutorialSession
+    private var narratorDismissTask: Task<Void, Never>? = nil
 
     var isGuidedTutorialActive: Bool { tutorialStep != .inactive }
 
     func dismissPeekHint() {
         showPeekHint = false
+    }
+
+    func dismissNarratorBox() {
+        narratorDismissTask?.cancel()
+        narratorDismissTask = nil
+        withAnimation(.easeInOut(duration: 0.2)) {
+            showNarratorBox = false
+        }
+    }
+
+    func caregiverLine(for object: GameObject) -> String? {
+        guard let story = engine.chapter.storyDefinition else { return nil }
+        let lang = engine.chapter.language
+        if let action = story.actions.first(where: {
+            $0.id == object.symbol ||
+            AssetFallbackHelper.actionImageName(for: $0.id) == object.symbol ||
+            $0.name.localized(language: lang) == object.name
+        }) {
+            return action.caregiverLine.localized(language: lang)
+        }
+        return nil
+    }
+
+    func selectNarratorLine(for object: GameObject) {
+        if let line = caregiverLine(for: object) {
+            presentNarratorLine(line)
+        }
+    }
+
+    private func presentNarratorLine(_ line: String) {
+        narratorDismissTask?.cancel()
+        withAnimation(.easeInOut(duration: 0.2)) {
+            self.currentNarratorLine = line
+            self.showNarratorBox = true
+        }
+        narratorDismissTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeInOut(duration: 0.2)) {
+                self.showNarratorBox = false
+            }
+        }
     }
     
     init(chapter: Chapter) {
@@ -139,6 +184,8 @@ final class DragDropGameViewModel: ObservableObject {
             self.hintText = Self.localizedHint(for: nextChapter)
             self.chapterResult = nil
             self.showPeekHint = false
+            self.showNarratorBox = false
+            self.currentNarratorLine = nil
             self.tutorialHintSession.reset()
             self.chapterTutorial = ChapterTutorialSession(
                 storyNumber: storyNumber,
@@ -243,6 +290,10 @@ final class DragDropGameViewModel: ObservableObject {
         animatingSceneID = sceneID
         
         syncWithEngine()
+
+        if let line = caregiverLine(for: object) {
+            presentNarratorLine(line)
+        }
         
         if let droppedScene = scenes.first(where: { $0.id == sceneID }) {
             let played = SoundManager.shared.playVoiceOverIfPresent(
@@ -277,6 +328,7 @@ final class DragDropGameViewModel: ObservableObject {
         hasPlayedCompletionSFX = false
         SoundManager.shared.play(.itemRemove)
         syncWithEngine()
+        updateNarratorStateAfterRemoval()
     }
     
     /// Remove an object globally from whichever scene currently holds it.
@@ -289,6 +341,19 @@ final class DragDropGameViewModel: ObservableObject {
         hasPlayedCompletionSFX = false
         SoundManager.shared.play(.itemRemove)
         syncWithEngine()
+        updateNarratorStateAfterRemoval()
+    }
+
+    private func updateNarratorStateAfterRemoval() {
+        let remainingObjects = scenes.flatMap(\.dropSlots).compactMap(\.currentObject)
+        if remainingObjects.isEmpty {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                self.showNarratorBox = false
+                self.currentNarratorLine = nil
+            }
+        } else if let lastObject = remainingObjects.last, let line = caregiverLine(for: lastObject) {
+            self.currentNarratorLine = line
+        }
     }
     
     /// Restart the chapter.
@@ -300,6 +365,8 @@ final class DragDropGameViewModel: ObservableObject {
         engine.restart()
         chapterResult = nil
         showPeekHint = false
+        showNarratorBox = false
+        currentNarratorLine = nil
         tutorialHintSession.reset()
         chapterTutorial.resetForRestart()
         syncTutorialStep()
