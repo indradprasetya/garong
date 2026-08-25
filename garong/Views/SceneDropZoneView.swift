@@ -306,6 +306,9 @@ struct SceneDropZoneView: View {
             }
         }
         .aspectRatio(212.0 / 147.0, contentMode: .fit)
+        .anchorPreference(key: SceneTargetPreferenceKey.self, value: .bounds) {
+            [scene.id: $0]
+        }
         .accessibilityHint(isTutorialTarget ? tutorialAccessibilityHint : "")
         .keyframeAnimator(
             initialValue: WinCelebrationValues(),

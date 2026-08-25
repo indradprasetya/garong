@@ -39,8 +39,13 @@ final class DragDropGameViewModel: ObservableObject {
     }
 
     func dismissNarratorBox() {
+        setDraggingActive(false)
         narratorDismissTask?.cancel()
         narratorDismissTask = nil
+        if chapterTutorial.step == .narratorBox {
+            chapterTutorial.didDismissNarratorBoxTutorial()
+            syncTutorialStep()
+        }
         withAnimation(.easeInOut(duration: 0.2)) {
             showNarratorBox = false
         }
@@ -71,6 +76,9 @@ final class DragDropGameViewModel: ObservableObject {
             self.currentNarratorLine = line
             self.showNarratorBox = true
         }
+        // During the narrator box tutorial step, keep the box visible
+        // until the player taps it to advance.
+        guard chapterTutorial.step != .narratorBox else { return }
         narratorDismissTask = Task { @MainActor in
             try? await Task.sleep(nanoseconds: 2_000_000_000)
             guard !Task.isCancelled else { return }
@@ -374,6 +382,7 @@ final class DragDropGameViewModel: ObservableObject {
     }
 
     func didDismissTutorialHint() {
+        setDraggingActive(false)
         chapterTutorial.didDismissHint()
         syncTutorialStep()
     }

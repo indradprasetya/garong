@@ -35,6 +35,7 @@
   "gameplay.breakFallback": { "en": "The characters need a break.", "id": "Para karakter perlu waktu untuk beristirahat." },
 
   "tutorial.approach": { "en": "Drag Approach to Rhodey.", "id": "Tarik Dekati ke Rhodey." },
+  "tutorial.narratorBox": { "en": "This shows feedback based on your choice. Tap to continue.", "id": "Ini menampilkan tanggapan berdasarkan pilihanmu. Ketuk untuk lanjut." },
   "tutorial.toy": { "en": "Now drag the Toy to Rhodey.", "id": "Sekarang tarik Mainan ke Rhodey." },
   "tutorial.wrongAndHint": { "en": "A choice can be wrong. Open Hint to learn what Rhodey needs.", "id": "Pilihanmu bisa kurang tepat. Buka Petunjuk untuk melihat kebutuhan Rhodey." },
   "tutorial.returnToy": { "en": "Drag the toy back to the tray to try again.", "id": "Tarik kembali mainan ke tempat pilihan untuk mencoba lagi." },

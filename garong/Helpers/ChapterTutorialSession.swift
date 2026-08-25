@@ -3,6 +3,7 @@ import Foundation
 enum ChapterTutorialStep: Equatable {
     case inactive
     case approach
+    case narratorBox
     case toy
     case wrongAndHint
     case returnToy
@@ -38,7 +39,7 @@ struct ChapterTutorialSession {
         case .approach: actionID == "action_approach"
         case .toy: actionID == "action_toy"
         case .crayon: actionID == "action_crayon"
-        case .wrongAndHint, .returnToy, .meter: false
+        case .wrongAndHint, .returnToy, .meter, .narratorBox: false
         }
     }
 
@@ -48,7 +49,7 @@ struct ChapterTutorialSession {
         case .approach: actionID == "action_approach" && sceneIndex == 0
         case .toy: actionID == "action_toy" && sceneIndex == 1
         case .crayon: actionID == "action_crayon" && sceneIndex == 1
-        case .wrongAndHint, .returnToy, .meter: false
+        case .wrongAndHint, .returnToy, .meter, .narratorBox: false
         }
     }
 
@@ -59,7 +60,7 @@ struct ChapterTutorialSession {
     mutating func didPlace(actionID: String, sceneIndex: Int) {
         guard allowsDrop(actionID: actionID, sceneIndex: sceneIndex) else { return }
         if step == .approach {
-            step = .toy
+            step = .narratorBox
         } else if step == .toy {
             step = .wrongAndHint
         }
@@ -68,6 +69,11 @@ struct ChapterTutorialSession {
     mutating func didDismissHint() {
         guard step == .wrongAndHint else { return }
         step = .returnToy
+    }
+
+    mutating func didDismissNarratorBoxTutorial() {
+        guard step == .narratorBox else { return }
+        step = .toy
     }
 
     mutating func didRemove(_ actionID: String) {
