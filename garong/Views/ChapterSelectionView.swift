@@ -38,159 +38,58 @@ struct ChapterSelectionView: View {
     // MARK: - BODY
     
     var body: some View {
-        ZStack {
-            Image(.storiesGreenGrid)
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-            
+        GeometryReader { geometry in
+            let width = geometry.size.width
+            let height = geometry.size.height
+
             ZStack {
-                VStack {
-                    HStack {
-                        Button {
-                            SoundManager.shared.play(.backTap)
-                            dismiss()
-                        } label: {
-                            Image("back_ribbon")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 64)
-                        }
-                        .buttonStyle(.plain)
-                        
-                        Spacer()
-                    }
-                    .padding(.leading, 46)
-                    
-                    GeometryReader { geometry in
-                        let width = geometry.size.width
-                        let height = geometry.size.height
-                        let storyPaperWidth = min(width * 0.82, height * 2)
-                        let storyPaperHeight = storyPaperWidth / 1.77
-                        let cardSpacing = storyPaperWidth + width * 0.15
-                        let paperCenterY = height * 0.48
+                Image(.storiesGreenGrid)
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
 
-                        ZStack {
-                            // Story Cards Layer
-                            ZStack {
-                                ForEach(Array(stories.enumerated()), id: \.element.id) { storyIndex, story in
-                                    let offsetIndex = CGFloat(storyIndex - selectedStoryIndex)
-                                    let cardX = width * 0.50 + offsetIndex * cardSpacing + dragOffset
-                                    
-                                    if abs(offsetIndex * cardSpacing + dragOffset) < width * 1.5 {
-                                        ZStack {
-                                            // 1. Paper Background Image
-                                            Image("paper_background")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: storyPaperWidth, height: storyPaperHeight)
-                                            
-                                            // 2. Paper Content Layout (Left & Right Pages)
-                                            HStack(spacing: 0) {
-                                                // Left Page: Artwork
-                                                VStack {
-                                                    Image(story.artworkAssetName)
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(
-                                                            width: storyPaperWidth * 0.40,
-                                                            height: storyPaperHeight * 0.75
-                                                        )
-                                                }
-                                                .frame(width: storyPaperWidth * 0.46, height: storyPaperHeight)
-                                                
-                                                // Right Page: Title + Chapter Buttons
-                                                VStack(spacing: storyPaperHeight * 0.02) {
-                                                    Text(localization.localized(story.name).uppercased())
-                                                        .font(.appFont(size: max(24, storyPaperWidth * 0.048)))
-                                                        .bold()
-                                                        .foregroundStyle(.black)
-                                                        .multilineTextAlignment(.center)
-                                                        .lineLimit(1)
-                                                        .minimumScaleFactor(0.65)
-                                                        .frame(width: storyPaperWidth * 0.38)
-                                                    
-                                                    VStack(spacing: storyPaperHeight * 0.015) {
-                                                        ForEach(0..<min(story.chapters.count, 3), id: \.self) { chapterIndex in
-                                                            chapterButton(
-                                                                storyIndex: storyIndex,
-                                                                chapterIndex: chapterIndex,
-                                                                width: width,
-                                                                height: height,
-                                                                cardX: cardX,
-                                                                storyPaperWidth: storyPaperWidth
-                                                            )
-                                                        }
-                                                    }
-                                                }
-                                                .frame(width: storyPaperWidth * 0.46, height: storyPaperHeight)
-                                            }
-                                            .frame(width: storyPaperWidth, height: storyPaperHeight)
-                                        }
-                                        .position(
-                                            x: cardX,
-                                            y: paperCenterY
-                                        )
-                                    }
-                                }
-                            }
-                            .frame(width: width, height: height)
-                            .contentShape(Rectangle())
-                            .gesture(
-                                DragGesture(minimumDistance: 20, coordinateSpace: .local)
-                                    .onChanged { value in
-                                        let translation = value.translation.width
-                                        if (translation < 0 && selectedStoryIndex == stories.count - 1) ||
-                                            (translation > 0 && selectedStoryIndex == 0) {
-                                            dragOffset = translation * 0.2
-                                        } else {
-                                            dragOffset = translation
-                                        }
-                                    }
-                                    .onEnded { value in
-                                        let translation = value.translation.width
-                                        let threshold: CGFloat = 50
-                                        if translation < -threshold && selectedStoryIndex < stories.count - 1 {
-                                            SoundManager.shared.play(.buttonTap)
-                                            withAnimation(.easeInOut(duration: 0.25)) {
-                                                selectedStoryIndex += 1
-                                            }
-                                        } else if translation > threshold && selectedStoryIndex > 0 {
-                                            SoundManager.shared.play(.buttonTap)
-                                            withAnimation(.easeInOut(duration: 0.25)) {
-                                                selectedStoryIndex -= 1
-                                            }
-                                        }
-                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                            dragOffset = 0
-                                        }
-                                    }
-                            )
-                            .zIndex(1)
-
-                            // Navigation Arrows Layer (Symmetrical Overlay)
-                            HStack {
-                                if selectedStoryIndex > 0 {
-                                    storyArrow(direction: .previous, width: width)
-                                } else {
-                                    Spacer().frame(width: width * 0.070)
-                                }
-                                
-                                Spacer()
-                                
-                                if selectedStoryIndex < stories.count - 1 {
-                                    storyArrow(direction: .next, width: width)
-                                } else {
-                                    Spacer().frame(width: width * 0.070)
-                                }
-                            }
-                            .padding(.horizontal, 28)
-                            .position(x: width * 0.50, y: paperCenterY)
-                            .zIndex(2)
-                        }
-                    }
+                ForEach(Array(stories.enumerated()), id: \.element.id) { storyIndex, story in
+                    storyPage(story, storyIndex: storyIndex, width: width, height: height)
+                        .offset(
+                            x: CGFloat(storyIndex - selectedStoryIndex) * width + dragOffset
+                        )
                 }
-                
+
+                if stories.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 42))
+                        Text("Story data could not be loaded")
+                            .font(.appFont(size: 24))
+                    }
+                    .foregroundStyle(.black.opacity(0.75))
+                }
+
+                Button {
+                    SoundManager.shared.play(.backTap)
+                    dismiss()
+                } label: {
+                    Image("back_ribbon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: min(64, height * 0.15))
+                }
+                .buttonStyle(.plain)
+                .position(x: width * 0.10, y: height * 0.08)
+                .zIndex(5)
+
+                if selectedStoryIndex > 0 {
+                    storyArrow(direction: .previous, width: width)
+                        .position(x: width * 0.10, y: height * 0.50)
+                        .zIndex(6)
+                }
+
+                if selectedStoryIndex < stories.count - 1 {
+                    storyArrow(direction: .next, width: width)
+                        .position(x: width * 0.925, y: height * 0.50)
+                        .zIndex(6)
+                }
+
                 if isLoadingGameplay {
                     LoadingView(chapter: selectedChapter, duration: 2.0) {
                         withAnimation(.easeInOut(duration: 0.35)) {
@@ -203,6 +102,7 @@ struct ChapterSelectionView: View {
                 }
             }
         }
+        .ignoresSafeArea()
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .onAppear {
@@ -213,6 +113,77 @@ struct ChapterSelectionView: View {
                 GameplayView(chapter: selectedChapter)
             }
         }
+    }
+
+    private var storySwipeGesture: some Gesture {
+        DragGesture(minimumDistance: 20, coordinateSpace: .local)
+            .onChanged { value in
+                let translation = value.translation.width
+                let isDraggingPastEdge =
+                    (translation < 0 && selectedStoryIndex == stories.count - 1) ||
+                    (translation > 0 && selectedStoryIndex == 0)
+                dragOffset = isDraggingPastEdge ? translation * 0.2 : translation
+            }
+            .onEnded { value in
+                let translation = value.translation.width
+                let threshold: CGFloat = 50
+                if translation < -threshold && selectedStoryIndex < stories.count - 1 {
+                    SoundManager.shared.play(.buttonTap)
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        selectedStoryIndex += 1
+                    }
+                } else if translation > threshold && selectedStoryIndex > 0 {
+                    SoundManager.shared.play(.buttonTap)
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        selectedStoryIndex -= 1
+                    }
+                }
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                    dragOffset = 0
+                }
+            }
+    }
+
+    private func storyPage(
+        _ story: StoryListStory,
+        storyIndex: Int,
+        width: CGFloat,
+        height: CGFloat
+    ) -> some View {
+        ZStack {
+            clipboard(story: story, width: width, height: height)
+                .contentShape(Rectangle())
+                .gesture(storySwipeGesture)
+                .position(x: width * 0.33, y: height * 0.535)
+
+            VStack(spacing: 0) {
+                ForEach(0..<min(story.chapters.count, 3), id: \.self) { chapterIndex in
+                    chapterButton(
+                        storyIndex: storyIndex,
+                        chapterIndex: chapterIndex,
+                        width: width,
+                        height: height
+                    )
+                }
+            }
+            .frame(width: width * 0.31, height: height * 0.72)
+            .position(x: width * 0.73, y: height * 0.54)
+        }
+        .frame(width: width, height: height)
+    }
+
+    private func clipboard(
+        story: StoryListStory,
+        width: CGFloat,
+        height: CGFloat
+    ) -> some View {
+        let boardWidth = min(width * 0.47, height * 1.18)
+        let boardHeight = min(height * 0.87, boardWidth * 0.84)
+
+        return Image(story.artworkAssetName)
+            .resizable()
+            .scaledToFit()
+            .frame(width: boardWidth, height: boardHeight)
     }
     
     private func storyArrow(
@@ -230,10 +201,10 @@ struct ChapterSelectionView: View {
                 selectedStoryIndex = destination
             }
         } label: {
-            Image("chevron_right")
+            Image("NextArrow")
                 .resizable()
                 .scaledToFit()
-                .frame(width: width * 0.070)
+                .frame(width: width * 0.045)
                 .rotationEffect(.degrees(direction == .previous ? 180 : 0))
         }
         .buttonStyle(.plain)
@@ -252,9 +223,7 @@ struct ChapterSelectionView: View {
         storyIndex: Int,
         chapterIndex: Int,
         width: CGFloat,
-        height: CGFloat,
-        cardX: CGFloat,
-        storyPaperWidth: CGFloat
+        height: CGFloat
     ) -> some View {
         let status = chapterStatus(storyIndex: storyIndex, chapterIndex: chapterIndex)
         
@@ -313,8 +282,10 @@ struct ChapterSelectionView: View {
             }
         } label: {
             chapterButtonLabel(storyIndex: storyIndex, chapterIndex: chapterIndex, status: status, width: width, height: height)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .contentShape(Rectangle())
     }
     
     private func chapterButtonLabel(
@@ -326,17 +297,25 @@ struct ChapterSelectionView: View {
     ) -> some View {
         ZStack {
             chapterButtonBackground(status: status, width: width)
-            
-            HStack(spacing: width * 0.008) {
-                chapterTitle(storyIndex: storyIndex, chapterIndex: chapterIndex, width: width)
-                
-                chapterAccessory(status: status, width: width)
-                    
+
+            HStack(spacing: width * 0.006) {
+                chapterTitle(
+                    storyIndex: storyIndex,
+                    chapterIndex: chapterIndex,
+                    width: width
+                )
+
+                if status == .current {
+                    Image(.chevronButtonBlack)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: width * 0.022)
+                }
             }
-            .frame(maxWidth: width * 0.23)
+            .frame(width: width * 0.245, height: height * 0.12)
+            .offset(y: height * 0.025)
         }
-        .frame(width: width * 0.30, height: height * 0.2)
-        .opacity(status == .locked ? 0.35 : 1)
+        .frame(width: width * 0.30, height: height * 0.23)
     }
     
     @ViewBuilder
@@ -346,66 +325,23 @@ struct ChapterSelectionView: View {
     ) -> some View {
         switch status {
         case .current:
-            Image("chapter_button_yellow")
+            Image("chapter_box_current")
                 .resizable()
                 .scaledToFit()
-                .frame(width: width * 0.27)
-            
-        case .completed, .locked:
-            Image("chapter_button_white")
-                .resizable()
-                .scaledToFit()
-                .frame(width: width * 0.27)
-        }
-    }
-    
-    @ViewBuilder
-    private func chapterAccessory(
-        status: ChapterProgressStatus,
-        width: CGFloat
-    ) -> some View {
-        switch status {
+                .frame(width: width * 0.28)
+
         case .completed(let stars):
-            starRating(stars, width: width)
-                .accessibilityHidden(true)
-            
-        case .current:
-            Image(.chevronButtonBlack)
+            Image("chapter_box_completed_\(min(max(stars, 1), 3))")
                 .resizable()
                 .scaledToFit()
-                .frame(height: 24)
-                .padding(.bottom, 8)
-            
-            
+                .frame(width: width * 0.28)
+
         case .locked:
-            EmptyView()
+            Image("chapter_box_locked")
+                .resizable()
+                .scaledToFit()
+                .frame(width: width * 0.28)
         }
-    }
-    
-    private func starRating(_ stars: Int, width: CGFloat) -> some View {
-        let count = min(max(stars, 1), 3)
-        
-        return VStack(spacing: -width * 0.004) {
-            if count == 1 || count == 3 {
-                starIcon(width: width)
-            }
-            
-            if count >= 2 {
-                HStack(spacing: width * 0.002) {
-                    ForEach(0..<2, id: \.self) { _ in
-                        starIcon(width: width)
-                    }
-                }
-            }
-        }
-        .frame(width: width * 0.04, height: width * 0.034)
-    }
-    
-    private func starIcon(width: CGFloat) -> some View {
-        Image("StarIcon")
-            .resizable()
-            .scaledToFit()
-            .frame(width: width * 0.016, height: width * 0.016)
     }
     
     
@@ -419,11 +355,11 @@ struct ChapterSelectionView: View {
         width: CGFloat
     ) -> some View {
         Text(chapterDisplayName(storyIndex: storyIndex, chapterIndex: chapterIndex))
-            .font(.appFont(size: max(20, width * 0.024)))
+            .font(.appFont(size: max(17, min(24, width * 0.026))))
             .foregroundStyle(.black)
             .multilineTextAlignment(.center)
             .lineLimit(1)
-            .minimumScaleFactor(0.65)
+            .minimumScaleFactor(0.48)
     }
     
     private func chapterDisplayName(storyIndex: Int, chapterIndex: Int) -> String {
