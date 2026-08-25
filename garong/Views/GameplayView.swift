@@ -5,6 +5,14 @@
 
 import SwiftUI
 
+struct SceneTargetPreferenceKey: PreferenceKey {
+    static var defaultValue: [UUID: Anchor<CGRect>] = [:]
+
+    static func reduce(value: inout [UUID: Anchor<CGRect>], nextValue: () -> [UUID: Anchor<CGRect>]) {
+        value.merge(nextValue(), uniquingKeysWith: { $1 })
+    }
+}
+
 /// Main gameplay screen — landscape layout with 3 scenes, centered object tray, and explicit Finish button.
 struct GameplayView: View {
     @StateObject private var viewModel: DragDropGameViewModel
@@ -99,7 +107,7 @@ struct GameplayView: View {
                                 peekHintView
                                     .fixedSize()
                                     .tutorialWiggle()
-                                    .offset(x: 28, y: 16)
+                                    .offset(x: 20, y: 16)
                                     .allowsHitTesting(false)
                                     .transition(.scale.combined(with: .opacity))
                             }
@@ -178,7 +186,7 @@ struct GameplayView: View {
                         HStack(spacing: 8) {
                             ForEach(Array(viewModel.scenes.enumerated()), id: \.element.id) { index, scene in
                                 sceneView(for: scene, at: index)
-                            }
+                            }   
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     
@@ -211,6 +219,7 @@ struct GameplayView: View {
 
                     if viewModel.showNarratorBox, let narratorText = viewModel.currentNarratorLine {
                         narratorBoxView(text: narratorText)
+                            .tutorialTarget(viewModel.tutorialStep == .narratorBox)
                     }
                 }
                 .frame(height: 80)
@@ -317,7 +326,7 @@ struct GameplayView: View {
         }
         .overlayPreferenceValue(TutorialTargetPreferenceKey.self) { targets in
             GeometryReader { proxy in
-                if viewModel.isGuidedTutorialActive && !showHintOverlay {
+                if viewModel.isGuidedTutorialActive && !showHintOverlay && !viewModel.isDraggingItem {
                     ChapterTutorialOverlayView(
                         step: viewModel.tutorialStep,
                         message: tutorialMessage,
@@ -325,6 +334,32 @@ struct GameplayView: View {
                     ) { target in
                         liftedTutorialTarget(in: target)
                     }
+                    .transition(.opacity)
+                }
+            }
+        }
+        .overlayPreferenceValue(SceneTargetPreferenceKey.self) { sceneAnchors in
+            GeometryReader { proxy in
+                if viewModel.isGuidedTutorialActive && !showHintOverlay && viewModel.isDraggingItem,
+                   let targetScene = viewModel.scenes.first(where: { viewModel.isTutorialTarget($0) }),
+                   let anchor = sceneAnchors[targetScene.id] {
+                    let targetRect = proxy[anchor]
+                    Canvas { context, size in
+                        context.fill(
+                            Path(CGRect(origin: .zero, size: size)),
+                            with: .color(.black.opacity(0.5))
+                        )
+                        context.blendMode = .destinationOut
+                        let cornerRadius = max(6, targetRect.height * 0.095)
+                        let padded = targetRect.insetBy(dx: -4, dy: -4).offsetBy(dx: 24, dy: 0)
+                        context.fill(
+                            Path(roundedRect: padded, cornerRadius: cornerRadius),
+                            with: .color(.white)
+                        )
+                    }
+                    .compositingGroup()
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
                     .transition(.opacity)
                 }
             }
@@ -501,6 +536,7 @@ struct GameplayView: View {
     private var tutorialMessage: String {
         let key = switch viewModel.tutorialStep {
         case .approach: "tutorial.approach"
+        case .narratorBox: "tutorial.narratorBox"
         case .toy: "tutorial.toy"
         case .wrongAndHint: "tutorial.wrongAndHint"
         case .returnToy: "tutorial.returnToy"
@@ -525,7 +561,7 @@ struct GameplayView: View {
                         peekHintView
                             .fixedSize()
                             .tutorialWiggle()
-                            .offset(x: 28, y: 16)
+                            .offset(x: 20, y: 16)
                     }
                 }
         case .returnToy:
@@ -541,6 +577,10 @@ struct GameplayView: View {
             }
         case .meter:
             meterView
+        case .narratorBox:
+            if let text = viewModel.currentNarratorLine {
+                narratorBoxView(text: text)
+            }
         case .inactive:
             EmptyView()
         }
