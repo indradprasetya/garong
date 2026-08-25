@@ -11,6 +11,7 @@ struct LetterView: View {
     var onContinue: (() -> Void)? = nil
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var localization = AppLocalization.shared
+    @ObservedObject private var textSizeManager = AppTextSizeManager.shared
 
     var body: some View {
         GeometryReader { geometry in
@@ -161,17 +162,17 @@ struct LetterView: View {
                     Text(localization.text("letter.body1"))
                         .font(.appFont(size: min(width * 0.5, 20)))
                         .lineSpacing(3)
-                        .minimumScaleFactor(0.85)
+                        .minimumScaleFactor(0.70)
 
                     Text(localization.text("letter.body2"))
                         .font(.appFont(size: min(width * 0.5, 20)))
                         .lineSpacing(3)
-                        .minimumScaleFactor(0.85)
+                        .minimumScaleFactor(0.70)
 
                     Text(localization.text("letter.sign"))
                         .font(.appFont(size: min(width * 0.3, 20)))
                         .lineSpacing(2)
-                        .minimumScaleFactor(0.85)
+                        .minimumScaleFactor(0.70)
                 }
 
             }

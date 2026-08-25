@@ -9,17 +9,17 @@ struct AppLocalizationTests {
             .appendingPathComponent("garong/Resources/localization.json")
         let catalog = try AppLocalizationCatalog(data: Data(contentsOf: resourceURL))
 
-        precondition(catalog.text(for: "settings.title", language: "en") == "SETTING")
+        precondition(catalog.text(for: "settings.title", language: "en") == "SETTINGS")
         precondition(catalog.text(for: "settings.title", language: "id") == "PENGATURAN")
         precondition(catalog.text(for: "missing.key", language: "id") == "missing.key")
 
         let naturalIndonesianCopy = [
             "settings.english": "INGGRIS",
             "settings.resetProgress": "atur ulang progres",
-            "guidebook.item1.title": "#1 Tenangkan, lalu arahkan",
-            "guidebook.item2.title": "#2 Kenali perasaan agar lebih tenang",
-            "guidebook.item3.title": "#3 Ajak berpikir, jangan memperkeruh emosi",
-            "guidebook.item4.title": "#4 Tetap terhubung saat berkonflik",
+            "guidebook.item1.title": "Tenangkan, lalu arahkan",
+            "guidebook.item2.title": "Kenali perasaan agar lebih tenang",
+            "guidebook.item3.title": "Ajak berpikir, jangan memperkeruh emosi",
+            "guidebook.item4.title": "Tetap terhubung saat berkonflik",
             "gameplay.scenesFilled": "%d / %d adegan selesai",
             "selection.current": "%@, siap dimainkan",
             "chapter.enter": "Mulai Bermain",

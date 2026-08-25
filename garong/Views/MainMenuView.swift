@@ -4,6 +4,7 @@ import Combine
 struct MainMenuView: View {
 
     @ObservedObject private var localization = AppLocalization.shared
+    @ObservedObject private var textSizeManager = AppTextSizeManager.shared
     @State private var showChapterSelection = false
     @State private var showSettings = false
     @State private var showGuidebook = false

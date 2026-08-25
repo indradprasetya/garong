@@ -3,6 +3,7 @@ import SwiftUI
 struct ChapterSelectionView: View {
     let stories: [StoryListStory]
     @ObservedObject private var localization = AppLocalization.shared
+    @ObservedObject private var textSizeManager = AppTextSizeManager.shared
     
     @Environment(\.dismiss)
     private var dismiss
@@ -48,12 +49,17 @@ struct ChapterSelectionView: View {
                     .scaledToFill()
                     .ignoresSafeArea()
 
-                ForEach(Array(stories.enumerated()), id: \.element.id) { storyIndex, story in
-                    storyPage(story, storyIndex: storyIndex, width: width, height: height)
-                        .offset(
-                            x: CGFloat(storyIndex - selectedStoryIndex) * width + dragOffset
-                        )
+                HStack(spacing: 0) {
+                    ForEach(Array(stories.enumerated()), id: \.element.id) { storyIndex, story in
+                        storyPage(story, storyIndex: storyIndex, width: width, height: height)
+                            .frame(width: width, height: height)
+                            .allowsHitTesting(storyIndex == selectedStoryIndex)
+                    }
                 }
+                .frame(width: width, alignment: .leading)
+                .offset(x: -CGFloat(selectedStoryIndex) * width + dragOffset)
+                .contentShape(Rectangle())
+                .gesture(storySwipeGesture)
 
                 if stories.isEmpty {
                     VStack(spacing: 12) {
@@ -75,7 +81,7 @@ struct ChapterSelectionView: View {
                         .frame(height: min(64, height * 0.15))
                 }
                 .buttonStyle(.plain)
-                .position(x: width * 0.10, y: height * 0.08)
+                .position(x: width * 0.10, y: height * 0.07)
                 .zIndex(5)
 
                 if selectedStoryIndex > 0 {
@@ -127,18 +133,18 @@ struct ChapterSelectionView: View {
             .onEnded { value in
                 let translation = value.translation.width
                 let threshold: CGFloat = 50
+                var targetIndex = selectedStoryIndex
+
                 if translation < -threshold && selectedStoryIndex < stories.count - 1 {
+                    targetIndex += 1
                     SoundManager.shared.play(.buttonTap)
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        selectedStoryIndex += 1
-                    }
                 } else if translation > threshold && selectedStoryIndex > 0 {
+                    targetIndex -= 1
                     SoundManager.shared.play(.buttonTap)
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        selectedStoryIndex -= 1
-                    }
                 }
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
+                    selectedStoryIndex = targetIndex
                     dragOffset = 0
                 }
             }
@@ -152,8 +158,6 @@ struct ChapterSelectionView: View {
     ) -> some View {
         ZStack {
             clipboard(story: story, width: width, height: height)
-                .contentShape(Rectangle())
-                .gesture(storySwipeGesture)
                 .position(x: width * 0.33, y: height * 0.535)
 
             VStack(spacing: 0) {
@@ -197,11 +201,11 @@ struct ChapterSelectionView: View {
                 pageCount: stories.count
             )
             SoundManager.shared.play(.buttonTap)
-            withAnimation(.easeInOut(duration: 0.25)) {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
                 selectedStoryIndex = destination
             }
         } label: {
-            Image("NextArrow")
+            Image(.chevronRight)
                 .resizable()
                 .scaledToFit()
                 .frame(width: width * 0.045)
@@ -313,7 +317,7 @@ struct ChapterSelectionView: View {
                 }
             }
             .frame(width: width * 0.245, height: height * 0.12)
-            .offset(y: height * 0.025)
+            .offset(y: height * 0.035)
         }
         .frame(width: width * 0.30, height: height * 0.23)
     }

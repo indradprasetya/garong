@@ -17,6 +17,7 @@ struct SceneTargetPreferenceKey: PreferenceKey {
 struct GameplayView: View {
     @StateObject private var viewModel: DragDropGameViewModel
     @ObservedObject private var localization = AppLocalization.shared
+    @ObservedObject private var textSizeManager = AppTextSizeManager.shared
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showHintOverlay: Bool = false
