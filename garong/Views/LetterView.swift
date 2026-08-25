@@ -112,7 +112,7 @@ struct LetterView: View {
             HStack(alignment: .bottom, spacing: width * 0.09) {
                 Spacer()
                 VStack {
-                    Text("Rhodey")
+                    Text(localization.text("letter.rhodey"))
                         .font(.appFontBold(size: min(width * 0.5, 32)))
                     
                     Image(.rhodeyHappy)
@@ -122,7 +122,7 @@ struct LetterView: View {
                 }
 
                 VStack {
-                    Text("Jojo")
+                    Text(localization.text("letter.jojo"))
                         .font(.appFontBold(size: min(width * 0.5, 32)))
                     
                     Image(.jojoQuestioning)
@@ -153,22 +153,22 @@ struct LetterView: View {
 
             // Text Content fitted within the safe writable margins
             VStack(alignment: .leading, spacing: height * 0.035) {
-                Text("Dear Volunteer,")
+                Text(localization.text("letter.greeting"))
                     .font(.appFontBold(size: min(width * 0.5, 32)))
                     .foregroundStyle(Color(red: 0.8, green: 0.07, blue: 0.07))
 
                 VStack(alignment: .leading, spacing: height * 0.05) {
-                    Text("Thank you for coming to Kinario Foundation. Today you'll be spending time with two kids, Rhodey and Jojo. How you approach them today will shape how their day goes.")
+                    Text(localization.text("letter.body1"))
                         .font(.appFont(size: min(width * 0.5, 20)))
                         .lineSpacing(3)
                         .minimumScaleFactor(0.85)
 
-                    Text("We're glad you're here!")
+                    Text(localization.text("letter.body2"))
                         .font(.appFont(size: min(width * 0.5, 20)))
                         .lineSpacing(3)
                         .minimumScaleFactor(0.85)
 
-                    Text("— Kinario Foundation")
+                    Text(localization.text("letter.sign"))
                         .font(.appFont(size: min(width * 0.3, 20)))
                         .lineSpacing(2)
                         .minimumScaleFactor(0.85)
