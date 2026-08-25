@@ -3,6 +3,7 @@ import SwiftUI
 struct ChapterSelectionView: View {
     let stories: [StoryListStory]
     @ObservedObject private var localization = AppLocalization.shared
+    @ObservedObject private var textSizeManager = AppTextSizeManager.shared
     
     @Environment(\.dismiss)
     private var dismiss
@@ -75,7 +76,7 @@ struct ChapterSelectionView: View {
                         .frame(height: min(64, height * 0.15))
                 }
                 .buttonStyle(.plain)
-                .position(x: width * 0.10, y: height * 0.08)
+                .position(x: width * 0.10, y: height * 0.07)
                 .zIndex(5)
 
                 if selectedStoryIndex > 0 {
@@ -201,7 +202,7 @@ struct ChapterSelectionView: View {
                 selectedStoryIndex = destination
             }
         } label: {
-            Image("NextArrow")
+            Image(.chevronRight)
                 .resizable()
                 .scaledToFit()
                 .frame(width: width * 0.045)
@@ -313,7 +314,7 @@ struct ChapterSelectionView: View {
                 }
             }
             .frame(width: width * 0.245, height: height * 0.12)
-            .offset(y: height * 0.025)
+            .offset(y: height * 0.035)
         }
         .frame(width: width * 0.30, height: height * 0.23)
     }

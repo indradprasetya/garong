@@ -5,6 +5,7 @@ struct SettingView: View {
     var onResetProgress: (() -> Void)? = nil
 
     @ObservedObject private var localization = AppLocalization.shared
+    @ObservedObject private var textSizeManager = AppTextSizeManager.shared
     @State private var sfxVolume: Float = SoundManager.shared.volume
     @State private var bgmVolume: Float = BackgroundMusicManager.shared.volume
     @State private var sfxPreviewThrottle = SFXPreviewThrottle(minimumInterval: 0.15)
@@ -43,7 +44,7 @@ struct SettingView: View {
                             .scaledToFit()
                             .frame(width: 350)
 
-                        VStack(spacing: 18) {
+                        VStack(spacing: 12) {
                             // SFX Volume Row
                             HStack {
                                 Text(localization.text("settings.sfxVolume"))
@@ -121,7 +122,45 @@ struct SettingView: View {
                                 .buttonStyle(.plain)
                             }
 
-                            
+                            // Text Size Row
+                            HStack {
+                                Text(localization.text("settings.textSize"))
+                                    .font(.appFont(size: 16))
+                                    .foregroundStyle(.white)
+
+                                Spacer()
+
+                                Button {
+                                    SoundManager.shared.play(.buttonTap)
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        textSizeManager.toggleTextSize()
+                                    }
+                                } label: {
+                                    HStack(spacing: 8) {
+                                        // Left Arrow (◄)
+                                        Image(systemName: "play.fill")
+                                            .font(.system(size: 11, weight: .bold))
+                                            .foregroundStyle(Color(red: 1.0, green: 0.65, blue: 0.0))
+                                            .rotationEffect(.degrees(180))
+
+                                        // Centered Text Size Option Text
+                                        Text(localization.text(
+                                            textSizeManager.textSize == .standard
+                                                ? "settings.textStandard"
+                                                : "settings.textLarge"
+                                        ))
+                                            .font(.appFont(size: 13))
+                                            .foregroundStyle(Color(red: 1.0, green: 0.65, blue: 0.0))
+                                            .frame(minWidth: 135, alignment: .center)
+
+                                        // Right Arrow (▶)
+                                        Image(systemName: "play.fill")
+                                            .font(.system(size: 11, weight: .bold))
+                                            .foregroundStyle(Color(red: 1.0, green: 0.65, blue: 0.0))
+                                    }
+                                }
+                                .buttonStyle(.plain)
+                            }
 
                             // Reset Progress Button
                             HStack {
@@ -140,7 +179,7 @@ struct SettingView: View {
                             }
                         }
                         .padding(.horizontal, 52)
-                        .padding(.vertical, 56)
+                        .padding(.vertical, 44)
                         .frame(width: 400)
                     }
                     .frame(maxWidth: 440)
