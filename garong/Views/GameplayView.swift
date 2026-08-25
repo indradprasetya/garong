@@ -89,7 +89,6 @@ struct GameplayView: View {
                         }
                         .disabled(!viewModel.canUseHint)
                         .opacity(viewModel.canUseHint ? 1 : 0.35)
-                        .tutorialTarget(viewModel.tutorialStep == .wrongAndHint)
                         .accessibilityHint(
                             viewModel.tutorialStep == .wrongAndHint
                                 ? localization.text("tutorial.wrongAndHint")
@@ -105,6 +104,7 @@ struct GameplayView: View {
                                     .transition(.scale.combined(with: .opacity))
                             }
                         }
+                        .tutorialTarget(viewModel.tutorialStep == .wrongAndHint)
                         
                         Spacer()
                         
@@ -227,8 +227,7 @@ struct GameplayView: View {
                     return true
                 }
             }
-            .padding(.leading, 46)
-            .padding(.trailing, 12)
+            .padding(.horizontal, 46)
             .padding(.bottom, 24)
             .ignoresSafeArea(edges: .bottom)
             
@@ -469,8 +468,7 @@ struct GameplayView: View {
                         .padding(.horizontal, 36)
                 }
             }
-            .padding(.leading, 32)
-            .padding(.trailing, 20)
+            .padding(.horizontal, 32)
             .padding(.vertical, 24)
         }
         .frame(maxWidth: 480, maxHeight: 320)
@@ -522,6 +520,14 @@ struct GameplayView: View {
             }
         case .wrongAndHint:
             hintIconView
+                .overlay(alignment: .leading) {
+                    if viewModel.showPeekHint {
+                        peekHintView
+                            .fixedSize()
+                            .tutorialWiggle()
+                            .offset(x: 28, y: 16)
+                    }
+                }
         case .returnToy:
             if let placement = tutorialToyPlacement {
                 CornerDropSlotBadge(
