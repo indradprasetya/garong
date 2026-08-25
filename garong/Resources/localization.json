@@ -72,5 +72,12 @@
   "scene.outcome": { "en": "Outcome", "id": "Hasil" },
   "scene.grid": { "en": "Grid %d", "id": "Tahap %d" },
   "scene.finalResult": { "en": "Final Result", "id": "Hasil Akhir" },
-  "scene.number": { "en": "Scene %d", "id": "Adegan %d" }
+  "scene.number": { "en": "Scene %d", "id": "Adegan %d" },
+
+  "letter.rhodey": { "en": "Rhodey", "id": "Rhodey" },
+  "letter.jojo": { "en": "Jojo", "id": "Jojo" },
+  "letter.greeting": { "en": "Dear Volunteer,", "id": "Halo Sukarelawan," },
+  "letter.body1": { "en": "Thank you for coming to Kinario Foundation. Today you'll be spending time with two kids, Rhodey and Jojo. How you approach them today will shape how their day goes.", "id": "Terima kasih telah datang ke Yayasan Kinario. Hari ini kamu akan menghabiskan waktu bersama dua anak, Rhodey dan Jojo. Bagaimana caramu mendekati mereka hari ini akan menentukan jalannya hari mereka." },
+  "letter.body2": { "en": "We're glad you're here!", "id": "Kami senang kamu ada di sini!" },
+  "letter.sign": { "en": "— Kinario Foundation", "id": "— Yayasan Kinario" }
 }

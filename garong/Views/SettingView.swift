@@ -180,6 +180,7 @@ struct SettingView: View {
             Button(localization.text("settings.reset"), role: .destructive) {
                 StoryProgressStore().resetAll()
                 ChapterTutorialSession.resetCompletion()
+                UserDefaults.standard.set(false, forKey: "hasSeenLetter")
                 onResetProgress?()
                 DispatchQueue.main.async {
                     showResetSuccess = true
