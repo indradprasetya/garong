@@ -25,14 +25,14 @@ public final class GameKitManager: NSObject, ObservableObject {
     // MARK: - Game Center Identifiers
     public struct Identifiers {
         // Leaderboards
-        public static let leaderboardTotalStars = "com.alfathoshi.kinario.leaderboard.total_stars"
-        public static let leaderboardStoriesCompleted = "com.alfathoshi.kinario.leaderboard.stories_completed"
+        public static let leaderboardTotalStars = "com.vidya.kinario.leaderboard.total_stars"
+        public static let leaderboardStoriesCompleted = "com.vidya.kinario.leaderboard.stories_completed"
 
         // Achievements
-        public static let achievementFirstStory = "com.alfathoshi.kinario.achievement.first_story"
-        public static let achievementAllStories = "com.alfathoshi.kinario.achievement.all_stories"
-        public static let achievementThreeStars = "com.alfathoshi.kinario.achievement.three_stars"
-        public static let achievementMastery = "com.alfathoshi.kinario.achievement.mastery"
+        public static let achievementFirstStory = "com.vidya.kinario.achievement.first_story"
+        public static let achievementAllStories = "com.vidya.kinario.achievement.all_stories"
+        public static let achievementThreeStars = "com.vidya.kinario.achievement.three_stars"
+        public static let achievementMastery = "com.vidya.kinario.achievement.mastery"
     }
 
     public override init() {
