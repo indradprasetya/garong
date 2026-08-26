@@ -251,40 +251,44 @@ struct ChapterResultView: View {
     }
 }
 
-#Preview("Win Condition") {
-    ChapterResultView(
-        result: ChapterResult(
-            chapterName: "Make Rhodey Want to Draw",
-            totalObjects: 2,
-            placedObjects: 2,
-            placementCount: 2,
-            stars: 3,
-            completedMessage: "Rhodey is satisfied.",
-            completionSummary: "Rhodey needed to feel noticed before he could join in.",
-            completionTip: "Before asking a hesitant child to join an activity, sit with them first. Let them feel your presence before you invite them in.",
-            sceneStates: [],
-            characterName: "Rhodey",
-            meterImageName: "rhodey_3_star"
-        )
-    )
-}
+struct ChapterResultView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            ChapterResultView(
+                result: ChapterResult(
+                    chapterName: "Make Rhodey Want to Draw",
+                    totalObjects: 2,
+                    placedObjects: 2,
+                    placementCount: 2,
+                    stars: 3,
+                    completedMessage: "Rhodey is satisfied.",
+                    completionSummary: "Rhodey needed to feel noticed before he could join in.",
+                    completionTip: "Before asking a hesitant child to join an activity, sit with them first. Let them feel your presence before you invite them in.",
+                    sceneStates: [],
+                    characterName: "Rhodey",
+                    meterImageName: "rhodey_3_star"
+                )
+            )
+            .previewDisplayName("Win Condition")
 
-#Preview("Lose Condition") {
-    ChapterResultView(
-        result: ChapterResult(
-            chapterName: "Make Rhodey Want to Draw",
-            totalObjects: 2,
-            placedObjects: 0,
-            placementCount: 8,
-            stars: 0,
-            completedMessage: nil,
-            completionSummary: "Rhodey needed to feel noticed before he could join in.",
-            completionTip: "Before asking a hesitant child to join an activity, sit with them first. Let them feel your presence before you invite them in.",
-            sceneStates: [],
-            characterName: "Rhodey",
-            meterImageName: "rhodey_0_star"
-        ),
-        onTryAgain: {},
-        statusMessage: "Rhodey is tired. You took too long."
-    )
+            ChapterResultView(
+                result: ChapterResult(
+                    chapterName: "Make Rhodey Want to Draw",
+                    totalObjects: 2,
+                    placedObjects: 0,
+                    placementCount: 8,
+                    stars: 0,
+                    completedMessage: nil,
+                    completionSummary: "Rhodey needed to feel noticed before he could join in.",
+                    completionTip: "Before asking a hesitant child to join an activity, sit with them first. Let them feel your presence before you invite them in.",
+                    sceneStates: [],
+                    characterName: "Rhodey",
+                    meterImageName: "rhodey_0_star"
+                ),
+                onTryAgain: {},
+                statusMessage: "Rhodey is tired. You took too long."
+            )
+            .previewDisplayName("Lose Condition")
+        }
+    }
 }

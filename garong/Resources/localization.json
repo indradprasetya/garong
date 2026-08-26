@@ -16,6 +16,11 @@
   "settings.resetSuccessTitle": { "en": "Your Data Has Been Reset", "id": "Progres Berhasil Diatur Ulang" },
   "settings.ok": { "en": "OK", "id": "OK" },
   "settings.resetSuccessMessage": { "en": "Your game progress has been reset.", "id": "Seluruh progres permainan telah diatur ulang." },
+  "settings.gameCenter": { "en": "GAME CENTER", "id": "GAME CENTER" },
+  "settings.gameCenterConnected": { "en": "Connected as %@", "id": "Terhubung sebagai %@" },
+  "settings.gameCenterNotConnected": { "en": "Not connected", "id": "Belum terhubung" },
+  "settings.gameCenterSignIn": { "en": "Sign In", "id": "Masuk" },
+  "settings.gameCenterView": { "en": "View", "id": "Lihat" },
 
   "guidebook.title": { "en": "GUIDEBOOK", "id": "PANDUAN" },
   "guidebook.item1.title": { "en": "Connect and redirect", "id": "Tenangkan, lalu arahkan" },

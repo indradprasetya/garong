@@ -314,6 +314,8 @@ private struct CustomVolumeSlider: View {
     }
 }
 
-#Preview {
-    SettingView()
+struct SettingView_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingView()
+    }
 }
