@@ -190,6 +190,13 @@ struct ChapterResultView: View {
                                                 }
                                             }
                                         }
+
+                                        if let completedMessage = result.completedMessage {
+                                            Text(completedMessage)
+                                                .font(.appFont(size: 20))
+                                                .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
+                                                .multilineTextAlignment(.center)
+                                        }
                                         
                                     }
 
@@ -248,6 +255,7 @@ struct ChapterResultView: View {
             placedObjects: 2,
             placementCount: 2,
             stars: 3,
+            completedMessage: "Rhodey is satisfied.",
             completionSummary: "Rhodey needed to feel noticed before he could join in.",
             completionTip: "Before asking a hesitant child to join an activity, sit with them first. Let them feel your presence before you invite them in.",
             sceneStates: [],
@@ -265,6 +273,7 @@ struct ChapterResultView: View {
             placedObjects: 0,
             placementCount: 8,
             stars: 0,
+            completedMessage: nil,
             completionSummary: "Rhodey needed to feel noticed before he could join in.",
             completionTip: "Before asking a hesitant child to join an activity, sit with them first. Let them feel your presence before you invite them in.",
             sceneStates: [],

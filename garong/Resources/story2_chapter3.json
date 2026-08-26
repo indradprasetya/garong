@@ -21,6 +21,18 @@
     "en": "When two children are upset at once, calm the hurt one and listen to both sides without blame. Fix what's broken after that.",
     "id": "Saat dua anak sama-sama sedang kesal, tenangkan anak yang terluka dan dengarkan kedua sisi tanpa menyalahkan. Perbaiki masalahnya setelah itu."
   },
+  "completedOneStar": {
+    "en": "Jojo and Rhodey feel better.",
+    "id": "Jojo dan Rhodey merasa lebih baik."
+  },
+  "completedTwoStars": {
+    "en": "Jojo and Rhodey are happy.",
+    "id": "Jojo dan Rhodey senang."
+  },
+  "completedThreeStars": {
+    "en": "Jojo and Rhodey are satisfied.",
+    "id": "Jojo dan Rhodey merasa puas."
+  },
   "hints": [
     {
       "en": "When two children are involved, emotional safety and fairness need to move together.",

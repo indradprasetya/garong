@@ -271,6 +271,7 @@ final class DragDropGameViewModel: ObservableObject {
     func dropObject(_ object: GameObject, intoSlot slotID: String? = nil, intoScene sceneID: UUID) {
         guard let sceneIndex = engine.scenes.firstIndex(where: { $0.id == sceneID }),
               chapterTutorial.allowsDrop(actionID: object.symbol, sceneIndex: sceneIndex) else { return }
+        let previousScenes = scenes
         let success = engine.placeObject(object, inSlot: slotID, inScene: sceneID)
         guard success else { return }
 
@@ -303,21 +304,16 @@ final class DragDropGameViewModel: ObservableObject {
             presentNarratorLine(line)
         }
         
-        if let droppedScene = scenes.first(where: { $0.id == sceneID }) {
-            let played = SoundManager.shared.playVoiceOverIfPresent(
-                for: droppedScene.characterImageNames,
-                emotion: droppedScene.characterEmotion
-            )
-            if !played {
-                for scene in scenes where scene.id != sceneID {
-                    if SoundManager.shared.playVoiceOverIfPresent(
-                        for: scene.characterImageNames,
-                        emotion: scene.characterEmotion
-                    ) {
-                        break
-                    }
-                }
-            }
+        for scene in scenes.sorted(by: { $0.id == sceneID && $1.id != sceneID }) {
+            guard let previousScene = previousScenes.first(where: { $0.id == scene.id }),
+                  let voiceOver = SoundManager.shared.voiceOver(
+                    forChangedImageNames: scene.characterImageNames,
+                    from: previousScene.characterImageNames,
+                    emotion: scene.characterEmotion,
+                    previousEmotion: previousScene.characterEmotion
+                  ) else { continue }
+            SoundManager.shared.playVoiceOver(voiceOver)
+            break
         }
         
         Task {

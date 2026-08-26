@@ -175,6 +175,21 @@ final class SoundManager: ObservableObject {
         case .neutral: return nil
         }
     }
+
+    /// Resolves voice over from expressions that actually changed, ignoring unchanged faces in the scene.
+    func voiceOver(
+        forChangedImageNames imageNames: [String],
+        from previousImageNames: [String],
+        emotion: CharacterEmotion,
+        previousEmotion: CharacterEmotion
+    ) -> VoiceOver? {
+        for name in imageNames where !previousImageNames.contains(name) {
+            if let vo = voiceOver(for: name) {
+                return vo
+            }
+        }
+        return emotion == previousEmotion ? nil : voiceOver(for: nil, emotion: emotion)
+    }
     
     /// Helper resolving the URL for audio files across bundle locations and subdirectories.
     private func findAudioURL(for name: String) -> URL? {

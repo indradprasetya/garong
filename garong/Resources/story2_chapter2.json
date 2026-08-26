@@ -21,6 +21,18 @@
     "en": "Before asking two children to make up, find out what's really going on. An apology means more once it's understood.",
     "id": "Sebelum meminta dua anak berdamai, cari tahu apa yang sebenarnya terjadi. Permintaan maaf lebih bermakna setelah situasinya dipahami."
   },
+  "completedOneStar": {
+    "en": "Jojo and Rhodey feel better.",
+    "id": "Jojo dan Rhodey merasa lebih baik."
+  },
+  "completedTwoStars": {
+    "en": "Jojo and Rhodey are happy.",
+    "id": "Jojo dan Rhodey senang."
+  },
+  "completedThreeStars": {
+    "en": "Jojo and Rhodey are satisfied.",
+    "id": "Jojo dan Rhodey merasa puas."
+  },
   "hints": [
     {
       "en": "Children can repair a conflict more naturally after the situation feels understood.",

@@ -19,7 +19,19 @@
   },
   "completionTip": {
     "en": "Before asking a hesitant child to join an activity, sit with them first. Let them feel your presence before you invite them in.",
-    "id": "Sebelum mengajak anak yang masih ragu untuk ikut aktivitas, duduklah bersamanya dahulu. Biarkan ia merasakan kehadiranmu sebelum mengajaknya ikut."
+    "id": "Sebelum mengajak anak yang masih ragu untuk mengikuti aktivitas, duduklah bersamanya terlebih dahulu. Biarkan ia merasakan kehadiranmu sebelum mengajaknya ikut."
+  },
+  "completedOneStar": {
+    "en": "Rhodey feels better.",
+    "id": "Rhodey merasa lebih baik."
+  },
+  "completedTwoStars": {
+    "en": "Rhodey is happy.",
+    "id": "Rhodey senang."
+  },
+  "completedThreeStars": {
+    "en": "Rhodey is satisfied.",
+    "id": "Rhodey merasa puas."
   },
   "hints": [
     {

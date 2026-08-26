@@ -19,7 +19,19 @@
   },
   "completionTip": {
     "en": "Get a distracted child's attention first, with a clap or their name, before asking for anything. Then the instruction has a chance to land.",
-    "id": "Tarik perhatian anak yang terdistraksi dengan tepukan tangan atau memanggil namanya, sebelum meminta sesuatu. Dengan begitu, instruksi lebih mungkin diterima."
+    "id": "Tarik perhatian anak yang terdistraksi terlebih dahulu, dengan tepukan tangan atau memanggil namanya, sebelum meminta sesuatu. Dengan begitu, instruksi lebih mungkin diterima."
+  },
+  "completedOneStar": {
+    "en": "Jojo and Rhodey feel better.",
+    "id": "Jojo dan Rhodey merasa lebih baik."
+  },
+  "completedTwoStars": {
+    "en": "Jojo and Rhodey are happy.",
+    "id": "Jojo dan Rhodey senang."
+  },
+  "completedThreeStars": {
+    "en": "Jojo and Rhodey are satisfied.",
+    "id": "Jojo dan Rhodey merasa puas."
   },
   "hints": [
     {
@@ -66,7 +78,7 @@
       "id": "action_attention_reset",
       "name": {
         "en": "Attention Reset",
-        "id": "Tarik Perhatian"
+        "id": "Atur Ulang Perhatian"
       },
       "caregiverLine": {
         "en": "Jojo, look this way for a moment.",

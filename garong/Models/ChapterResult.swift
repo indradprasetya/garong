@@ -11,6 +11,7 @@ struct ChapterResult: Equatable {
     let placedObjects: Int
     let placementCount: Int
     let stars: Int
+    let completedMessage: String?
     let completionSummary: String?
     let completionTip: String?
     let sceneStates: [SceneResultEntry]

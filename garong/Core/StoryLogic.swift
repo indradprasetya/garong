@@ -88,8 +88,16 @@ private extension StoryDefinition {
               !description.en.isEmpty, !description.id.isEmpty,
               !completionSummary.en.isEmpty, !completionSummary.id.isEmpty,
               !completionTip.en.isEmpty, !completionTip.id.isEmpty,
+              !completedOneStar.en.isEmpty, !completedOneStar.id.isEmpty,
+              !completedTwoStars.en.isEmpty, !completedTwoStars.id.isEmpty,
+              !completedThreeStars.en.isEmpty, !completedThreeStars.id.isEmpty,
               !placementLimitMessage.en.isEmpty, !placementLimitMessage.id.isEmpty,
-              characters.allSatisfy({ placementLimitMessage.en.contains($0.displayName) }) else {
+              characters.allSatisfy({ character in
+                  placementLimitMessage.en.contains(character.displayName) &&
+                  completedOneStar.en.contains(character.displayName) &&
+                  completedTwoStars.en.contains(character.displayName) &&
+                  completedThreeStars.en.contains(character.displayName)
+              }) else {
             throw StoryValidationError.invalidGrid("story")
         }
 

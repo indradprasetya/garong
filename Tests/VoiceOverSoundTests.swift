@@ -16,6 +16,16 @@ struct VoiceOverSoundTests {
         precondition(soundManager.voiceOver(for: "rhodey_sad", emotion: .sad) == .sad)
         precondition(soundManager.voiceOver(for: "rhodey_calm", emotion: .calm) == .calm)
 
+        precondition(
+            soundManager.voiceOver(
+                forChangedImageNames: ["jojo_happy", "rhodey_frustrated"],
+                from: ["jojo_happy", "rhodey_calm"],
+                emotion: .neutral,
+                previousEmotion: .neutral
+            ) == .annoyed,
+            "An unchanged happy face must not override Rhodey's newly frustrated expression"
+        )
+
         // Test fallback by emotion
         precondition(soundManager.voiceOver(for: nil, emotion: .happy) == .happy)
         precondition(soundManager.voiceOver(for: nil, emotion: .sad) == .sad)
@@ -32,3 +42,15 @@ struct VoiceOverSoundTests {
         print("VoiceOverSoundTests passed")
     }
 }
+
+#if !canImport(UIKit)
+final class HapticManager {
+    enum Impact { case light, medium }
+    enum Notification { case success, warning }
+
+    static let shared = HapticManager()
+
+    func impact(_ style: Impact) {}
+    func notification(_ type: Notification) {}
+}
+#endif
