@@ -124,25 +124,10 @@ struct ChapterResultView: View {
                             HStack(spacing: 0) {
                                 // LEFT PAGE: RESULT / SUMMARY
                                 VStack(alignment: .center) {
-                                    // Tappable Title Button
-                                    Button {
-                                        SoundManager.shared.play(.buttonTap)
-                                        withAnimation(.easeInOut) {
-                                            showSummary.toggle()
-                                        }
-                                    } label: {
-                                        HStack(spacing: 6) {
-                                            Text(showSummary ? localization.text("result.summary") : localization.text("result.title"))
-                                                .font(.appFont(size: 32))
-                                                .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1))
-
-                                            Image(systemName: "arrow.triangle.2.circlepath")
-                                                .font(.system(size: 16, weight: .bold))
-                                                .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1).opacity(0.7))
-                                        }
-                                    }
-                                    .buttonStyle(.plain)
-
+                                    Text(showSummary ? localization.text("result.summary") : localization.text("result.title"))
+                                        .font(.appFont(size: 32))
+                                        .foregroundStyle(Color(red: 0.9, green: 0.28, blue: 0.1))
+                                        .padding(.bottom, 1)
 
                                     if showSummary {
                                         // Summary View
@@ -162,6 +147,14 @@ struct ChapterResultView: View {
                                             .frame(maxHeight: .infinity)
                                         }
                                     } else {
+                                        
+                                        if let completedMessage = result.completedMessage {
+                                            Text(completedMessage)
+                                                .font(.appFont(size: 20))
+                                                .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
+                                                .multilineTextAlignment(.center)
+                                        }
+                                        
                                         // Meter and Stars View (Default)
                                         HStack(alignment: .center, spacing: 16) {
                                             // Meter head icon
@@ -184,28 +177,39 @@ struct ChapterResultView: View {
                                                         Image("StarIcon")
                                                             .resizable()
                                                             .scaledToFit()
-                                                            .frame(width: 38, height: 38)
+                                                            .frame(width: 32, height: 32)
                                                             .offset(y: yOffset)
                                                     }
                                                 }
                                             }
                                         }
 
-                                        if let completedMessage = result.completedMessage {
-                                            Text(completedMessage)
-                                                .font(.appFont(size: 20))
-                                                .foregroundStyle(Color(red: 0.15, green: 0.15, blue: 0.15))
-                                                .multilineTextAlignment(.center)
-                                        }
+                                       
                                         
                                     }
 
-                                    Spacer(minLength: 0)
+                                    HStack {
+                                        Spacer()
+                                        Button {
+                                            SoundManager.shared.play(.buttonTap)
+                                            withAnimation(.easeInOut) {
+                                                showSummary.toggle()
+                                            }
+                                        } label: {
+
+                                            Image(.flipButton)
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 40)
+                                            
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
                                 }
                                 .padding(.leading, bookWidth * 0.08)
                                 .padding(.trailing, bookWidth * 0.04)
                                 .padding(.top, bookHeight * 0.22)
-                                .padding(.bottom, bookHeight * 0.12)
+                                .padding(.bottom, bookHeight * 0.2)
                                 .frame(width: bookWidth * 0.49, height: bookHeight, alignment: .top)
 
                                 // RIGHT PAGE: TIPS
