@@ -88,12 +88,36 @@ struct PlaceholderCharacterView: View {
                     Circle().frame(width: 12, height: 12)
                 }
                 Image(systemName: "mouth").font(.system(size: 24, weight: .bold)).rotationEffect(.degrees(180)) // Downward frown
+            case .crying:
+                HStack(spacing: 25) {
+                    HStack(spacing: 0) {
+                        Circle().frame(width: 12, height: 12)
+                        Image(systemName: "drop.fill").font(.system(size: 12)).foregroundColor(.blue).offset(y: 8)
+                    }
+                    HStack(spacing: 0) {
+                        Circle().frame(width: 12, height: 12)
+                        Image(systemName: "drop.fill").font(.system(size: 12)).foregroundColor(.blue).offset(y: 8)
+                    }
+                }
+                Circle().trim(from: 0.5, to: 1.0).frame(width: 24, height: 24) // Open crying mouth
             case .confused:
                 HStack(spacing: 25) {
                     Circle().frame(width: 16, height: 16)
                     Circle().frame(width: 8, height: 8)
                 }
                 Image(systemName: "waveform").font(.system(size: 20, weight: .bold)) // Wavy mouth
+            case .questioning:
+                HStack(spacing: 20) {
+                    VStack(spacing: 2) {
+                        RoundedRectangle(cornerRadius: 2).frame(width: 16, height: 4).rotationEffect(.degrees(-10)).offset(y: -4)
+                        Circle().frame(width: 16, height: 16)
+                    }
+                    VStack(spacing: 2) {
+                        Color.clear.frame(width: 16, height: 4)
+                        Circle().frame(width: 12, height: 12)
+                    }
+                }
+                Image(systemName: "questionmark").font(.system(size: 14, weight: .bold))
             case .angry:
                 HStack(spacing: 20) {
                     VStack(spacing: 2) {
@@ -106,12 +130,30 @@ struct PlaceholderCharacterView: View {
                     }
                 }
                 RoundedRectangle(cornerRadius: 2).frame(width: 25, height: 4) // Tight straight mouth
+            case .annoyed:
+                HStack(spacing: 20) {
+                    RoundedRectangle(cornerRadius: 2).frame(width: 16, height: 4).rotationEffect(.degrees(10))
+                    RoundedRectangle(cornerRadius: 2).frame(width: 16, height: 4).rotationEffect(.degrees(-10))
+                }
+                Image(systemName: "line.horizontal.3").font(.system(size: 14, weight: .bold))
             case .excited:
                 HStack(spacing: 25) {
                     Text("*").font(.system(size: 30, weight: .black))
                     Text("*").font(.system(size: 30, weight: .black))
                 }
                 Circle().trim(from: 0.5, to: 1.0).frame(width: 30, height: 30).rotationEffect(.degrees(180)) // Wide open smile
+            case .humming:
+                HStack(spacing: 25) {
+                    Image(systemName: "music.note").font(.system(size: 16, weight: .bold))
+                    Image(systemName: "music.note").font(.system(size: 16, weight: .bold))
+                }
+                Image(systemName: "mouth").font(.system(size: 20, weight: .semibold))
+            case .sniffing:
+                HStack(spacing: 25) {
+                    Circle().frame(width: 12, height: 12)
+                    Circle().frame(width: 12, height: 12)
+                }
+                Image(systemName: "bandage.fill").font(.system(size: 12)).foregroundColor(.brown)
             case .calm:
                 HStack(spacing: 25) {
                     RoundedRectangle(cornerRadius: 2).frame(width: 16, height: 4)

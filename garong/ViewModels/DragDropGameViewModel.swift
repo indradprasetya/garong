@@ -304,16 +304,52 @@ final class DragDropGameViewModel: ObservableObject {
             presentNarratorLine(line)
         }
         
-        for scene in scenes.sorted(by: { $0.id == sceneID && $1.id != sceneID }) {
-            guard let previousScene = previousScenes.first(where: { $0.id == scene.id }),
-                  let voiceOver = SoundManager.shared.voiceOver(
-                    forChangedImageNames: scene.characterImageNames,
-                    from: previousScene.characterImageNames,
-                    emotion: scene.characterEmotion,
-                    previousEmotion: previousScene.characterEmotion
-                  ) else { continue }
-            SoundManager.shared.playVoiceOver(voiceOver)
-            break
+        var playedVO = false
+        let candidateScenes: [GameScene]
+        if engine.isAllScenesFilled && engine.isCurrentOutcomeSuccessful {
+            candidateScenes = scenes.reversed()
+        } else {
+            candidateScenes = scenes.sorted(by: { $0.id == sceneID && $1.id != sceneID })
+        }
+        
+        for scene in candidateScenes {
+            guard let previousScene = previousScenes.first(where: { $0.id == scene.id }) else { continue }
+            
+            // If the scene has a newly triggered or active speech bubble, resolve VO for the dialogue & character
+            if let bubbleText = scene.speechBubbleText, !bubbleText.isEmpty,
+               (scene.id == sceneID || bubbleText != previousScene.speechBubbleText || (engine.isAllScenesFilled && engine.isCurrentOutcomeSuccessful)) {
+                if let voiceOver = SoundManager.shared.voiceOver(
+                    forDialogue: bubbleText,
+                    speakerImageNames: scene.characterImageNames,
+                    emotion: scene.characterEmotion
+                ) {
+                    SoundManager.shared.playVoiceOver(voiceOver)
+                    playedVO = true
+                    break
+                }
+            }
+            
+            if let voiceOver = SoundManager.shared.voiceOver(
+                forChangedImageNames: scene.characterImageNames,
+                from: previousScene.characterImageNames,
+                emotion: scene.characterEmotion,
+                previousEmotion: previousScene.characterEmotion
+            ) {
+                SoundManager.shared.playVoiceOver(voiceOver)
+                playedVO = true
+                break
+            }
+        }
+        
+        // Fallback: Ensure dropped scene feedback plays sound
+        if !playedVO, let targetScene = candidateScenes.first {
+            if let voiceOver = SoundManager.shared.voiceOver(
+                forDialogue: targetScene.speechBubbleText,
+                speakerImageNames: targetScene.characterImageNames,
+                emotion: targetScene.characterEmotion
+            ) {
+                SoundManager.shared.playVoiceOver(voiceOver)
+            }
         }
         
         Task {
