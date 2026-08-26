@@ -273,6 +273,8 @@ struct GuidebookView: View {
     }
 }
 
-#Preview {
-    GuidebookView()
+struct GuidebookView_Previews: PreviewProvider {
+    static var previews: some View {
+        GuidebookView()
+    }
 }

@@ -54,6 +54,7 @@ struct garongApp: App {
             .ignoresSafeArea()
             .onAppear {
                 BackgroundMusicManager.shared.play()
+                GameKitManager.shared.authenticateLocalPlayer()
             }
         }
     }

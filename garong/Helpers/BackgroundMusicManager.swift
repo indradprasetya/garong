@@ -44,9 +44,12 @@ final class BackgroundMusicManager {
 
         guard let url = Bundle.main.url(
             forResource: track.rawValue,
+            withExtension: "m4a"
+        ) ?? Bundle.main.url(
+            forResource: track.rawValue,
             withExtension: "mp3"
         ) else {
-            print("Background music file '\(track.rawValue).mp3' is missing from the app bundle.")
+            print("Background music file '\(track.rawValue)' is missing from the app bundle.")
             return
         }
 

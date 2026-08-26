@@ -156,6 +156,7 @@ final class SoundManager: ObservableObject {
         if name.contains("happy") || name.contains("handshake") || name.contains("holding_new_paper") { return .happy }
         if name.contains("sad") { return .sad }
         if name.contains("calm") || name.contains("relieved") || name.contains("bandaged") { return .calm }
+        if name.contains("neutral") { return .calm }
         return nil
     }
 
@@ -168,12 +169,63 @@ final class SoundManager: ObservableObject {
         switch emotion {
         case .happy: return .happy
         case .sad: return .sad
+        case .crying: return .cry
         case .angry: return .angry
-        case .confused, .curious: return .questioning
-        case .excited: return .humming
-        case .calm: return .calm
-        case .neutral: return nil
+        case .annoyed: return .annoyed
+        case .questioning, .confused, .curious: return .questioning
+        case .excited, .humming: return .humming
+        case .sniffing: return .sniffing
+        case .calm, .neutral: return .calm
         }
+    }
+
+    /// Resolves voice over from dialogue text, speaker image names, or emotion fallback.
+    func voiceOver(
+        forDialogue dialogue: String?,
+        speakerID: String? = nil,
+        speakerImageNames: [String] = [],
+        emotion: CharacterEmotion = .neutral
+    ) -> VoiceOver? {
+        // 1. Prioritize the speaker's specific non-neutral expression
+        if let speakerID = speakerID?.lowercased() {
+            for name in speakerImageNames where name.lowercased().contains(speakerID) && !name.lowercased().contains("neutral") {
+                if let vo = voiceOver(for: name) {
+                    return vo
+                }
+            }
+        }
+        
+        // 2. Check any other non-neutral character expressions
+        for name in speakerImageNames where !name.lowercased().contains("neutral") {
+            if let vo = voiceOver(for: name) {
+                return vo
+            }
+        }
+        
+        // 3. Fallback to dialogue keywords/punctuation when expressions are neutral or absent
+        if let text = dialogue?.lowercased() {
+            if text.contains("?") || text.contains("huh") || text.contains("hah") || text.contains("apa") {
+                return .questioning
+            }
+            if text.contains("torn") || text.contains("robek") || text.contains("crying") {
+                return .cry
+            }
+            if text.contains("mad") || text.contains("angry") || text.contains("marah") || text.contains("slide!") || text.contains("perosotan!") {
+                return .angry
+            }
+            if text.contains("listen to me") || text.contains("dengarkan aku") {
+                return .annoyed
+            }
+        }
+        
+        // 4. Fallback to neutral/calm expression or emotion
+        for name in speakerImageNames {
+            if let vo = voiceOver(for: name) {
+                return vo
+            }
+        }
+        
+        return voiceOver(for: nil, emotion: emotion)
     }
 
     /// Resolves voice over from expressions that actually changed, ignoring unchanged faces in the scene.
@@ -193,7 +245,7 @@ final class SoundManager: ObservableObject {
     
     /// Helper resolving the URL for audio files across bundle locations and subdirectories.
     private func findAudioURL(for name: String) -> URL? {
-        let extensions = ["qta", "wav", "mp3", "m4a", "caf", "aac"]
+        let extensions = ["m4a", "wav", "mp3", "caf", "aac", "qta"]
         let subdirectories = [
             "SFX", "Resources/SFX", "Resources", "garong/Resources/SFX",
             "Voice Over", "Resources/Voice Over", "garong/Resources/Voice Over",

@@ -119,9 +119,8 @@ struct ChapterCompleteView: View {
 }
 
 
-#Preview {
-
-    Text(
-        "ChapterCompleteView Preview"
-    )
+struct ChapterCompleteView_Previews: PreviewProvider {
+    static var previews: some View {
+        Text("ChapterCompleteView Preview")
+    }
 }

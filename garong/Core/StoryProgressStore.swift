@@ -45,6 +45,18 @@ struct StoryProgressStore {
         state.activeRun = nil
         stored[storyID] = state
         defaults.set(try JSONEncoder().encode(stored), forKey: Self.storageKey)
+
+        Task { @MainActor in
+            let totalCompleted = stored.values.compactMap(\.completion).count
+            let totalStars = stored.values.compactMap(\.completion).reduce(0) { $0 + $1.bestStars }
+            let totalStoriesCount = StoryCatalog.stories.reduce(0) { $0 + $1.chapters.count }
+            GameKitManager.shared.reportProgressAfterStoryCompletion(
+                completedStoriesCount: totalCompleted,
+                totalStoriesCount: totalStoriesCount > 0 ? totalStoriesCount : stored.count,
+                totalStars: totalStars,
+                latestStoryStars: stars
+            )
+        }
     }
 
     func clearActiveRun(storyID: String) throws {
