@@ -61,7 +61,9 @@ enum AssetFallbackHelper {
         "rhodey_neutral",
         "rhodey_questioning",
         "rhodey_relieved",
-        "rhodey_sad"
+        "rhodey_sad",
+        "story1_img",
+        "story2_img"
     ]
 
     /// Checks whether an asset is available in the bundle / asset catalog.
@@ -118,11 +120,28 @@ enum AssetFallbackHelper {
         return "gameplay_background"
     }
 
+    /// Returns story artwork, falling back when a new story art asset is not ready yet.
+    static func storyArtworkImageName(for assetName: String) -> String {
+        hasAsset(named: assetName) ? assetName : "fallback_globe"
+    }
+
     /// Returns an appropriate SF Symbol fallback for game actions or items.
     static func sfSymbol(for actionID: String) -> String {
         let lower = actionID.lowercased()
         if lower.contains("crayon") || lower.contains("draw") {
             return "pencil.tip.crop.circle"
+        } else if lower.contains("swim") {
+            return "figure.pool.swim"
+        } else if lower.contains("slide") {
+            return "water.waves"
+        } else if lower.contains("recall") {
+            return "clock.arrow.circlepath"
+        } else if lower.contains("example") || lower.contains("explain") {
+            return "lightbulb.fill"
+        } else if lower.contains("comfort") || lower.contains("empathy") {
+            return "heart.fill"
+        } else if lower.contains("push") {
+            return "hand.raised.fill"
         } else if lower.contains("toy") || lower.contains("play") {
             return "play.fill"
         } else if lower.contains("approach") || lower.contains("get_nearby") {
@@ -139,7 +158,7 @@ enum AssetFallbackHelper {
             return "doc.fill"
         } else if lower.contains("candy") || lower.contains("lollipop") {
             return "circle.fill"
-        } else if lower.contains("apologize") || lower.contains("blaming") || lower.contains("asking") {
+        } else if lower.contains("apologize") || lower.contains("blaming") || lower.contains("asking") || lower.contains("ask") {
             return "person.crop.circle.badge.questionmark"
         } else {
             return "globe"

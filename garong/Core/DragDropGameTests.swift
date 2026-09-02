@@ -154,10 +154,11 @@ final class DragDropGameTests {
             }
         }
 
-        assertTest("Story JSON: all 6 chapter JSON files load and validate") {
+        assertTest("Story JSON: all 9 chapter JSON files load and validate") {
             let files = [
                 "story1_chapter1", "story1_chapter2", "story1_chapter3",
-                "story2_chapter1", "story2_chapter2", "story2_chapter3"
+                "story2_chapter1", "story2_chapter2", "story2_chapter3",
+                "story3_chapter1", "story3_chapter2", "story3_chapter3"
             ]
             do {
                 for file in files {

@@ -74,6 +74,43 @@
           "resource": "story2_chapter3"
         }
       ]
+    },
+    {
+      "id": "swimming_pool",
+      "number": 3,
+      "name": {
+        "en": "Swimming Pool",
+        "id": "Kolam Renang"
+      },
+      "chapters": [
+        {
+          "id": "jojo_afraid_to_swim",
+          "number": 1,
+          "shortTitle": {
+            "en": "Scared of the Pool",
+            "id": "Takut Kolam Renang"
+          },
+          "resource": "story3_chapter1"
+        },
+        {
+          "id": "rhodey_afraid_of_slide",
+          "number": 2,
+          "shortTitle": {
+            "en": "The High Pool Slide",
+            "id": "Seluncuran Kolam yang Tinggi"
+          },
+          "resource": "story3_chapter2"
+        },
+        {
+          "id": "jojo_shares_floatie",
+          "number": 3,
+          "shortTitle": {
+            "en": "Share the Floatie",
+            "id": "Berbagi Pelampung"
+          },
+          "resource": "story3_chapter3"
+        }
+      ]
     }
   ]
 }

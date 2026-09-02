@@ -5,7 +5,7 @@ struct StoryArtworkView: View {
     var size: CGFloat = 120
 
     var body: some View {
-        Image(assetName)
+        Image(AssetFallbackHelper.storyArtworkImageName(for: assetName))
             .resizable()
             .scaledToFit()
             .frame(width: size, height: size)
