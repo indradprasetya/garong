@@ -28,6 +28,7 @@ enum AssetFallbackHelper {
         "classroom_background",
         "gameplay_background",
         "park_background",
+        "pool_backgorund",
         "blue_selector_full",
         "blue_selector_half",
         "green_selector_full",
@@ -63,7 +64,8 @@ enum AssetFallbackHelper {
         "rhodey_relieved",
         "rhodey_sad",
         "story1_img",
-        "story2_img"
+        "story2_img",
+        "story3_img"
     ]
 
     /// Checks whether an asset is available in the bundle / asset catalog.
@@ -113,6 +115,9 @@ enum AssetFallbackHelper {
         }
         if lower.contains("classroom") && hasAsset(named: "classroom_background") {
             return "classroom_background"
+        }
+        if lower.contains("pool") && hasAsset(named: "pool_background") {
+            return "pool_background"
         }
         if hasAsset(named: lower) {
             return lower
