@@ -7,6 +7,7 @@ struct MainMenuView: View {
     @State private var showChapterSelection = false
     @State private var showSettings = false
     @State private var showGuidebook = false
+    @State private var showSaveJojoMiniGame = false
     @State private var isLoading = false
     @State private var useFrame1: Bool = true
     @State private var timer = Timer.publish(every: 0.4, on: .main, in: .common).autoconnect()
@@ -87,6 +88,18 @@ struct MainMenuView: View {
                     VStack {
                         HStack(spacing: 12) {
                             Spacer()
+
+                            Button {
+                                SoundManager.shared.play(.buttonTap)
+                                showSaveJojoMiniGame = true
+                            } label: {
+                                Text("🛟")
+                                    .font(.system(size: 38))
+                                    .frame(width: 64, height: 64)
+                                    .background(.white.opacity(0.9), in: Circle())
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("Play Save Jojo")
 
                             // GUIDEBOOK BUTTON (Beside Setting Button)
                             Button {
@@ -194,6 +207,9 @@ struct MainMenuView: View {
                 ChapterSelectionView(
                     stories: StoryCatalog.stories
                 )
+            }
+            .navigationDestination(isPresented: $showSaveJojoMiniGame) {
+                SaveJojoMiniGameView()
             }
             .onReceive(timer) { _ in
                 withAnimation(.easeInOut(duration: 0.2)) {
