@@ -9,6 +9,10 @@ struct SaveJojoMiniGameView: View {
     @State private var catchBarPosition = 0.62
     @State private var catchBarVelocity = 0.0
     @State private var rescueProgress = 0.25
+    @State private var jojoMarkerPosition = 0.50
+    @State private var jojoMarkerTarget = 0.24
+    @State private var jojoMarkerSpeed = 0.32
+    @State private var nextJojoMoveChange = Date()
     @State private var lastPullTick: Date?
     @State private var failureCooldown = 0.0
     @State private var caughtJojoX = 0.5
@@ -42,6 +46,12 @@ struct SaveJojoMiniGameView: View {
                     pullingScene(width: width, height: height)
                 } else if game.phase == .rescuing {
                     rescueTransitionScene(width: width, height: height)
+                } else if game.phase == .won {
+                    resultScene(isWin: true, width: width, height: height)
+                    interactionLayer(width: width, height: height)
+                } else if game.phase == .lost {
+                    resultScene(isWin: false, width: width, height: height)
+                    interactionLayer(width: width, height: height)
                 } else {
                     backgroundImage
                         .resizable()
@@ -282,18 +292,24 @@ struct SaveJojoMiniGameView: View {
     private func onboardingCopy(width: CGFloat, height: CGFloat) -> some View {
         let paperCenterX = width * 0.52
         let copyWidth = width * 0.54
+        let paperWhite = Color(red: 0.998, green: 0.996, blue: 0.992)
         let pinkLine = Color(red: 0.98, green: 0.86, blue: 0.88)
 
         return ZStack {
             Rectangle()
-                .fill(Color.white)
-                .frame(width: copyWidth, height: height * 0.45)
-                .position(x: paperCenterX, y: height * 0.34)
+                .fill(paperWhite)
+                .frame(width: width * 0.50, height: height * 0.44)
+                .position(x: paperCenterX, y: height * 0.36)
+
+            Rectangle()
+                .fill(paperWhite)
+                .frame(width: width * 0.50, height: height * 0.055)
+                .position(x: paperCenterX, y: height * 0.605)
 
             ForEach([0.285, 0.425, 0.565], id: \.self) { y in
                 Capsule()
                     .fill(pinkLine)
-                    .frame(width: copyWidth * 0.90, height: max(2, height * 0.007))
+                    .frame(width: width * 0.45, height: max(2, height * 0.007))
                     .position(x: paperCenterX, y: height * y)
             }
 
@@ -302,6 +318,7 @@ struct SaveJojoMiniGameView: View {
                 .foregroundStyle(.black)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
+                .frame(width: copyWidth * 0.66, height: height * 0.12)
                 .position(x: paperCenterX, y: height * 0.205)
 
             HStack(spacing: width * 0.007) {
@@ -320,7 +337,7 @@ struct SaveJojoMiniGameView: View {
             .foregroundStyle(.black)
             .lineLimit(1)
             .minimumScaleFactor(0.72)
-            .frame(width: copyWidth * 0.92)
+            .frame(width: copyWidth * 0.92, height: height * 0.105)
             .position(x: paperCenterX, y: height * 0.355)
 
             HStack(spacing: width * 0.006) {
@@ -334,7 +351,7 @@ struct SaveJojoMiniGameView: View {
             .foregroundStyle(.black)
             .lineLimit(1)
             .minimumScaleFactor(0.72)
-            .frame(width: copyWidth * 0.92)
+            .frame(width: copyWidth * 0.92, height: height * 0.105)
             .position(x: paperCenterX, y: height * 0.495)
         }
         .allowsHitTesting(false)
@@ -622,7 +639,6 @@ struct SaveJojoMiniGameView: View {
             let jojoPosition = markerPosition(at: timeline.date)
 
             ZStack {
-                livesDisplay(width: width, height: height)
                 fishingMeter(
                     jojoPosition: jojoPosition,
                     width: width,
@@ -750,6 +766,67 @@ struct SaveJojoMiniGameView: View {
         }
     }
 
+    private func resultScene(isWin: Bool, width: CGFloat, height: CGFloat) -> some View {
+        TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
+            let time = timeline.date.timeIntervalSinceReferenceDate
+            let bob = CGFloat(sin(time * 1.65)) * height * 0.018
+            let drift = CGFloat(sin(time * 0.82)) * width * 0.020
+            let tilt = sin(time * 1.25) * 2.2
+            let titlePulse = 1 + CGFloat(sin(time * 2.0)) * 0.008
+            let arrowNudge = CGFloat(sin(time * 3.2)) * width * 0.006
+
+            ZStack {
+                Color(red: 0.65, green: 0.81, blue: 0.94)
+                backWater(time: time, width: width, height: height)
+
+                if isWin {
+                    Image("save_jojo_floating")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: width * 0.22, height: height * 0.43)
+                        .rotationEffect(.degrees(tilt))
+                        .position(
+                            x: width * 0.50 + drift,
+                            y: height * 0.23 + bob
+                        )
+                } else {
+                    referenceSprite(
+                        asset: "save_jojo_character",
+                        crop: CGRect(x: 190, y: 285, width: 520, height: 650),
+                        referenceSize: CGSize(width: 2622, height: 1206)
+                    )
+                    .frame(width: width * 0.18, height: height * 0.40)
+                    .rotationEffect(.degrees(tilt))
+                    .position(
+                        x: width * 0.62 + drift,
+                        y: height * 0.24 + bob
+                    )
+                }
+
+                frontWater(time: time, width: width, height: height)
+
+                Text(isWin ? "JOJO IS SAFE!" : "UH OH!")
+                    .font(.appFontBold(size: max(54, width * 0.087), relativeTo: .largeTitle))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+                    .scaleEffect(titlePulse)
+                    .position(x: width * 0.50, y: height * 0.52)
+
+                HStack(spacing: width * 0.012) {
+                    Text(isWin ? "Next" : "Try Again")
+                        .font(.appFont(size: max(24, width * 0.037), relativeTo: .title2))
+
+                    Image(systemName: isWin ? "arrow.right" : "arrow.counterclockwise")
+                        .font(.system(size: max(24, width * 0.036), weight: .bold))
+                        .offset(x: arrowNudge)
+                }
+                .foregroundStyle(.white)
+                .position(x: width * (isWin ? 0.88 : 0.86), y: height * 0.08)
+            }
+        }
+    }
+
     private func fishingMeter(
         jojoPosition: Double,
         width: CGFloat,
@@ -761,6 +838,13 @@ struct SaveJojoMiniGameView: View {
         let catchBarY = meterTop + CGFloat(catchBarPosition) * meterHeight
         let catchBarHeight = meterHeight * 0.20
         let progressHeight = meterHeight * CGFloat(rescueProgress)
+        let progressColor: Color = if rescueProgress < 0.34 {
+            Color(red: 0.94, green: 0.20, blue: 0.18)
+        } else if rescueProgress < 0.67 {
+            Color(red: 1.00, green: 0.82, blue: 0.10)
+        } else {
+            Color(red: 0.13, green: 0.88, blue: 0.42)
+        }
 
         return ZStack {
             Image("save_jojo_meter_wide")
@@ -778,8 +862,8 @@ struct SaveJojoMiniGameView: View {
                 .frame(width: width * 0.043, height: catchBarHeight)
                 .position(x: width * 0.169, y: catchBarY)
 
-            Image("save_jojo_meter_fill")
-                .resizable()
+            RoundedRectangle(cornerRadius: width * 0.006)
+                .fill(progressColor)
                 .frame(width: width * 0.011, height: progressHeight)
                 .position(
                     x: width * 0.121,
@@ -809,6 +893,7 @@ struct SaveJojoMiniGameView: View {
         let delta = min(max(date.timeIntervalSince(previousTick), 0), 0.05)
         lastPullTick = date
         failureCooldown = max(0, failureCooldown - delta)
+        updateJojoMarker(at: date, delta: delta)
 
         catchBarVelocity += (pullHeld ? -2.35 : 1.75) * delta
         catchBarVelocity *= pow(0.055, delta)
@@ -824,7 +909,7 @@ struct SaveJojoMiniGameView: View {
 
         let jojoPosition = markerPosition(at: date)
         let jojoInsideBar = abs(jojoPosition - catchBarPosition) <= 0.14
-        rescueProgress += (jojoInsideBar ? 0.30 : -0.20) * delta
+        rescueProgress += (jojoInsideBar ? 0.18 : -0.11) * delta
         rescueProgress = min(max(rescueProgress, 0), 1)
 
         if rescueProgress >= 1 {
@@ -855,6 +940,10 @@ struct SaveJojoMiniGameView: View {
         catchBarPosition = 0.62
         catchBarVelocity = 0
         rescueProgress = 0.25
+        jojoMarkerPosition = 0.50
+        jojoMarkerTarget = Double.random(in: 0.08...0.92)
+        jojoMarkerSpeed = Double.random(in: 0.20...0.58)
+        nextJojoMoveChange = Date().addingTimeInterval(Double.random(in: 0.65...1.35))
         lastPullTick = nil
         failureCooldown = 0
     }
@@ -876,10 +965,28 @@ struct SaveJojoMiniGameView: View {
     }
 
     private func markerPosition(at date: Date) -> Double {
-        let duration = 4.5
-        let cycle = date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: duration)
-        let progress = cycle / duration
-        return progress <= 0.5 ? progress * 2 : (1 - progress) * 2
+        jojoMarkerPosition
+    }
+
+    private func updateJojoMarker(at date: Date, delta: TimeInterval) {
+        if date >= nextJojoMoveChange || abs(jojoMarkerTarget - jojoMarkerPosition) < 0.015 {
+            var newTarget = Double.random(in: 0.07...0.93)
+
+            if abs(newTarget - jojoMarkerPosition) < 0.16 {
+                newTarget = jojoMarkerPosition < 0.50
+                    ? Double.random(in: 0.62...0.93)
+                    : Double.random(in: 0.07...0.38)
+            }
+
+            jojoMarkerTarget = newTarget
+            jojoMarkerSpeed = Double.random(in: 0.18...0.68)
+            nextJojoMoveChange = date.addingTimeInterval(Double.random(in: 0.55...1.65))
+        }
+
+        let distance = jojoMarkerTarget - jojoMarkerPosition
+        let maximumStep = jojoMarkerSpeed * delta
+        jojoMarkerPosition += min(max(distance, -maximumStep), maximumStep)
+        jojoMarkerPosition = min(max(jojoMarkerPosition, 0.07), 0.93)
     }
 
     private func flash(_ color: Color) {
