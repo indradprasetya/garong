@@ -6,6 +6,7 @@ struct SaveJojoGameState: Equatable {
         case aiming
         case caught
         case pulling
+        case rescuing
         case won
         case lost
     }
@@ -23,7 +24,10 @@ struct SaveJojoGameState: Equatable {
     }
 
     @discardableResult
-    mutating func throwLifebuoy(alignmentError: Double = 0) -> Bool {
+    mutating func throwLifebuoy(
+        alignmentError: Double = 0,
+        deferLoss: Bool = false
+    ) -> Bool {
         guard phase == .aiming else { return false }
         if alignmentError <= 0.10 {
             phase = .caught
@@ -31,10 +35,15 @@ struct SaveJojoGameState: Equatable {
         }
 
         lives -= 1
-        if lives <= 0 {
+        if lives <= 0, !deferLoss {
             phase = .lost
         }
         return false
+    }
+
+    mutating func finishFailedThrow() {
+        guard phase == .aiming, lives <= 0 else { return }
+        phase = .lost
     }
 
     mutating func beginPulling() {
@@ -42,8 +51,13 @@ struct SaveJojoGameState: Equatable {
         phase = .pulling
     }
 
-    mutating func completeRescue() {
+    mutating func beginRescueTransition() {
         guard phase == .pulling else { return }
+        phase = .rescuing
+    }
+
+    mutating func completeRescue() {
+        guard phase == .rescuing else { return }
         successfulPulls = Self.pullsNeeded
         phase = .won
     }

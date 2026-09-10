@@ -6,6 +6,7 @@ final class BackgroundMusicManager {
     enum Track: String {
         case menu = "background_music"
         case gameplay = "gameplay_music"
+        case miniGameOnboarding = "mini_game_onboarding_music"
     }
 
     private var player: AVAudioPlayer?

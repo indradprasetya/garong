@@ -38,8 +38,18 @@ struct SaveJojoGameStateTests {
         game.beginPulling()
         game.failPullAttempt()
         precondition(game.phase == .pulling && game.lives == 2)
+        game.beginRescueTransition()
+        precondition(game.phase == .rescuing)
         game.completeRescue()
         precondition(game.phase == .won)
+
+        game.restart()
+        precondition(!game.throwLifebuoy(alignmentError: 0.3, deferLoss: true))
+        precondition(!game.throwLifebuoy(alignmentError: 0.3, deferLoss: true))
+        precondition(!game.throwLifebuoy(alignmentError: 0.3, deferLoss: true))
+        precondition(game.phase == .aiming && game.lives == 0)
+        game.finishFailedThrow()
+        precondition(game.phase == .lost)
 
         print("Save Jojo game state tests passed")
     }
