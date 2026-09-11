@@ -100,11 +100,11 @@ struct MainMenuView: View {
                                         .frame(width: 38, height: 38)
 
                                     VStack(alignment: .leading, spacing: 1) {
-                                        Text("TRY THIS GAME!")
+                                        Text(localization.text("minigame.menu.try"))
                                             .font(.appFontBold(size: 12, relativeTo: .caption))
                                             .lineLimit(1)
                                             .minimumScaleFactor(0.85)
-                                        Text("SAVE JOJO")
+                                        Text(localization.text("minigame.title"))
                                             .font(.appFontBold(size: 18, relativeTo: .headline))
                                             .lineLimit(1)
                                             .minimumScaleFactor(0.85)
@@ -131,7 +131,7 @@ struct MainMenuView: View {
                                 .animation(.easeInOut(duration: 0.18), value: useFrame1)
                             }
                             .buttonStyle(.plain)
-                            .accessibilityLabel("Play Save Jojo")
+                            .accessibilityLabel(localization.text("minigame.accessibility.start"))
 
                             // GUIDEBOOK BUTTON (Beside Setting Button)
                             Button {

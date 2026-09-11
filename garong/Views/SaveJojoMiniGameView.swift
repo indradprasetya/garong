@@ -3,6 +3,7 @@ import Combine
 
 struct SaveJojoMiniGameView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var localization = AppLocalization.shared
     @State private var game = SaveJojoGameState()
     @State private var feedbackColor = Color.clear
     @State private var pullHeld = false
@@ -133,7 +134,7 @@ struct SaveJojoMiniGameView: View {
         }
         .buttonStyle(.plain)
         .position(x: width * 0.065, y: height * 0.080)
-        .accessibilityLabel("Back to main menu")
+        .accessibilityLabel(localization.text("minigame.accessibility.back"))
     }
 
     private func onboardingScene(width: CGFloat, height: CGFloat) -> some View {
@@ -241,7 +242,7 @@ struct SaveJojoMiniGameView: View {
                         crop: CGRect(x: 875, y: 500, width: 390, height: 300),
                         referenceSize: CGSize(width: 2622, height: 1206)
                     )
-                    Text("throw")
+                    Text(localization.text("minigame.throw"))
                         .font(.appFont(size: max(12, width * 0.016)))
                         .foregroundStyle(.white)
                         .offset(y: -height * 0.012)
@@ -258,7 +259,7 @@ struct SaveJojoMiniGameView: View {
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Start Save Jojo")
+                .accessibilityLabel(localization.text("minigame.accessibility.start"))
             }
         }
     }
@@ -276,7 +277,7 @@ struct SaveJojoMiniGameView: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Start Save Jojo")
+            .accessibilityLabel(localization.text("minigame.accessibility.start"))
 
         case .aiming:
             EmptyView()
@@ -301,7 +302,7 @@ struct SaveJojoMiniGameView: View {
             }
             .buttonStyle(.plain)
             .position(x: width * 0.88, y: height * 0.08)
-            .accessibilityLabel("Next")
+            .accessibilityLabel(localization.text("minigame.next"))
 
         case .lost:
             Button {
@@ -314,7 +315,7 @@ struct SaveJojoMiniGameView: View {
             }
             .buttonStyle(.plain)
             .position(x: width * 0.86, y: height * 0.08)
-            .accessibilityLabel("Try again")
+            .accessibilityLabel(localization.text("minigame.tryAgain"))
         }
     }
 
@@ -342,7 +343,7 @@ struct SaveJojoMiniGameView: View {
                     .position(x: paperCenterX, y: height * y)
             }
 
-            Text("SAVE JOJO")
+            Text(localization.text("minigame.title"))
                 .font(.appFontBold(size: max(28, width * 0.052), relativeTo: .title))
                 .foregroundStyle(.black)
                 .lineLimit(1)
@@ -351,12 +352,12 @@ struct SaveJojoMiniGameView: View {
                 .position(x: paperCenterX, y: height * 0.205)
 
             HStack(spacing: width * 0.007) {
-                Text("Throw the lifebuoy")
+                Text(localization.text("minigame.onboarding.throw"))
                 Image("save_jojo_lifebuoy_icon")
                     .resizable()
                     .scaledToFit()
                     .frame(width: width * 0.032, height: width * 0.032)
-                Text("to JOJO")
+                Text(localization.text("minigame.onboarding.toJojo"))
                 Image("save_jojo_floating")
                     .resizable()
                     .scaledToFit()
@@ -370,7 +371,7 @@ struct SaveJojoMiniGameView: View {
             .position(x: paperCenterX, y: height * 0.355)
 
             HStack(spacing: width * 0.006) {
-                Text("Be careful because you only have 3×")
+                Text(localization.text("minigame.onboarding.warning"))
                 Image("save_jojo_lifebuoy_icon")
                     .resizable()
                     .scaledToFit()
@@ -507,7 +508,7 @@ struct SaveJojoMiniGameView: View {
                             referenceSize: CGSize(width: 2622, height: 1206)
                         )
 
-                        Text("throw")
+                        Text(localization.text("minigame.throw"))
                             .font(.appFont(size: max(25, width * 0.038)))
                             .foregroundStyle(.white)
                             .offset(y: -height * 0.028)
@@ -516,8 +517,8 @@ struct SaveJojoMiniGameView: View {
                 }
                 .buttonStyle(.plain)
                 .position(x: width * 0.87, y: height * 0.77)
-                .accessibilityLabel("Throw lifebuoy")
-                .accessibilityHint("Throw when the arrow is aligned with Jojo")
+                .accessibilityLabel(localization.text("minigame.accessibility.throw"))
+                .accessibilityHint(localization.text("minigame.accessibility.throwHint"))
             }
         }
     }
@@ -681,7 +682,7 @@ struct SaveJojoMiniGameView: View {
                         referenceSize: CGSize(width: 2622, height: 1206)
                     )
 
-                    Text("pull")
+                    Text(localization.text("minigame.pull"))
                         .font(.appFont(size: max(25, width * 0.038)))
                         .foregroundStyle(.white)
                         .offset(y: -height * 0.028)
@@ -694,8 +695,8 @@ struct SaveJojoMiniGameView: View {
                             .onEnded { _ in pullHeld = false }
                     )
                 .position(x: width * 0.87, y: height * 0.78)
-                .accessibilityLabel("Pull Jojo")
-                .accessibilityHint("Hold to raise the catch bar and release to lower it")
+                .accessibilityLabel(localization.text("minigame.accessibility.pull"))
+                .accessibilityHint(localization.text("minigame.accessibility.pullHint"))
             }
         }
     }
@@ -834,7 +835,7 @@ struct SaveJojoMiniGameView: View {
 
                 frontWater(time: time, width: width, height: height)
 
-                Text(isWin ? "JOJO IS SAFE!" : "UH OH!")
+                Text(localization.text(isWin ? "minigame.result.win" : "minigame.result.lose"))
                     .font(.appFontBold(size: max(54, width * 0.087), relativeTo: .largeTitle))
                     .foregroundStyle(.white)
                     .lineLimit(1)
@@ -843,7 +844,7 @@ struct SaveJojoMiniGameView: View {
                     .position(x: width * 0.50, y: height * 0.52)
 
                 HStack(spacing: width * 0.012) {
-                    Text(isWin ? "Next" : "Try Again")
+                    Text(localization.text(isWin ? "minigame.next" : "minigame.tryAgain"))
                         .font(.appFont(size: max(24, width * 0.037), relativeTo: .title2))
 
                     Image(systemName: isWin ? "arrow.right" : "arrow.counterclockwise")
