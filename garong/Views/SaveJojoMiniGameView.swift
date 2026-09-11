@@ -13,6 +13,7 @@ struct SaveJojoMiniGameView: View {
     @State private var jojoMarkerTarget = 0.24
     @State private var jojoMarkerSpeed = 0.32
     @State private var nextJojoMoveChange = Date()
+    @State private var lastDistanceHaptic = Date.distantPast
     @State private var lastPullTick: Date?
     @State private var failureCooldown = 0.0
     @State private var caughtJojoX = 0.5
@@ -62,6 +63,8 @@ struct SaveJojoMiniGameView: View {
                     interactionLayer(width: width, height: height)
                 }
 
+                gameBackButton(width: width, height: height)
+
                 if feedbackColor != .clear {
                     feedbackColor
                         .ignoresSafeArea()
@@ -105,6 +108,32 @@ struct SaveJojoMiniGameView: View {
         case .won: Image("save_jojo_win")
         case .lost: Image("save_jojo_lose")
         }
+    }
+
+    private func gameBackButton(width: CGFloat, height: CGFloat) -> some View {
+        Button {
+            SoundManager.shared.play(.backTap)
+            dismiss()
+        } label: {
+            ZStack {
+                Circle()
+                    .fill(Color(red: 0.03, green: 0.27, blue: 0.48).opacity(0.92))
+                    .overlay {
+                        Circle()
+                            .stroke(.white.opacity(0.92), lineWidth: max(2, width * 0.0025))
+                    }
+
+                Image(systemName: "chevron.left")
+                    .font(.system(size: max(16, width * 0.019), weight: .bold))
+                    .foregroundStyle(.white)
+                    .offset(x: -1)
+            }
+            .frame(width: min(42, width * 0.045), height: min(42, width * 0.045))
+            .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .position(x: width * 0.065, y: height * 0.080)
+        .accessibilityLabel("Back to main menu")
     }
 
     private func onboardingScene(width: CGFloat, height: CGFloat) -> some View {
@@ -838,6 +867,9 @@ struct SaveJojoMiniGameView: View {
         let catchBarY = meterTop + CGFloat(catchBarPosition) * meterHeight
         let catchBarHeight = meterHeight * 0.20
         let progressHeight = meterHeight * CGFloat(rescueProgress)
+        let markerDistance = abs(jojoPosition - catchBarPosition)
+        let markerProximity = max(0, 1 - markerDistance / 0.34)
+        let markerScale = 1 + CGFloat(markerProximity) * 0.42
         let progressColor: Color = if rescueProgress < 0.34 {
             Color(red: 0.94, green: 0.20, blue: 0.18)
         } else if rescueProgress < 0.67 {
@@ -870,11 +902,13 @@ struct SaveJojoMiniGameView: View {
                     y: meterTop + meterHeight - progressHeight / 2
                 )
 
-            Image("save_jojo_meter_marker")
+            Image("save_jojo_floating")
                 .resizable()
                 .scaledToFit()
-                .frame(width: width * 0.045, height: height * 0.12)
-            .position(x: width * 0.169, y: jojoY)
+                .frame(width: width * 0.075, height: height * 0.18)
+                .scaleEffect(markerScale)
+                .position(x: width * 0.169, y: jojoY)
+                .zIndex(2)
         }
     }
 
@@ -908,7 +942,9 @@ struct SaveJojoMiniGameView: View {
         }
 
         let jojoPosition = markerPosition(at: date)
-        let jojoInsideBar = abs(jojoPosition - catchBarPosition) <= 0.14
+        let markerDistance = abs(jojoPosition - catchBarPosition)
+        let jojoInsideBar = markerDistance <= 0.14
+        triggerDistanceHapticIfNeeded(at: date, distance: markerDistance)
         rescueProgress += (jojoInsideBar ? 0.18 : -0.11) * delta
         rescueProgress = min(max(rescueProgress, 0), 1)
 
@@ -944,6 +980,7 @@ struct SaveJojoMiniGameView: View {
         jojoMarkerTarget = Double.random(in: 0.08...0.92)
         jojoMarkerSpeed = Double.random(in: 0.20...0.58)
         nextJojoMoveChange = Date().addingTimeInterval(Double.random(in: 0.65...1.35))
+        lastDistanceHaptic = .distantPast
         lastPullTick = nil
         failureCooldown = 0
     }
@@ -951,7 +988,7 @@ struct SaveJojoMiniGameView: View {
     private func livesDisplay(width: CGFloat, height: CGFloat) -> some View {
         HStack(spacing: width * 0.008) {
             Text("\(game.lives)×")
-                .font(.system(size: max(20, width * 0.033), weight: .bold, design: .rounded))
+                .font(.appFontBold(size: max(20, width * 0.033), relativeTo: .title2))
                 .foregroundStyle(.black)
 
             Image("save_jojo_lifebuoy_icon")
@@ -987,6 +1024,15 @@ struct SaveJojoMiniGameView: View {
         let maximumStep = jojoMarkerSpeed * delta
         jojoMarkerPosition += min(max(distance, -maximumStep), maximumStep)
         jojoMarkerPosition = min(max(jojoMarkerPosition, 0.07), 0.93)
+    }
+
+    private func triggerDistanceHapticIfNeeded(at date: Date, distance: Double) {
+        let isNear = distance <= 0.17
+        let interval = isNear ? 0.17 : 0.70
+        guard date.timeIntervalSince(lastDistanceHaptic) >= interval else { return }
+
+        lastDistanceHaptic = date
+        HapticManager.shared.impact(isNear ? .rigid : .soft)
     }
 
     private func flash(_ color: Color) {
