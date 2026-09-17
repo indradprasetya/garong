@@ -131,24 +131,13 @@ struct SaveJojoMiniGameView: View {
                 dismiss()
             }
         } label: {
-            ZStack {
-                Circle()
-                    .fill(Color(red: 0.03, green: 0.27, blue: 0.48).opacity(0.92))
-                    .overlay {
-                        Circle()
-                            .stroke(.white.opacity(0.92), lineWidth: max(2, width * 0.0025))
-                    }
-
-                Image(systemName: "chevron.left")
-                    .font(.system(size: max(16, width * 0.019), weight: .bold))
-                    .foregroundStyle(.white)
-                    .offset(x: -1)
-            }
-            .frame(width: min(42, width * 0.045), height: min(42, width * 0.045))
-            .contentShape(Circle())
+            Image("guidebook_back_button")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 64)
         }
         .buttonStyle(.plain)
-        .position(x: width * 0.065, y: height * 0.080)
+        .position(x: width * 0.1, y: height * 0.080)
         .accessibilityLabel(localization.text("minigame.accessibility.back"))
     }
 

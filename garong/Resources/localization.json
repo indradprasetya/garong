@@ -78,6 +78,7 @@
   "selection.completed": { "en": "%@, completed, %d stars", "id": "%@, selesai dengan %d bintang" },
   "selection.current": { "en": "%@, current chapter", "id": "%@, siap dimainkan" },
   "selection.locked": { "en": "%@, locked", "id": "%@, masih terkunci" },
+  "selection.comingSoon": { "en": "COMING SOON", "id": "COMING SOON" },
 
   "chapter.level": { "en": "LEVEL %d", "id": "LEVEL %d" },
   "chapter.frames": { "en": "Frames", "id": "Adegan" },

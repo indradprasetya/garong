@@ -37,6 +37,11 @@ struct ChapterSelectionView: View {
     }
     
     
+    private var totalPages: Int {
+        stories.isEmpty ? 0 : stories.count + 1
+    }
+    
+    
     // MARK: - BODY
     
     var body: some View {
@@ -55,6 +60,12 @@ struct ChapterSelectionView: View {
                         storyPage(story, storyIndex: storyIndex, width: width, height: height)
                             .frame(width: width, height: height)
                             .allowsHitTesting(storyIndex == selectedStoryIndex)
+                    }
+
+                    if !stories.isEmpty {
+                        comingSoonPage(width: width, height: height)
+                            .frame(width: width, height: height)
+                            .allowsHitTesting(selectedStoryIndex == stories.count)
                     }
                 }
                 .frame(width: width, alignment: .leading)
@@ -93,7 +104,7 @@ struct ChapterSelectionView: View {
                         .disabled(showSaveJojoMiniGame || isLoadingGameplay)
                 }
 
-                if selectedStoryIndex < stories.count - 1 {
+                if selectedStoryIndex < totalPages - 1 {
                     storyArrow(direction: .next, width: width)
                         .position(x: width * 0.925, y: height * 0.50)
                         .zIndex(6)
@@ -159,7 +170,7 @@ struct ChapterSelectionView: View {
             .onChanged { value in
                 let translation = value.translation.width
                 let isDraggingPastEdge =
-                    (translation < 0 && selectedStoryIndex == stories.count - 1) ||
+                    (translation < 0 && selectedStoryIndex == totalPages - 1) ||
                     (translation > 0 && selectedStoryIndex == 0)
                 dragOffset = isDraggingPastEdge ? translation * 0.2 : translation
             }
@@ -168,7 +179,7 @@ struct ChapterSelectionView: View {
                 let threshold: CGFloat = 50
                 var targetIndex = selectedStoryIndex
 
-                if translation < -threshold && selectedStoryIndex < stories.count - 1 {
+                if translation < -threshold && selectedStoryIndex < totalPages - 1 {
                     targetIndex += 1
                     SoundManager.shared.play(.buttonTap)
                 } else if translation > threshold && selectedStoryIndex > 0 {
@@ -209,6 +220,40 @@ struct ChapterSelectionView: View {
         .frame(width: width, height: height)
     }
 
+    private func comingSoonPage(
+        width: CGFloat,
+        height: CGFloat
+    ) -> some View {
+        ZStack {
+            Image("silhouette_background")
+                .resizable()
+                .scaledToFit()
+                .frame(
+                    width: min(width * 0.47, height * 1.18),
+                    height: min(height * 0.87, min(width * 0.47, height * 1.18) * 0.84)
+                )
+                .position(x: width * 0.33, y: height * 0.535)
+
+            ZStack {
+                if AssetFallbackHelper.hasAsset(named: "paper_background") {
+                    Image("paper_background")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: width * 0.28)
+                }
+
+                Text(localization.text("selection.comingSoon"))
+                    .font(.appFontBold(size: max(24, min(36, width * 0.034))))
+                    .foregroundStyle(GarongTheme.ink)
+                    .tracking(2)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 16)
+            }
+            .position(x: width * 0.73, y: height * 0.54)
+        }
+        .frame(width: width, height: height)
+    }
+
     private func clipboard(
         story: StoryListStory,
         width: CGFloat,
@@ -231,7 +276,7 @@ struct ChapterSelectionView: View {
             let destination = ChapterPageNavigation.destinationIndex(
                 from: selectedStoryIndex,
                 direction: direction,
-                pageCount: stories.count
+                pageCount: totalPages
             )
             SoundManager.shared.play(.buttonTap)
             withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
