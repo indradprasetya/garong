@@ -49,7 +49,7 @@
   "minigame.accessibility.throw": { "en": "Throw lifebuoy", "id": "Lempar pelampung" },
   "minigame.accessibility.throwHint": { "en": "Throw when the arrow is aligned with Jojo", "id": "Lempar saat panah mengarah tepat ke Jojo" },
   "minigame.accessibility.pull": { "en": "Pull Jojo", "id": "Tarik Jojo" },
-  "minigame.accessibility.pullHint": { "en": "Hold to raise the catch bar and release to lower it", "id": "Tahan untuk menaikkan bar dan lepaskan untuk menurunkannya" },
+  "minigame.accessibility.pullHint": { "en": "Tap repeatedly to move the bar up", "id": "Ketuk berulang kali untuk menaikkan bar" },
   "gameplay.hint": { "en": "HINT", "id": "PETUNJUK" },
   "gameplay.hintFallback": { "en": "Pay attention to how each action affects the characters' feelings.", "id": "Perhatikan perubahan perasaan setiap karakter setelah kamu memilih suatu tindakan." },
   "gameplay.scenesFilled": { "en": "%d / %d Scenes Filled", "id": "%d / %d adegan selesai" },

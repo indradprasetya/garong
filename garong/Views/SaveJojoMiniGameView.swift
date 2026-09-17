@@ -2,11 +2,22 @@ import SwiftUI
 import Combine
 
 struct SaveJojoMiniGameView: View {
+    var onDismiss: (() -> Void)? = nil
+    var onContinue: (() -> Void)? = nil
+
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var localization = AppLocalization.shared
+
+    init(
+        onDismiss: (() -> Void)? = nil,
+        onContinue: (() -> Void)? = nil
+    ) {
+        self.onDismiss = onDismiss
+        self.onContinue = onContinue
+    }
     @State private var game = SaveJojoGameState()
     @State private var feedbackColor = Color.clear
-    @State private var pullHeld = false
+    @State private var isPullPressed = false
     @State private var catchBarPosition = 0.62
     @State private var catchBarVelocity = 0.0
     @State private var rescueProgress = 0.25
@@ -114,7 +125,11 @@ struct SaveJojoMiniGameView: View {
     private func gameBackButton(width: CGFloat, height: CGFloat) -> some View {
         Button {
             SoundManager.shared.play(.backTap)
-            dismiss()
+            if let onDismiss {
+                onDismiss()
+            } else {
+                dismiss()
+            }
         } label: {
             ZStack {
                 Circle()
@@ -294,7 +309,13 @@ struct SaveJojoMiniGameView: View {
         case .won:
             Button {
                 SoundManager.shared.play(.buttonTap)
-                dismiss()
+                if let onContinue {
+                    onContinue()
+                } else if let onDismiss {
+                    onDismiss()
+                } else {
+                    dismiss()
+                }
             } label: {
                 Color.clear
                     .frame(width: width * 0.20, height: height * 0.18)
@@ -687,17 +708,45 @@ struct SaveJojoMiniGameView: View {
                         .foregroundStyle(.white)
                         .offset(y: -height * 0.028)
                 }
-                    .frame(width: width * 0.17, height: height * 0.30)
-                    .contentShape(Rectangle())
-                    .gesture(
-                        DragGesture(minimumDistance: 0)
-                            .onChanged { _ in pullHeld = true }
-                            .onEnded { _ in pullHeld = false }
-                    )
+                .scaleEffect(isPullPressed ? 0.92 : 1.0)
+                .animation(.spring(response: 0.15, dampingFraction: 0.6), value: isPullPressed)
+                .frame(width: width * 0.17, height: height * 0.30)
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { _ in
+                            if !isPullPressed {
+                                isPullPressed = true
+                                handlePullTap()
+                            }
+                        }
+                        .onEnded { _ in
+                            isPullPressed = false
+                        }
+                )
                 .position(x: width * 0.87, y: height * 0.78)
                 .accessibilityLabel(localization.text("minigame.accessibility.pull"))
                 .accessibilityHint(localization.text("minigame.accessibility.pullHint"))
+                .accessibilityAction {
+                    handlePullTap()
+                }
             }
+        }
+    }
+
+    private func handlePullTap() {
+        guard game.phase == .pulling else { return }
+        SoundManager.shared.play(.buttonTap)
+        HapticManager.shared.impact(.light)
+
+        // Gentle, fluid upward impulse without abrupt position jumps
+        let tapImpulse = -0.40
+        if catchBarVelocity > 0 {
+            // Smoothly transition downward falling into gentle rising
+            catchBarVelocity = catchBarVelocity * 0.20 + tapImpulse
+        } else {
+            // Fluidly accumulate upward velocity with a gentle maximum speed
+            catchBarVelocity = max(-0.70, catchBarVelocity + tapImpulse * 0.70)
         }
     }
 
@@ -916,7 +965,7 @@ struct SaveJojoMiniGameView: View {
     private func updatePullMechanic(at date: Date) {
         guard game.phase == .pulling else {
             lastPullTick = nil
-            pullHeld = false
+            isPullPressed = false
             return
         }
 
@@ -930,16 +979,17 @@ struct SaveJojoMiniGameView: View {
         failureCooldown = max(0, failureCooldown - delta)
         updateJojoMarker(at: date, delta: delta)
 
-        catchBarVelocity += (pullHeld ? -2.35 : 1.75) * delta
-        catchBarVelocity *= pow(0.055, delta)
+        // Gentle fluid gravity pulls the catch bar downwards; player taps give smooth upward impulses
+        catchBarVelocity += 0.85 * delta
+        catchBarVelocity *= pow(0.20, delta)
         catchBarPosition += catchBarVelocity * delta
 
         if catchBarPosition < 0.14 {
             catchBarPosition = 0.14
-            catchBarVelocity = max(0, catchBarVelocity * -0.25)
+            catchBarVelocity = max(0, catchBarVelocity * -0.10)
         } else if catchBarPosition > 0.86 {
             catchBarPosition = 0.86
-            catchBarVelocity = min(0, catchBarVelocity * -0.25)
+            catchBarVelocity = min(0, catchBarVelocity * -0.10)
         }
 
         let jojoPosition = markerPosition(at: date)
@@ -950,7 +1000,7 @@ struct SaveJojoMiniGameView: View {
         rescueProgress = min(max(rescueProgress, 0), 1)
 
         if rescueProgress >= 1 {
-            pullHeld = false
+            isPullPressed = false
             SoundManager.shared.play(.itemPickup)
             flash(.green.opacity(0.20))
             let pullElapsed = date.timeIntervalSince(pullAnimationStart)
@@ -973,14 +1023,14 @@ struct SaveJojoMiniGameView: View {
     }
 
     private func resetPullMechanic() {
-        pullHeld = false
+        isPullPressed = false
         catchBarPosition = 0.62
         catchBarVelocity = 0
         rescueProgress = 0.25
         jojoMarkerPosition = 0.50
         jojoMarkerTarget = Double.random(in: 0.08...0.92)
-        jojoMarkerSpeed = Double.random(in: 0.20...0.58)
-        nextJojoMoveChange = Date().addingTimeInterval(Double.random(in: 0.65...1.35))
+        jojoMarkerSpeed = Double.random(in: 0.16...0.45)
+        nextJojoMoveChange = Date().addingTimeInterval(Double.random(in: 0.8...1.8))
         lastDistanceHaptic = .distantPast
         lastPullTick = nil
         failureCooldown = 0
@@ -1017,8 +1067,8 @@ struct SaveJojoMiniGameView: View {
             }
 
             jojoMarkerTarget = newTarget
-            jojoMarkerSpeed = Double.random(in: 0.18...0.68)
-            nextJojoMoveChange = date.addingTimeInterval(Double.random(in: 0.55...1.65))
+            jojoMarkerSpeed = Double.random(in: 0.16...0.45)
+            nextJojoMoveChange = date.addingTimeInterval(Double.random(in: 0.8...1.8))
         }
 
         let distance = jojoMarkerTarget - jojoMarkerPosition

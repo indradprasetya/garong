@@ -13,6 +13,7 @@ struct ChapterSelectionView: View {
     @State private var selectedChapter: Chapter?
     @State private var isLoadingGameplay = false
     @State private var showGameplay = false
+    @State private var showSaveJojoMiniGame = false
     @State private var dragOffset: CGFloat = 0.0
     private let progressStore = StoryProgressStore()
     
@@ -83,17 +84,49 @@ struct ChapterSelectionView: View {
                 .buttonStyle(.plain)
                 .position(x: width * 0.10, y: height * 0.07)
                 .zIndex(5)
+                .disabled(showSaveJojoMiniGame || isLoadingGameplay)
 
                 if selectedStoryIndex > 0 {
                     storyArrow(direction: .previous, width: width)
                         .position(x: width * 0.10, y: height * 0.50)
                         .zIndex(6)
+                        .disabled(showSaveJojoMiniGame || isLoadingGameplay)
                 }
 
                 if selectedStoryIndex < stories.count - 1 {
                     storyArrow(direction: .next, width: width)
                         .position(x: width * 0.925, y: height * 0.50)
                         .zIndex(6)
+                        .disabled(showSaveJojoMiniGame || isLoadingGameplay)
+                }
+
+                if showSaveJojoMiniGame {
+                    SaveJojoMiniGameView(
+                        onDismiss: {
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                showSaveJojoMiniGame = false
+                            }
+                        },
+                        onContinue: {
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                showSaveJojoMiniGame = false
+                                if selectedChapter == nil,
+                                   stories.indices.contains(selectedStoryIndex) {
+                                    let story = stories[selectedStoryIndex]
+                                    if let firstChapter = story.chapters.first(where: { $0.number == 1 }) {
+                                        selectedChapter = StoryCatalog.chapter(
+                                            for: firstChapter,
+                                            storyNumber: story.number,
+                                            language: localization.languageCode
+                                        )
+                                    }
+                                }
+                                isLoadingGameplay = selectedChapter != nil
+                            }
+                        }
+                    )
+                    .transition(.opacity)
+                    .zIndex(15)
                 }
 
                 if isLoadingGameplay {
@@ -274,14 +307,21 @@ struct ChapterSelectionView: View {
                 guard stories.indices.contains(storyIndex) else { return }
                 let story = stories[storyIndex]
                 guard story.chapters.indices.contains(chapterIndex) else { return }
+                let chapterRef = story.chapters[chapterIndex]
                 SoundManager.shared.play(.buttonTap)
                 selectedChapter = StoryCatalog.chapter(
-                    for: story.chapters[chapterIndex],
+                    for: chapterRef,
                     storyNumber: story.number,
                     language: localization.languageCode
                 )
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    isLoadingGameplay = selectedChapter != nil
+                if (story.number == 3 && chapterRef.number == 1) || chapterRef.resource == "story3_chapter1" {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showSaveJojoMiniGame = true
+                    }
+                } else {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        isLoadingGameplay = selectedChapter != nil
+                    }
                 }
             }
         } label: {
