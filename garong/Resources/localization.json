@@ -21,6 +21,13 @@
   "settings.gameCenterNotConnected": { "en": "Not connected", "id": "Belum terhubung" },
   "settings.gameCenterSignIn": { "en": "Sign In", "id": "Masuk" },
   "settings.gameCenterView": { "en": "View", "id": "Lihat" },
+  "settings.aboutUs": { "en": "about us", "id": "tentang kami" },
+
+  "about.back": { "en": "Back", "id": "Kembali" },
+  "about.teamTitle": { "en": "Meet Our Team!", "id": "Kenali Tim Kami!" },
+  "about.teamImageLabel": { "en": "Portraits of the Kinario team", "id": "Potret tim Kinario" },
+  "about.whyTitle": { "en": "Why We Built Kinario", "id": "Mengapa Kami Membuat Kinario" },
+  "about.body": { "en": "The idea for Kinario came from our own experience working with first-time volunteers in a child-related community.\n\nWe saw how underprepared most of them were, stepping into roles they cared about, but without the child-related knowledge to feel ready. Hence, Kinario existed!", "id": "Ide Kinario lahir dari pengalaman kami bekerja bersama relawan baru di komunitas yang berfokus pada anak.\n\nKami melihat banyak dari mereka belum cukup siap menjalani peran yang mereka pedulikan karena belum memiliki pengetahuan tentang anak yang membuat mereka merasa percaya diri. Karena itulah Kinario hadir!" },
 
   "guidebook.title": { "en": "GUIDEBOOK", "id": "PANDUAN" },
   "guidebook.item1.title": { "en": "Connect and redirect", "id": "Tenangkan, lalu arahkan" },

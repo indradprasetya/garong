@@ -11,6 +11,7 @@ struct SettingView: View {
     @State private var sfxPreviewThrottle = SFXPreviewThrottle(minimumInterval: 0.15)
     @State private var showResetConfirmation: Bool = false
     @State private var showResetSuccess: Bool = false
+    @State private var showAboutUs: Bool = false
 
     var body: some View {
         ZStack {
@@ -162,8 +163,21 @@ struct SettingView: View {
                                 .buttonStyle(.plain)
                             }
 
-                            // Reset Progress Button
+                            // About Us and Reset Progress
                             HStack {
+                                Button {
+                                    SoundManager.shared.play(.buttonTap)
+                                    withAnimation(.easeOut(duration: 0.25)) {
+                                        showAboutUs = true
+                                    }
+                                } label: {
+                                    Text(localization.text("settings.aboutUs"))
+                                        .font(.appFont(size: 16))
+                                        .foregroundStyle(Color(red: 1.0, green: 0.65, blue: 0.0))
+                                        .underline()
+                                }
+                                .buttonStyle(.plain)
+
                                 Spacer()
 
                                 Button {
@@ -201,6 +215,16 @@ struct SettingView: View {
                 .offset(x: 12, y: -12)
             }
             .padding(24)
+
+            if showAboutUs {
+                AboutUsView {
+                    withAnimation(.easeOut(duration: 0.25)) {
+                        showAboutUs = false
+                    }
+                }
+                .transition(.opacity)
+                .zIndex(20)
+            }
         }
         .onChange(of: sfxVolume) { newValue in
             SoundManager.shared.volume = newValue

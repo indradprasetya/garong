@@ -16,6 +16,10 @@ struct AppLocalizationTests {
         let naturalIndonesianCopy = [
             "settings.english": "INGGRIS",
             "settings.resetProgress": "atur ulang progres",
+            "settings.aboutUs": "tentang kami",
+            "about.back": "Kembali",
+            "about.teamTitle": "Kenali Tim Kami!",
+            "about.whyTitle": "Mengapa Kami Membuat Kinario",
             "guidebook.item1.title": "Tenangkan, lalu arahkan",
             "guidebook.item2.title": "Kenali perasaan agar lebih tenang",
             "guidebook.item3.title": "Ajak berpikir, jangan memperkeruh emosi",
