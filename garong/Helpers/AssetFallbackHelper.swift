@@ -65,7 +65,9 @@ enum AssetFallbackHelper {
         "rhodey_sad",
         "story1_img",
         "story2_img",
-        "story3_img"
+        "story3_img",
+        "paper_background",
+        "silhouette_background"
     ]
 
     /// Checks whether an asset is available in the bundle / asset catalog.

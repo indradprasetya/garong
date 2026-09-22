@@ -2,19 +2,31 @@ import SwiftUI
 import Combine
 
 struct SaveJojoMiniGameView: View {
+    var onDismiss: (() -> Void)? = nil
+    var onContinue: (() -> Void)? = nil
+
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var localization = AppLocalization.shared
+
+    init(
+        onDismiss: (() -> Void)? = nil,
+        onContinue: (() -> Void)? = nil
+    ) {
+        self.onDismiss = onDismiss
+        self.onContinue = onContinue
+    }
     @State private var game = SaveJojoGameState()
     @State private var feedbackColor = Color.clear
-    @State private var pullHeld = false
-    @State private var catchBarPosition = 0.62
+    @State private var isPullPressed = false
+    @State private var catchBarPosition = 0.65
     @State private var catchBarVelocity = 0.0
     @State private var rescueProgress = 0.25
     @State private var jojoMarkerPosition = 0.50
     @State private var jojoMarkerTarget = 0.24
     @State private var jojoMarkerSpeed = 0.32
     @State private var nextJojoMoveChange = Date()
-    @State private var lastDistanceHaptic = Date.distantPast
+    @State private var wasJojoInsideBar = false
+    @State private var lastCatchHaptic = Date.distantPast
     @State private var lastPullTick: Date?
     @State private var failureCooldown = 0.0
     @State private var caughtJojoX = 0.5
@@ -114,26 +126,19 @@ struct SaveJojoMiniGameView: View {
     private func gameBackButton(width: CGFloat, height: CGFloat) -> some View {
         Button {
             SoundManager.shared.play(.backTap)
-            dismiss()
-        } label: {
-            ZStack {
-                Circle()
-                    .fill(Color(red: 0.03, green: 0.27, blue: 0.48).opacity(0.92))
-                    .overlay {
-                        Circle()
-                            .stroke(.white.opacity(0.92), lineWidth: max(2, width * 0.0025))
-                    }
-
-                Image(systemName: "chevron.left")
-                    .font(.system(size: max(16, width * 0.019), weight: .bold))
-                    .foregroundStyle(.white)
-                    .offset(x: -1)
+            if let onDismiss {
+                onDismiss()
+            } else {
+                dismiss()
             }
-            .frame(width: min(42, width * 0.045), height: min(42, width * 0.045))
-            .contentShape(Circle())
+        } label: {
+            Image("guidebook_back_button")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 64)
         }
         .buttonStyle(.plain)
-        .position(x: width * 0.065, y: height * 0.080)
+        .position(x: width * 0.1, y: height * 0.080)
         .accessibilityLabel(localization.text("minigame.accessibility.back"))
     }
 
@@ -213,17 +218,14 @@ struct SaveJojoMiniGameView: View {
                 .position(x: width * 0.52, y: height * 0.68)
                 .allowsHitTesting(false)
 
-                Path { path in
-                    path.move(to: CGPoint(x: width * 0.38, y: height * 0.80))
-                    path.addLine(
-                        to: CGPoint(
-                            x: buoyX,
-                            y: buoyY + (throwProgress < 0.96 ? width * 0.025 : height * 0.055)
-                        )
-                    )
-                }
-                .stroke(.white, style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
-                .allowsHitTesting(false)
+                tambangRope(
+                    from: CGPoint(x: width * 0.38, y: height * 0.80),
+                    to: CGPoint(
+                        x: buoyX,
+                        y: buoyY + (throwProgress < 0.96 ? width * 0.025 : height * 0.055)
+                    ),
+                    thickness: max(6, width * 0.007)
+                )
 
                 if throwProgress < 0.96 {
                     referenceSprite(
@@ -294,7 +296,13 @@ struct SaveJojoMiniGameView: View {
         case .won:
             Button {
                 SoundManager.shared.play(.buttonTap)
-                dismiss()
+                if let onContinue {
+                    onContinue()
+                } else if let onDismiss {
+                    onDismiss()
+                } else {
+                    dismiss()
+                }
             } label: {
                 Color.clear
                     .frame(width: width * 0.20, height: height * 0.18)
@@ -445,17 +453,14 @@ struct SaveJojoMiniGameView: View {
                     .opacity(isMissAnimating ? 0 : 1)
 
                 if isMissAnimating {
-                    Path { path in
-                        path.move(to: CGPoint(x: buoyX, y: height * 1.08))
-                        path.addLine(
-                            to: CGPoint(
-                                x: missedBuoyX,
-                                y: missedBuoyY + width * 0.095
-                            )
-                        )
-                    }
-                    .stroke(.white, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                    .allowsHitTesting(false)
+                    tambangRope(
+                        from: CGPoint(x: buoyX, y: height * 1.08),
+                        to: CGPoint(
+                            x: missedBuoyX,
+                            y: missedBuoyY + width * 0.095
+                        ),
+                        thickness: max(14, width * 0.018)
+                    )
 
                     referenceSprite(
                         asset: "save_jojo_lifebuoy",
@@ -583,19 +588,16 @@ struct SaveJojoMiniGameView: View {
 
                 frontWater(time: time, width: width, height: height)
 
-                Path { path in
-                    path.move(to: CGPoint(x: startX, y: height * 1.08))
-                    path.addLine(
-                        to: CGPoint(
-                            x: isCaught ? caughtX : buoyX,
-                            y: isCaught
-                                ? caughtY + height * 0.17
-                                : buoyY + width * 0.095
-                        )
-                    )
-                }
-                .stroke(.white, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                .allowsHitTesting(false)
+                tambangRope(
+                    from: CGPoint(x: startX, y: height * 1.08),
+                    to: CGPoint(
+                        x: isCaught ? caughtX : buoyX,
+                        y: isCaught
+                            ? caughtY + height * 0.17
+                            : buoyY + width * 0.095
+                    ),
+                    thickness: max(14, width * 0.018)
+                )
 
                 if !isCaught {
                     referenceSprite(
@@ -664,6 +666,32 @@ struct SaveJojoMiniGameView: View {
         .clipped()
     }
 
+    private func tambangRope(
+        from: CGPoint,
+        to: CGPoint,
+        thickness: CGFloat
+    ) -> some View {
+        let dx = to.x - from.x
+        let dy = to.y - from.y
+        let distance = hypot(dx, dy)
+        let angle = Angle(radians: Double(atan2(dy, dx)))
+        let midX = (from.x + to.x) / 2
+        let midY = (from.y + to.y) / 2
+
+        return Group {
+            if distance > 1 {
+                Image("tambangkinario")
+                    .resizable()
+                    .renderingMode(.original)
+                    .frame(width: distance, height: thickness)
+                    .rotationEffect(angle)
+                    .shadow(color: .black.opacity(0.16), radius: 1.5, x: 1, y: 1)
+                    .position(x: midX, y: midY)
+                    .allowsHitTesting(false)
+            }
+        }
+    }
+
     private func pullingControls(width: CGFloat, height: CGFloat) -> some View {
         TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
             let jojoPosition = markerPosition(at: timeline.date)
@@ -687,17 +715,45 @@ struct SaveJojoMiniGameView: View {
                         .foregroundStyle(.white)
                         .offset(y: -height * 0.028)
                 }
-                    .frame(width: width * 0.17, height: height * 0.30)
-                    .contentShape(Rectangle())
-                    .gesture(
-                        DragGesture(minimumDistance: 0)
-                            .onChanged { _ in pullHeld = true }
-                            .onEnded { _ in pullHeld = false }
-                    )
+                .scaleEffect(isPullPressed ? 0.92 : 1.0)
+                .animation(.spring(response: 0.15, dampingFraction: 0.6), value: isPullPressed)
+                .frame(width: width * 0.17, height: height * 0.30)
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { _ in
+                            if !isPullPressed {
+                                isPullPressed = true
+                                handlePullTap()
+                            }
+                        }
+                        .onEnded { _ in
+                            isPullPressed = false
+                        }
+                )
                 .position(x: width * 0.87, y: height * 0.78)
                 .accessibilityLabel(localization.text("minigame.accessibility.pull"))
                 .accessibilityHint(localization.text("minigame.accessibility.pullHint"))
+                .accessibilityAction {
+                    handlePullTap()
+                }
             }
+        }
+    }
+
+    private func handlePullTap() {
+        guard game.phase == .pulling else { return }
+        SoundManager.shared.play(.buttonTap)
+        HapticManager.shared.impact(.light)
+
+        // Gentle, fluid upward impulse without abrupt position jumps
+        let tapImpulse = -0.40
+        if catchBarVelocity > 0 {
+            // Smoothly transition downward falling into gentle rising
+            catchBarVelocity = catchBarVelocity * 0.20 + tapImpulse
+        } else {
+            // Fluidly accumulate upward velocity with a gentle maximum speed
+            catchBarVelocity = max(-0.70, catchBarVelocity + tapImpulse * 0.70)
         }
     }
 
@@ -722,26 +778,17 @@ struct SaveJojoMiniGameView: View {
 
                 frontWater(time: time, width: width, height: height)
 
-                Path { path in
-                    path.move(
-                        to: CGPoint(
-                            x: centerX,
-                            y: centerY + height * 0.17
-                        )
-                    )
-                    path.addLine(
-                        to: CGPoint(
-                            x: width * 0.52,
-                            y: height * 1.10
-                        )
-                    )
-                }
-                .stroke(
-                    .white,
-                    style: StrokeStyle(lineWidth: 5, lineCap: .round)
+                tambangRope(
+                    from: CGPoint(
+                        x: centerX,
+                        y: centerY + height * 0.17
+                    ),
+                    to: CGPoint(
+                        x: width * 0.52,
+                        y: height * 1.10
+                    ),
+                    thickness: max(14, width * 0.018)
                 )
-                .shadow(color: .black.opacity(0.12), radius: 1, x: 1, y: 1)
-                .allowsHitTesting(false)
 
                 pullingControls(width: width, height: height)
             }
@@ -769,17 +816,14 @@ struct SaveJojoMiniGameView: View {
 
                 frontWater(time: time, width: width, height: height)
 
-                Path { path in
-                    path.move(to: CGPoint(x: endX, y: height * 1.06))
-                    path.addLine(
-                        to: CGPoint(
-                            x: jojoX,
-                            y: jojoY + height * 0.17 * scale
-                        )
-                    )
-                }
-                .stroke(.white, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                .allowsHitTesting(false)
+                tambangRope(
+                    from: CGPoint(x: endX, y: height * 1.06),
+                    to: CGPoint(
+                        x: jojoX,
+                        y: jojoY + height * 0.17 * scale
+                    ),
+                    thickness: max(14, width * 0.018)
+                )
 
                 Image("save_jojo_floating")
                     .resizable()
@@ -862,8 +906,8 @@ struct SaveJojoMiniGameView: View {
         width: CGFloat,
         height: CGFloat
     ) -> some View {
-        let meterHeight = height * 0.68
-        let meterTop = height * 0.15
+        let meterHeight = height * 0.65
+        let meterTop = height * 0.20
         let jojoY = meterTop + CGFloat(jojoPosition) * meterHeight
         let catchBarY = meterTop + CGFloat(catchBarPosition) * meterHeight
         let catchBarHeight = meterHeight * 0.20
@@ -916,7 +960,7 @@ struct SaveJojoMiniGameView: View {
     private func updatePullMechanic(at date: Date) {
         guard game.phase == .pulling else {
             lastPullTick = nil
-            pullHeld = false
+            isPullPressed = false
             return
         }
 
@@ -930,27 +974,28 @@ struct SaveJojoMiniGameView: View {
         failureCooldown = max(0, failureCooldown - delta)
         updateJojoMarker(at: date, delta: delta)
 
-        catchBarVelocity += (pullHeld ? -2.35 : 1.75) * delta
-        catchBarVelocity *= pow(0.055, delta)
+        // Gentle fluid gravity pulls the catch bar downwards; player taps give smooth upward impulses
+        catchBarVelocity += 0.85 * delta
+        catchBarVelocity *= pow(0.20, delta)
         catchBarPosition += catchBarVelocity * delta
 
         if catchBarPosition < 0.14 {
             catchBarPosition = 0.14
-            catchBarVelocity = max(0, catchBarVelocity * -0.25)
+            catchBarVelocity = max(0, catchBarVelocity * -0.10)
         } else if catchBarPosition > 0.86 {
             catchBarPosition = 0.86
-            catchBarVelocity = min(0, catchBarVelocity * -0.25)
+            catchBarVelocity = min(0, catchBarVelocity * -0.10)
         }
 
         let jojoPosition = markerPosition(at: date)
         let markerDistance = abs(jojoPosition - catchBarPosition)
         let jojoInsideBar = markerDistance <= 0.14
-        triggerDistanceHapticIfNeeded(at: date, distance: markerDistance)
+        triggerCatchHapticIfNeeded(at: date, isCaught: jojoInsideBar)
         rescueProgress += (jojoInsideBar ? 0.18 : -0.11) * delta
         rescueProgress = min(max(rescueProgress, 0), 1)
 
         if rescueProgress >= 1 {
-            pullHeld = false
+            isPullPressed = false
             SoundManager.shared.play(.itemPickup)
             flash(.green.opacity(0.20))
             let pullElapsed = date.timeIntervalSince(pullAnimationStart)
@@ -973,15 +1018,16 @@ struct SaveJojoMiniGameView: View {
     }
 
     private func resetPullMechanic() {
-        pullHeld = false
-        catchBarPosition = 0.62
+        isPullPressed = false
+        catchBarPosition = 0.65
         catchBarVelocity = 0
         rescueProgress = 0.25
         jojoMarkerPosition = 0.50
         jojoMarkerTarget = Double.random(in: 0.08...0.92)
-        jojoMarkerSpeed = Double.random(in: 0.20...0.58)
-        nextJojoMoveChange = Date().addingTimeInterval(Double.random(in: 0.65...1.35))
-        lastDistanceHaptic = .distantPast
+        jojoMarkerSpeed = Double.random(in: 0.16...0.45)
+        nextJojoMoveChange = Date().addingTimeInterval(Double.random(in: 0.8...1.8))
+        wasJojoInsideBar = false
+        lastCatchHaptic = .distantPast
         lastPullTick = nil
         failureCooldown = 0
     }
@@ -1017,8 +1063,8 @@ struct SaveJojoMiniGameView: View {
             }
 
             jojoMarkerTarget = newTarget
-            jojoMarkerSpeed = Double.random(in: 0.18...0.68)
-            nextJojoMoveChange = date.addingTimeInterval(Double.random(in: 0.55...1.65))
+            jojoMarkerSpeed = Double.random(in: 0.16...0.45)
+            nextJojoMoveChange = date.addingTimeInterval(Double.random(in: 0.8...1.8))
         }
 
         let distance = jojoMarkerTarget - jojoMarkerPosition
@@ -1027,13 +1073,19 @@ struct SaveJojoMiniGameView: View {
         jojoMarkerPosition = min(max(jojoMarkerPosition, 0.07), 0.93)
     }
 
-    private func triggerDistanceHapticIfNeeded(at date: Date, distance: Double) {
-        let isNear = distance <= 0.17
-        let interval = isNear ? 0.17 : 0.70
-        guard date.timeIntervalSince(lastDistanceHaptic) >= interval else { return }
-
-        lastDistanceHaptic = date
-        HapticManager.shared.impact(isNear ? .rigid : .soft)
+    private func triggerCatchHapticIfNeeded(at date: Date, isCaught: Bool) {
+        if isCaught {
+            if !wasJojoInsideBar {
+                wasJojoInsideBar = true
+                lastCatchHaptic = date
+                HapticManager.shared.impact(.medium)
+            } else if date.timeIntervalSince(lastCatchHaptic) >= 0.18 {
+                lastCatchHaptic = date
+                HapticManager.shared.impact(.rigid)
+            }
+        } else {
+            wasJojoInsideBar = false
+        }
     }
 
     private func flash(_ color: Color) {
