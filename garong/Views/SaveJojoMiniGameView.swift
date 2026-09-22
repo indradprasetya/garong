@@ -18,14 +18,15 @@ struct SaveJojoMiniGameView: View {
     @State private var game = SaveJojoGameState()
     @State private var feedbackColor = Color.clear
     @State private var isPullPressed = false
-    @State private var catchBarPosition = 0.62
+    @State private var catchBarPosition = 0.65
     @State private var catchBarVelocity = 0.0
     @State private var rescueProgress = 0.25
     @State private var jojoMarkerPosition = 0.50
     @State private var jojoMarkerTarget = 0.24
     @State private var jojoMarkerSpeed = 0.32
     @State private var nextJojoMoveChange = Date()
-    @State private var lastDistanceHaptic = Date.distantPast
+    @State private var wasJojoInsideBar = false
+    @State private var lastCatchHaptic = Date.distantPast
     @State private var lastPullTick: Date?
     @State private var failureCooldown = 0.0
     @State private var caughtJojoX = 0.5
@@ -905,8 +906,8 @@ struct SaveJojoMiniGameView: View {
         width: CGFloat,
         height: CGFloat
     ) -> some View {
-        let meterHeight = height * 0.68
-        let meterTop = height * 0.15
+        let meterHeight = height * 0.65
+        let meterTop = height * 0.20
         let jojoY = meterTop + CGFloat(jojoPosition) * meterHeight
         let catchBarY = meterTop + CGFloat(catchBarPosition) * meterHeight
         let catchBarHeight = meterHeight * 0.20
@@ -989,7 +990,7 @@ struct SaveJojoMiniGameView: View {
         let jojoPosition = markerPosition(at: date)
         let markerDistance = abs(jojoPosition - catchBarPosition)
         let jojoInsideBar = markerDistance <= 0.14
-        triggerDistanceHapticIfNeeded(at: date, distance: markerDistance)
+        triggerCatchHapticIfNeeded(at: date, isCaught: jojoInsideBar)
         rescueProgress += (jojoInsideBar ? 0.18 : -0.11) * delta
         rescueProgress = min(max(rescueProgress, 0), 1)
 
@@ -1018,14 +1019,15 @@ struct SaveJojoMiniGameView: View {
 
     private func resetPullMechanic() {
         isPullPressed = false
-        catchBarPosition = 0.62
+        catchBarPosition = 0.65
         catchBarVelocity = 0
         rescueProgress = 0.25
         jojoMarkerPosition = 0.50
         jojoMarkerTarget = Double.random(in: 0.08...0.92)
         jojoMarkerSpeed = Double.random(in: 0.16...0.45)
         nextJojoMoveChange = Date().addingTimeInterval(Double.random(in: 0.8...1.8))
-        lastDistanceHaptic = .distantPast
+        wasJojoInsideBar = false
+        lastCatchHaptic = .distantPast
         lastPullTick = nil
         failureCooldown = 0
     }
@@ -1071,13 +1073,19 @@ struct SaveJojoMiniGameView: View {
         jojoMarkerPosition = min(max(jojoMarkerPosition, 0.07), 0.93)
     }
 
-    private func triggerDistanceHapticIfNeeded(at date: Date, distance: Double) {
-        let isNear = distance <= 0.17
-        let interval = isNear ? 0.17 : 0.70
-        guard date.timeIntervalSince(lastDistanceHaptic) >= interval else { return }
-
-        lastDistanceHaptic = date
-        HapticManager.shared.impact(isNear ? .rigid : .soft)
+    private func triggerCatchHapticIfNeeded(at date: Date, isCaught: Bool) {
+        if isCaught {
+            if !wasJojoInsideBar {
+                wasJojoInsideBar = true
+                lastCatchHaptic = date
+                HapticManager.shared.impact(.medium)
+            } else if date.timeIntervalSince(lastCatchHaptic) >= 0.18 {
+                lastCatchHaptic = date
+                HapticManager.shared.impact(.rigid)
+            }
+        } else {
+            wasJojoInsideBar = false
+        }
     }
 
     private func flash(_ color: Color) {
