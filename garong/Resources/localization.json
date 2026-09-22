@@ -5,6 +5,9 @@
   "settings.language": { "en": "LANGUAGE", "id": "BAHASA" },
   "settings.english": { "en": "ENGLISH", "id": "INGGRIS" },
   "settings.indonesian": { "en": "BAHASA INDONESIA", "id": "INDONESIA" },
+  "settings.textSize": { "en": "TEXT SIZE", "id": "UKURAN TEKS" },
+  "settings.textStandard": { "en": "STANDARD", "id": "STANDAR" },
+  "settings.textLarge": { "en": "LARGE", "id": "BESAR" },
   "settings.resetProgress": { "en": "reset progress", "id": "atur ulang progres" },
   "settings.resetTitle": { "en": "Reset Progress?", "id": "Atur Ulang Progres?" },
   "settings.cancel": { "en": "Cancel", "id": "Batal" },
@@ -13,6 +16,11 @@
   "settings.resetSuccessTitle": { "en": "Your Data Has Been Reset", "id": "Progres Berhasil Diatur Ulang" },
   "settings.ok": { "en": "OK", "id": "OK" },
   "settings.resetSuccessMessage": { "en": "Your game progress has been reset.", "id": "Seluruh progres permainan telah diatur ulang." },
+  "settings.gameCenter": { "en": "GAME CENTER", "id": "GAME CENTER" },
+  "settings.gameCenterConnected": { "en": "Connected as %@", "id": "Terhubung sebagai %@" },
+  "settings.gameCenterNotConnected": { "en": "Not connected", "id": "Belum terhubung" },
+  "settings.gameCenterSignIn": { "en": "Sign In", "id": "Masuk" },
+  "settings.gameCenterView": { "en": "View", "id": "Lihat" },
 
   "guidebook.title": { "en": "GUIDEBOOK", "id": "PANDUAN" },
   "guidebook.item1.title": { "en": "Connect and redirect", "id": "Tenangkan, lalu arahkan" },
@@ -41,7 +49,7 @@
   "minigame.accessibility.throw": { "en": "Throw lifebuoy", "id": "Lempar pelampung" },
   "minigame.accessibility.throwHint": { "en": "Throw when the arrow is aligned with Jojo", "id": "Lempar saat panah mengarah tepat ke Jojo" },
   "minigame.accessibility.pull": { "en": "Pull Jojo", "id": "Tarik Jojo" },
-  "minigame.accessibility.pullHint": { "en": "Hold to raise the catch bar and release to lower it", "id": "Tahan untuk menaikkan bar dan lepaskan untuk menurunkannya" },
+  "minigame.accessibility.pullHint": { "en": "Tap repeatedly to move the bar up", "id": "Ketuk berulang kali untuk menaikkan bar" },
   "gameplay.hint": { "en": "HINT", "id": "PETUNJUK" },
   "gameplay.hintFallback": { "en": "Pay attention to how each action affects the characters' feelings.", "id": "Perhatikan perubahan perasaan setiap karakter setelah kamu memilih suatu tindakan." },
   "gameplay.scenesFilled": { "en": "%d / %d Scenes Filled", "id": "%d / %d adegan selesai" },
@@ -52,6 +60,7 @@
   "gameplay.breakFallback": { "en": "The characters need a break.", "id": "Para karakter perlu waktu untuk beristirahat." },
 
   "tutorial.approach": { "en": "Drag Approach to Rhodey.", "id": "Tarik Dekati ke Rhodey." },
+  "tutorial.narratorBox": { "en": "This shows feedback based on your choice. Tap to continue.", "id": "Ini menampilkan tanggapan berdasarkan pilihanmu. Ketuk untuk lanjut." },
   "tutorial.toy": { "en": "Now drag the Toy to Rhodey.", "id": "Sekarang tarik Mainan ke Rhodey." },
   "tutorial.wrongAndHint": { "en": "A choice can be wrong. Open Hint to learn what Rhodey needs.", "id": "Pilihanmu bisa kurang tepat. Buka Petunjuk untuk melihat kebutuhan Rhodey." },
   "tutorial.returnToy": { "en": "Drag the toy back to the tray to try again.", "id": "Tarik kembali mainan ke tempat pilihan untuk mencoba lagi." },
@@ -69,6 +78,7 @@
   "selection.completed": { "en": "%@, completed, %d stars", "id": "%@, selesai dengan %d bintang" },
   "selection.current": { "en": "%@, current chapter", "id": "%@, siap dimainkan" },
   "selection.locked": { "en": "%@, locked", "id": "%@, masih terkunci" },
+  "selection.comingSoon": { "en": "COMING SOON", "id": "COMING SOON" },
 
   "chapter.level": { "en": "LEVEL %d", "id": "LEVEL %d" },
   "chapter.frames": { "en": "Frames", "id": "Adegan" },
@@ -88,5 +98,12 @@
   "scene.outcome": { "en": "Outcome", "id": "Hasil" },
   "scene.grid": { "en": "Grid %d", "id": "Tahap %d" },
   "scene.finalResult": { "en": "Final Result", "id": "Hasil Akhir" },
-  "scene.number": { "en": "Scene %d", "id": "Adegan %d" }
+  "scene.number": { "en": "Scene %d", "id": "Adegan %d" },
+
+  "letter.rhodey": { "en": "Rhodey", "id": "Rhodey" },
+  "letter.jojo": { "en": "Jojo", "id": "Jojo" },
+  "letter.greeting": { "en": "Dear Volunteer,", "id": "Halo Sukarelawan," },
+  "letter.body1": { "en": "Thank you for coming to Kinario Foundation. Today you'll be spending time with two kids, Rhodey and Jojo. How you approach them today will shape how their day goes.", "id": "Terima kasih telah datang ke Yayasan Kinario. Hari ini kamu akan menghabiskan waktu bersama dua anak, Rhodey dan Jojo. Bagaimana caramu mendekati mereka hari ini akan menentukan jalannya hari mereka." },
+  "letter.body2": { "en": "We're glad you're here!", "id": "Kami senang kamu ada di sini!" },
+  "letter.sign": { "en": "— Kinario Foundation", "id": "— Yayasan Kinario" }
 }

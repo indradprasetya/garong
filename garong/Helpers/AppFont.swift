@@ -53,32 +53,36 @@ enum AppFont {
         #endif
     }
 
+    private static var scaleFactor: CGFloat {
+        AppTextSizeManager.shared.textSize.scale
+    }
+
     static func custom(_ size: CGFloat, relativeTo textStyle: Font.TextStyle = .body) -> Font {
-        Font.custom(fontName, size: size, relativeTo: textStyle)
+        Font.custom(fontName, size: size * scaleFactor, relativeTo: textStyle)
     }
 
     static func regular(size: CGFloat) -> Font {
-        Font.custom(fontName, size: size)
+        Font.custom(fontName, size: size * scaleFactor)
     }
 
     static func bold(size: CGFloat, relativeTo textStyle: Font.TextStyle = .body) -> Font {
-        Font.custom(boldFontName, size: size, relativeTo: textStyle)
+        Font.custom(boldFontName, size: size * scaleFactor, relativeTo: textStyle)
     }
     
     static func title(size: CGFloat = 28) -> Font {
-        Font.custom(fontName, size: size, relativeTo: .title)
+        Font.custom(fontName, size: size * scaleFactor, relativeTo: .title)
     }
     
     static func headline(size: CGFloat = 18) -> Font {
-        Font.custom(fontName, size: size, relativeTo: .headline)
+        Font.custom(fontName, size: size * scaleFactor, relativeTo: .headline)
     }
     
     static func body(size: CGFloat = 14) -> Font {
-        Font.custom(fontName, size: size, relativeTo: .body)
+        Font.custom(fontName, size: size * scaleFactor, relativeTo: .body)
     }
     
     static func caption(size: CGFloat = 11) -> Font {
-        Font.custom(fontName, size: size, relativeTo: .caption)
+        Font.custom(fontName, size: size * scaleFactor, relativeTo: .caption)
     }
 }
 

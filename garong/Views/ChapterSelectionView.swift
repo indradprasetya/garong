@@ -3,6 +3,7 @@ import SwiftUI
 struct ChapterSelectionView: View {
     let stories: [StoryListStory]
     @ObservedObject private var localization = AppLocalization.shared
+    @ObservedObject private var textSizeManager = AppTextSizeManager.shared
     
     @Environment(\.dismiss)
     private var dismiss
@@ -12,6 +13,7 @@ struct ChapterSelectionView: View {
     @State private var selectedChapter: Chapter?
     @State private var isLoadingGameplay = false
     @State private var showGameplay = false
+    @State private var showSaveJojoMiniGame = false
     @State private var dragOffset: CGFloat = 0.0
     private let progressStore = StoryProgressStore()
     
@@ -35,6 +37,11 @@ struct ChapterSelectionView: View {
     }
     
     
+    private var totalPages: Int {
+        stories.isEmpty ? 0 : stories.count + 1
+    }
+    
+    
     // MARK: - BODY
     
     var body: some View {
@@ -48,12 +55,23 @@ struct ChapterSelectionView: View {
                     .scaledToFill()
                     .ignoresSafeArea()
 
-                ForEach(Array(stories.enumerated()), id: \.element.id) { storyIndex, story in
-                    storyPage(story, storyIndex: storyIndex, width: width, height: height)
-                        .offset(
-                            x: CGFloat(storyIndex - selectedStoryIndex) * width + dragOffset
-                        )
+                HStack(spacing: 0) {
+                    ForEach(Array(stories.enumerated()), id: \.element.id) { storyIndex, story in
+                        storyPage(story, storyIndex: storyIndex, width: width, height: height)
+                            .frame(width: width, height: height)
+                            .allowsHitTesting(storyIndex == selectedStoryIndex)
+                    }
+
+                    if !stories.isEmpty {
+                        comingSoonPage(width: width, height: height)
+                            .frame(width: width, height: height)
+                            .allowsHitTesting(selectedStoryIndex == stories.count)
+                    }
                 }
+                .frame(width: width, alignment: .leading)
+                .offset(x: -CGFloat(selectedStoryIndex) * width + dragOffset)
+                .contentShape(Rectangle())
+                .gesture(storySwipeGesture)
 
                 if stories.isEmpty {
                     VStack(spacing: 12) {
@@ -75,19 +93,51 @@ struct ChapterSelectionView: View {
                         .frame(height: min(64, height * 0.15))
                 }
                 .buttonStyle(.plain)
-                .position(x: width * 0.10, y: height * 0.08)
+                .position(x: width * 0.10, y: height * 0.07)
                 .zIndex(5)
+                .disabled(showSaveJojoMiniGame || isLoadingGameplay)
 
                 if selectedStoryIndex > 0 {
                     storyArrow(direction: .previous, width: width)
                         .position(x: width * 0.10, y: height * 0.50)
                         .zIndex(6)
+                        .disabled(showSaveJojoMiniGame || isLoadingGameplay)
                 }
 
-                if selectedStoryIndex < stories.count - 1 {
+                if selectedStoryIndex < totalPages - 1 {
                     storyArrow(direction: .next, width: width)
                         .position(x: width * 0.925, y: height * 0.50)
                         .zIndex(6)
+                        .disabled(showSaveJojoMiniGame || isLoadingGameplay)
+                }
+
+                if showSaveJojoMiniGame {
+                    SaveJojoMiniGameView(
+                        onDismiss: {
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                showSaveJojoMiniGame = false
+                            }
+                        },
+                        onContinue: {
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                showSaveJojoMiniGame = false
+                                if selectedChapter == nil,
+                                   stories.indices.contains(selectedStoryIndex) {
+                                    let story = stories[selectedStoryIndex]
+                                    if let firstChapter = story.chapters.first(where: { $0.number == 1 }) {
+                                        selectedChapter = StoryCatalog.chapter(
+                                            for: firstChapter,
+                                            storyNumber: story.number,
+                                            language: localization.languageCode
+                                        )
+                                    }
+                                }
+                                isLoadingGameplay = selectedChapter != nil
+                            }
+                        }
+                    )
+                    .transition(.opacity)
+                    .zIndex(15)
                 }
 
                 if isLoadingGameplay {
@@ -120,25 +170,25 @@ struct ChapterSelectionView: View {
             .onChanged { value in
                 let translation = value.translation.width
                 let isDraggingPastEdge =
-                    (translation < 0 && selectedStoryIndex == stories.count - 1) ||
+                    (translation < 0 && selectedStoryIndex == totalPages - 1) ||
                     (translation > 0 && selectedStoryIndex == 0)
                 dragOffset = isDraggingPastEdge ? translation * 0.2 : translation
             }
             .onEnded { value in
                 let translation = value.translation.width
                 let threshold: CGFloat = 50
-                if translation < -threshold && selectedStoryIndex < stories.count - 1 {
+                var targetIndex = selectedStoryIndex
+
+                if translation < -threshold && selectedStoryIndex < totalPages - 1 {
+                    targetIndex += 1
                     SoundManager.shared.play(.buttonTap)
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        selectedStoryIndex += 1
-                    }
                 } else if translation > threshold && selectedStoryIndex > 0 {
+                    targetIndex -= 1
                     SoundManager.shared.play(.buttonTap)
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        selectedStoryIndex -= 1
-                    }
                 }
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
+                    selectedStoryIndex = targetIndex
                     dragOffset = 0
                 }
             }
@@ -152,8 +202,6 @@ struct ChapterSelectionView: View {
     ) -> some View {
         ZStack {
             clipboard(story: story, width: width, height: height)
-                .contentShape(Rectangle())
-                .gesture(storySwipeGesture)
                 .position(x: width * 0.33, y: height * 0.535)
 
             VStack(spacing: 0) {
@@ -167,6 +215,40 @@ struct ChapterSelectionView: View {
                 }
             }
             .frame(width: width * 0.31, height: height * 0.72)
+            .position(x: width * 0.73, y: height * 0.54)
+        }
+        .frame(width: width, height: height)
+    }
+
+    private func comingSoonPage(
+        width: CGFloat,
+        height: CGFloat
+    ) -> some View {
+        ZStack {
+            Image("silhouette_background")
+                .resizable()
+                .scaledToFit()
+                .frame(
+                    width: min(width * 0.47, height * 1.18),
+                    height: min(height * 0.87, min(width * 0.47, height * 1.18) * 0.84)
+                )
+                .position(x: width * 0.33, y: height * 0.535)
+
+            ZStack {
+                if AssetFallbackHelper.hasAsset(named: "paper_background") {
+                    Image("paper_background")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: width * 0.28)
+                }
+
+                Text(localization.text("selection.comingSoon"))
+                    .font(.appFontBold(size: max(24, min(36, width * 0.034))))
+                    .foregroundStyle(GarongTheme.ink)
+                    .tracking(2)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 16)
+            }
             .position(x: width * 0.73, y: height * 0.54)
         }
         .frame(width: width, height: height)
@@ -194,14 +276,14 @@ struct ChapterSelectionView: View {
             let destination = ChapterPageNavigation.destinationIndex(
                 from: selectedStoryIndex,
                 direction: direction,
-                pageCount: stories.count
+                pageCount: totalPages
             )
             SoundManager.shared.play(.buttonTap)
-            withAnimation(.easeInOut(duration: 0.25)) {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
                 selectedStoryIndex = destination
             }
         } label: {
-            Image("NextArrow")
+            Image(.chevronRight)
                 .resizable()
                 .scaledToFit()
                 .frame(width: width * 0.045)
@@ -270,14 +352,21 @@ struct ChapterSelectionView: View {
                 guard stories.indices.contains(storyIndex) else { return }
                 let story = stories[storyIndex]
                 guard story.chapters.indices.contains(chapterIndex) else { return }
+                let chapterRef = story.chapters[chapterIndex]
                 SoundManager.shared.play(.buttonTap)
                 selectedChapter = StoryCatalog.chapter(
-                    for: story.chapters[chapterIndex],
+                    for: chapterRef,
                     storyNumber: story.number,
                     language: localization.languageCode
                 )
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    isLoadingGameplay = selectedChapter != nil
+                if (story.number == 3 && chapterRef.number == 1) || chapterRef.resource == "story3_chapter1" {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showSaveJojoMiniGame = true
+                    }
+                } else {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        isLoadingGameplay = selectedChapter != nil
+                    }
                 }
             }
         } label: {
@@ -313,7 +402,7 @@ struct ChapterSelectionView: View {
                 }
             }
             .frame(width: width * 0.245, height: height * 0.12)
-            .offset(y: height * 0.025)
+            .offset(y: height * 0.035)
         }
         .frame(width: width * 0.30, height: height * 0.23)
     }

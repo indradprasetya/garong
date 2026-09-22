@@ -13,6 +13,9 @@ struct StoryDefinition: Codable {
     let description: LocalizedStoryText
     let completionSummary: LocalizedStoryText
     let completionTip: LocalizedStoryText
+    let completedOneStar: LocalizedStoryText
+    let completedTwoStars: LocalizedStoryText
+    let completedThreeStars: LocalizedStoryText
     let hints: [LocalizedStoryText]?
     let initialState: String?
     let gridCount: Int
@@ -24,6 +27,15 @@ struct StoryDefinition: Codable {
     let characters: [StoryCharacterDefinition]
     let grids: [StoryGridDefinition]
     let outcomes: [StoryOutcome]
+
+    func completedMessage(for stars: Int, language: String) -> String? {
+        switch stars {
+        case 1: completedOneStar.localized(language: language)
+        case 2: completedTwoStars.localized(language: language)
+        case 3: completedThreeStars.localized(language: language)
+        default: nil
+        }
+    }
 }
 
 struct StoryStarThresholds: Codable, Equatable {

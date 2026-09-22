@@ -46,29 +46,42 @@ struct ChapterTutorialOverlayView<Target: View>: View {
     @ViewBuilder
     private func callout(for target: CGRect, viewport: CGSize) -> some View {
         let edge = TutorialCalloutLayout.edge(for: target, viewportHeight: viewport.height)
-        let x = min(max(target.midX, 170), viewport.width - 170)
+        let textX = min(max(target.midX, 170), viewport.width - 170)
+        let arrowX = min(max(target.midX, 25), viewport.width - 25)
 
         if step == .wrongAndHint {
             VStack(spacing: 4) {
-                peekHintArrow
                 instructionText
             }
-                .position(
-                    x: min(x + 70, viewport.width - 170),
-                    y: min(viewport.height - 82, target.maxY + 82)
-                )
-        } else if edge == .above {
-            VStack(spacing: 6) {
-                instructionText
+            .position(
+                x: min(textX + 70, viewport.width - 170),
+                y: min(viewport.height - 100, target.maxY + 50)
+            )
+        } else if step == .meter {
+            let meterTextX = min(max(target.midX - 130, 200), viewport.width - 210)
+            let meterArrowX = target.midX - 45
+            ZStack {
                 arrow
-            }
-            .position(x: x, y: max(70, target.minY - 62))
-        } else {
-            VStack(spacing: 6) {
-                arrow.rotationEffect(.degrees(180))
+                    .rotationEffect(.degrees(-135))
+                    .position(x: meterArrowX, y: target.maxY + 35)
                 instructionText
+                    .position(x: meterTextX, y: target.maxY + 90)
             }
-            .position(x: x, y: min(viewport.height - 70, target.maxY + 62))
+        } else if edge == .above {
+            ZStack {
+                instructionText
+                    .position(x: textX, y: max(60, target.minY - 78))
+                arrow
+                    .position(x: arrowX, y: max(28, target.minY - 30))
+            }
+        } else {
+            ZStack {
+                arrow
+                    .rotationEffect(.degrees(180))
+                    .position(x: arrowX, y: min(viewport.height - 28, target.maxY + 30))
+                instructionText
+                    .position(x: textX, y: min(viewport.height - 60, target.maxY + 78))
+            }
         }
     }
 
@@ -94,19 +107,6 @@ struct ChapterTutorialOverlayView<Target: View>: View {
             }
         }
         .frame(width: 34, height: 50)
-    }
-
-    private var peekHintArrow: some View {
-        Group {
-            if AssetFallbackHelper.hasAsset(named: "peek_hint") {
-                Image("peek_hint")
-                    .resizable()
-                    .scaledToFit()
-            } else {
-                arrow.rotationEffect(.degrees(180))
-            }
-        }
-        .frame(width: 90, height: 70)
     }
 }
 

@@ -1,10 +1,13 @@
 .DS_Store
 
-# Xcode
-build/
+# Cache & Derived Data
+.cache/
+.derivedData/
 DerivedData/
+build/
 *.xcuserstate
 xcuserdata/
+*.xcresult
 
 # Swift Package Manager
 .build/
@@ -12,5 +15,3 @@ xcuserdata/
 
 # Agent scratch directory
 scratch/
-
-

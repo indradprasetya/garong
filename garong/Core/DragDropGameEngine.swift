@@ -317,6 +317,7 @@ final class DragDropGameEngine {
             placedObjects: placedObjectCount,
             placementCount: placementCount,
             stars: stars,
+            completedMessage: chapter.storyDefinition?.completedMessage(for: stars, language: chapter.language),
             completionSummary: chapter.storyDefinition?.completionSummary.localized(language: chapter.language),
             completionTip: chapter.storyDefinition?.completionTip.localized(language: chapter.language),
             sceneStates: scenes.map { scene in

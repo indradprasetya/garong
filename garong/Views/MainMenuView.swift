@@ -1,13 +1,14 @@
 import SwiftUI
 import Combine
+import GameKit
 
 struct MainMenuView: View {
 
     @ObservedObject private var localization = AppLocalization.shared
+    @ObservedObject private var textSizeManager = AppTextSizeManager.shared
     @State private var showChapterSelection = false
     @State private var showSettings = false
     @State private var showGuidebook = false
-    @State private var showSaveJojoMiniGame = false
     @State private var isLoading = false
     @State private var useFrame1: Bool = true
     @State private var timer = Timer.publish(every: 0.4, on: .main, in: .common).autoconnect()
@@ -88,50 +89,6 @@ struct MainMenuView: View {
                     VStack {
                         HStack(spacing: 12) {
                             Spacer()
-
-                            Button {
-                                SoundManager.shared.play(.buttonTap)
-                                showSaveJojoMiniGame = true
-                            } label: {
-                                HStack(spacing: 8) {
-                                    Image("save_jojo_lifebuoy_icon")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 38, height: 38)
-
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text(localization.text("minigame.menu.try"))
-                                            .font(.appFontBold(size: 12, relativeTo: .caption))
-                                            .lineLimit(1)
-                                            .minimumScaleFactor(0.85)
-                                        Text(localization.text("minigame.title"))
-                                            .font(.appFontBold(size: 18, relativeTo: .headline))
-                                            .lineLimit(1)
-                                            .minimumScaleFactor(0.85)
-                                    }
-                                    .foregroundStyle(Color(red: 0.08, green: 0.25, blue: 0.24))
-                                }
-                                .padding(.horizontal, 10)
-                                .frame(width: 155, height: 54)
-                                .background(Color(red: 1.0, green: 0.83, blue: 0.05), in: Capsule())
-                                .overlay {
-                                    Capsule()
-                                        .strokeBorder(
-                                            Color(red: 0.08, green: 0.25, blue: 0.24),
-                                            lineWidth: 2
-                                        )
-                                }
-                                .overlay(alignment: .leading) {
-                                    Image(systemName: "arrow.right")
-                                        .font(.system(size: 25, weight: .black))
-                                        .foregroundStyle(.white)
-                                        .offset(x: -32)
-                                        .opacity(useFrame1 ? 1 : 0)
-                                }
-                                .animation(.easeInOut(duration: 0.18), value: useFrame1)
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel(localization.text("minigame.accessibility.start"))
 
                             // GUIDEBOOK BUTTON (Beside Setting Button)
                             Button {
@@ -239,9 +196,6 @@ struct MainMenuView: View {
                 ChapterSelectionView(
                     stories: StoryCatalog.stories
                 )
-            }
-            .navigationDestination(isPresented: $showSaveJojoMiniGame) {
-                SaveJojoMiniGameView()
             }
             .onReceive(timer) { _ in
                 withAnimation(.easeInOut(duration: 0.2)) {

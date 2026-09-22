@@ -10,16 +10,19 @@ enum StoryListTests {
         let data = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[1]))
         let resources = Set([
             "story1_chapter1", "story1_chapter2", "story1_chapter3",
-            "story2_chapter1", "story2_chapter2", "story2_chapter3"
+            "story2_chapter1", "story2_chapter2", "story2_chapter3",
+            "story3_chapter1", "story3_chapter2", "story3_chapter3"
         ])
         let stories = try StoryListLoader.decode(data) { resources.contains($0) }
 
-        precondition(stories.map(\.id) == ["school", "playground"])
-        precondition(stories.map(\.artworkAssetName) == ["story1_img", "story2_img"])
-        precondition(stories.map { $0.name.localized(language: "id") } == ["Sekolah", "Taman Bermain"])
+        precondition(stories.map(\.id) == ["school", "playground", "swimming_pool"])
+        precondition(stories.map(\.artworkAssetName) == ["story1_img", "story2_img", "story3_img"])
+        precondition(stories.map { $0.name.localized(language: "id") } == ["Sekolah", "Taman Bermain", "Kolam Renang"])
         precondition(stories[0].chapters.map { $0.shortTitle.localized(language: "en") } == ["Let's Draw!", "Too Loud to Draw", "My Drawing Tore"])
         precondition(stories[0].chapters.map(\.resource) == ["story1_chapter1", "story1_chapter2", "story1_chapter3"])
         precondition(stories[1].chapters.map(\.id) == ["validate_jojo_feelings", "share_the_slide", "listen_before_helping_rhodey"])
+        precondition(stories[2].chapters.map(\.id) == ["jojo_afraid_to_swim", "rhodey_afraid_of_slide", "jojo_shares_floatie"])
+        precondition(stories[2].chapters.map(\.resource) == ["story3_chapter1", "story3_chapter2", "story3_chapter3"])
         precondition(stories[0].chapters[1].id == "jojo_settles_down_to_draw")
 
         try expectFailure(data, resources: resources) { root in

@@ -4,6 +4,7 @@ struct GuidebookView: View {
     var onBack: (() -> Void)? = nil
 
     @ObservedObject private var localization = AppLocalization.shared
+    @ObservedObject private var textSizeManager = AppTextSizeManager.shared
     @State private var currentPage = 0
     @State private var dragOffset: CGFloat = 0
 
@@ -272,6 +273,8 @@ struct GuidebookView: View {
     }
 }
 
-#Preview {
-    GuidebookView()
+struct GuidebookView_Previews: PreviewProvider {
+    static var previews: some View {
+        GuidebookView()
+    }
 }

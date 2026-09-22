@@ -26,6 +26,8 @@ struct AssetFallbackHelperTests {
         precondition(AssetFallbackHelper.imageName(for: "rhodey_unknown_emotion") == "rhodey_happy")
         precondition(AssetFallbackHelper.imageName(for: "unknown") == "fallback_globe")
         precondition(AssetFallbackHelper.backgroundImageName(for: "background_classroom") == "classroom_background")
+        precondition(AssetFallbackHelper.storyArtworkImageName(for: "story1_img") == "story1_img")
+        precondition(AssetFallbackHelper.storyArtworkImageName(for: "story3_img") == "fallback_globe")
         precondition(AssetFallbackHelper.hasAsset(named: "rhodey_happy"))
         precondition(AssetFallbackHelper.hasAsset(named: "jojo_happy"))
         precondition(AssetFallbackHelper.hasAsset(named: "action_toy"))
