@@ -213,17 +213,14 @@ struct SaveJojoMiniGameView: View {
                 .position(x: width * 0.52, y: height * 0.68)
                 .allowsHitTesting(false)
 
-                Path { path in
-                    path.move(to: CGPoint(x: width * 0.38, y: height * 0.80))
-                    path.addLine(
-                        to: CGPoint(
-                            x: buoyX,
-                            y: buoyY + (throwProgress < 0.96 ? width * 0.025 : height * 0.055)
-                        )
-                    )
-                }
-                .stroke(.white, style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
-                .allowsHitTesting(false)
+                tambangRope(
+                    from: CGPoint(x: width * 0.38, y: height * 0.80),
+                    to: CGPoint(
+                        x: buoyX,
+                        y: buoyY + (throwProgress < 0.96 ? width * 0.025 : height * 0.055)
+                    ),
+                    thickness: max(6, width * 0.007)
+                )
 
                 if throwProgress < 0.96 {
                     referenceSprite(
@@ -445,17 +442,14 @@ struct SaveJojoMiniGameView: View {
                     .opacity(isMissAnimating ? 0 : 1)
 
                 if isMissAnimating {
-                    Path { path in
-                        path.move(to: CGPoint(x: buoyX, y: height * 1.08))
-                        path.addLine(
-                            to: CGPoint(
-                                x: missedBuoyX,
-                                y: missedBuoyY + width * 0.095
-                            )
-                        )
-                    }
-                    .stroke(.white, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                    .allowsHitTesting(false)
+                    tambangRope(
+                        from: CGPoint(x: buoyX, y: height * 1.08),
+                        to: CGPoint(
+                            x: missedBuoyX,
+                            y: missedBuoyY + width * 0.095
+                        ),
+                        thickness: max(14, width * 0.018)
+                    )
 
                     referenceSprite(
                         asset: "save_jojo_lifebuoy",
@@ -583,19 +577,16 @@ struct SaveJojoMiniGameView: View {
 
                 frontWater(time: time, width: width, height: height)
 
-                Path { path in
-                    path.move(to: CGPoint(x: startX, y: height * 1.08))
-                    path.addLine(
-                        to: CGPoint(
-                            x: isCaught ? caughtX : buoyX,
-                            y: isCaught
-                                ? caughtY + height * 0.17
-                                : buoyY + width * 0.095
-                        )
-                    )
-                }
-                .stroke(.white, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                .allowsHitTesting(false)
+                tambangRope(
+                    from: CGPoint(x: startX, y: height * 1.08),
+                    to: CGPoint(
+                        x: isCaught ? caughtX : buoyX,
+                        y: isCaught
+                            ? caughtY + height * 0.17
+                            : buoyY + width * 0.095
+                    ),
+                    thickness: max(14, width * 0.018)
+                )
 
                 if !isCaught {
                     referenceSprite(
@@ -664,6 +655,32 @@ struct SaveJojoMiniGameView: View {
         .clipped()
     }
 
+    private func tambangRope(
+        from: CGPoint,
+        to: CGPoint,
+        thickness: CGFloat
+    ) -> some View {
+        let dx = to.x - from.x
+        let dy = to.y - from.y
+        let distance = hypot(dx, dy)
+        let angle = Angle(radians: Double(atan2(dy, dx)))
+        let midX = (from.x + to.x) / 2
+        let midY = (from.y + to.y) / 2
+
+        return Group {
+            if distance > 1 {
+                Image("tambangkinario")
+                    .resizable()
+                    .renderingMode(.original)
+                    .frame(width: distance, height: thickness)
+                    .rotationEffect(angle)
+                    .shadow(color: .black.opacity(0.16), radius: 1.5, x: 1, y: 1)
+                    .position(x: midX, y: midY)
+                    .allowsHitTesting(false)
+            }
+        }
+    }
+
     private func pullingControls(width: CGFloat, height: CGFloat) -> some View {
         TimelineView(.animation(minimumInterval: 1.0 / 60.0)) { timeline in
             let jojoPosition = markerPosition(at: timeline.date)
@@ -722,26 +739,17 @@ struct SaveJojoMiniGameView: View {
 
                 frontWater(time: time, width: width, height: height)
 
-                Path { path in
-                    path.move(
-                        to: CGPoint(
-                            x: centerX,
-                            y: centerY + height * 0.17
-                        )
-                    )
-                    path.addLine(
-                        to: CGPoint(
-                            x: width * 0.52,
-                            y: height * 1.10
-                        )
-                    )
-                }
-                .stroke(
-                    .white,
-                    style: StrokeStyle(lineWidth: 5, lineCap: .round)
+                tambangRope(
+                    from: CGPoint(
+                        x: centerX,
+                        y: centerY + height * 0.17
+                    ),
+                    to: CGPoint(
+                        x: width * 0.52,
+                        y: height * 1.10
+                    ),
+                    thickness: max(14, width * 0.018)
                 )
-                .shadow(color: .black.opacity(0.12), radius: 1, x: 1, y: 1)
-                .allowsHitTesting(false)
 
                 pullingControls(width: width, height: height)
             }
@@ -769,17 +777,14 @@ struct SaveJojoMiniGameView: View {
 
                 frontWater(time: time, width: width, height: height)
 
-                Path { path in
-                    path.move(to: CGPoint(x: endX, y: height * 1.06))
-                    path.addLine(
-                        to: CGPoint(
-                            x: jojoX,
-                            y: jojoY + height * 0.17 * scale
-                        )
-                    )
-                }
-                .stroke(.white, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                .allowsHitTesting(false)
+                tambangRope(
+                    from: CGPoint(x: endX, y: height * 1.06),
+                    to: CGPoint(
+                        x: jojoX,
+                        y: jojoY + height * 0.17 * scale
+                    ),
+                    thickness: max(14, width * 0.018)
+                )
 
                 Image("save_jojo_floating")
                     .resizable()
